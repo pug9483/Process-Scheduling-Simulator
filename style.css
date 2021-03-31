@@ -1,0 +1,13 @@
+table {
+  width: 850px;
+}
+
+table tr {
+  text-align: center;
+}
+
+#t-body input {
+  border: none;
+  background-color: red;
+  width: 90%;
+}

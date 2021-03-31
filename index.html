@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table border="1">
+      <thead>
+        <th>Process</th>
+        <th>Arrival time</th>
+        <th>Burst time</th>
+      </thead>
+      <tbody id="t-body"></tbody>
+    </table>
+
+    <input
+      type="button"
+      onclick="addRow();"
+      value="프로세스 추가"
+      id="addprocess"
+    />
+    <input
+      type="button"
+      onclick="deleteRow();"
+      value="프로세스 제거"
+      id="deleteprocess"
+    />
+
+    <select>
+      <option value="FCFS">FCFS</option>
+      <option value="rr">RR</option>
+      <option value="spn">SPN</option>
+      <option value="sptn">SPTN</option>
+      <option value="hrrn">HRRN</option>
+      <option value="newalgorithm">My Scheduling Algorithm</option>
+    </select>
+    <button onclick="run();">실행</button>
+
+    <table border="1">
+      <thead>
+        <th>Name</th>
+        <th>Arrival time</th>
+        <th>Burst time</th>
+        <th>Waiting Time</th>
+        <th>Turnaound Time</th>
+        <th>Nomalized Time</th>
+      </thead>
+      <tbody id="show-table"></tbody>
+    </table>
+
+    <script src="index.js"></script>
+  </body>
+</html>
