@@ -8,6 +8,6 @@ table tr {
 
 #t-body input {
   border: none;
-  background-color: red;
+  /* background-color: red; */
   width: 90%;
 }
