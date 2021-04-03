@@ -125,9 +125,10 @@ function showProgressBar(){
 }
 
 function deleteAllOfProgressBar(){
-    var test = document.getElementById('progressBars');
-    console.log(test.parentNode);
-    test.removeChild(test);
+    var del = document.getElementById("progressBars"); 
+    while ( del.hasChildNodes() ) { 
+        del.removeChild( del.firstChild ); 
+    }
 }
 
 function run(){
