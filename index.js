@@ -1,6 +1,7 @@
-const  tbody = document.querySelector("#t-body");
-const showtable = document.querySelector("#show-table");
+const inputTable = document.querySelector("#input-table");
+const showTable = document.querySelector("#show-table");
 const body = document.querySelector("body");
+
 //FCFS 실행되는지 보기 위해 만든 배열
 var array = Array.from(Array(4), () => new Array(6));
 
@@ -11,10 +12,35 @@ var array = Array.from(Array(4), () => new Array(6));
 1. 실행을 눌렀을 때 배열이 만들어지며 계산을 실행한다.
 2. 또한 설정값을 다르게 했을 때 다른 함수가 실행되도록 한다.*/
 
-function addRow(){
-    if(tbody.rows.length < 4){
-        let newRow = tbody.insertRow(tbody.rows.length );
-        let size = tbody.rows.length;
+function chooseProcessAlgorithm(){
+    const selectprocess = document.querySelector(".selectprocess");
+    const processValue = selectprocess.value;
+    //console.log(processValue);
+    // if(processValue == "fcfs"){
+    //     fcfs();
+    // }
+    // else if(processValue == "rr"){
+    //     rr();
+    // }
+    // else if(processValue == "spn"){
+    //     spn();
+    // }
+    // else if(processValue == "sptn"){
+    //     sptn();
+    // }
+    // else if(processValue == "hrrn"){
+    //     hrrn();
+    // }
+    // else if(processValue == "newalgorithm"){
+    //     newalgorithm();
+    // }
+}
+
+// 프로세스 입력 추가 테이블
+function addInputRow(){
+    if(inputTable.rows.length < 5){
+        let newRow = inputTable.insertRow(inputTable.rows.length );
+        let size = inputTable.rows.length;
 
         const cell0 = newRow.insertCell(0);
         cell0.innerText = "P" + size;
@@ -39,61 +65,20 @@ function addRow(){
     }
 }
 
-function deleteRow(){
+function deleteLastIndexOfInputRow(){
     // const table = document.querySelector("table");
-    if(tbody.rows.length >= 1){
-        tbody.deleteRow(-1);
-        showtable.deleteRow(tbody.rows.length);
-    }
-}
-function deleteShowRow(){
-    for(let i=0; i <showtable.rows.length; i++){
-        showtable.deleteRow(i);
+    if(inputTable.rows.length >= 1){
+        inputTable.deleteRow(-1);
+        showTable.deleteRow(-1);
     }
 }
 
-function chooseProcess(){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    console.log(processValue);
-    // if(processValue == "fcfs"){
-    //     fcfs();
-    // }
-    // else if(processValue == "rr"){
-    //     rr();
-    // }
-    // else if(processValue == "spn"){
-    //     spn();
-    // }
-    // else if(processValue == "sptn"){
-    //     sptn();
-    // }
-    // else if(processValue == "hrrn"){
-    //     hrrn();
-    // }
-    // else if(processValue == "newalgorithm"){
-    //     newalgorithm();
-    // }
-}
-
-function createProcessBar(){
-    var ele = document.createElement("div");
-    ele.className = "prog";
-    body.appendChild(ele);
-
-    for(let i=0; i < tbody.rows.length; i++){
-        var childProg = document.createElement("div");
-        childProg.className = "progs";
-        ele.appendChild(childProg);
-    }
-}
-
-
-function createTable(){
-    for(let i=0; i <tbody.rows.length; i++){
-        var getRow = showtable.insertRow(showtable.rows.length);
+function createShowTable(){
+    deleteAllOfShowTable();
+    for(let i=0; i <inputTable.rows.length; i++){
+        var getRow = showTable.insertRow(showTable.rows.length);
         const row0 = getRow.insertCell(0);
-        row0.innerText = 'P'+ (i+1);
+        row0.innerText = array[i][0];
         const row1 = getRow.insertCell(1);
         row1.innerText = array[i][1];
         const row2 = getRow.insertCell(2);
@@ -101,10 +86,26 @@ function createTable(){
     }
 }
 
+function deleteAllOfShowTable(){
+    while(showTable.rows.length>0){
+        showTable.deleteRow(0);
+    }
+}
+
+function createProgressBar(){
+    deleteAllOfProgressBar();
+    for(let i=0; i < inputTable.rows.length; i++){
+        var childProg = document.createElement("div");
+        childProg.className = "progressBar";
+        childProg.id ="progressBar";
+        progressBars.appendChild(childProg);
+    }
+}
+
 //20초를 100%로 잡고 시작 
 //1초당 5%씩 올라감
-function showProgress(){
-    const progress = document.querySelectorAll(".progs");
+function showProgressBar(){
+    const progress = document.querySelectorAll(".progressBar");
     for(let i=0; i<progress.length; i++){
         var width = 0;
         var max = 100;
@@ -123,30 +124,33 @@ function showProgress(){
     }
 }
 
+function deleteAllOfProgressBar(){
+    var test = document.getElementById('progressBars');
+    console.log(test.parentNode);
+    test.removeChild(test);
+}
 
 function run(){
-    deleteShowRow();
-
     const ar = document.querySelectorAll(".arrivalTime");
     const br = document.querySelectorAll(".burstTime");
 
     //Name, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT 저장 배열
-    for(let i=0; i <tbody.rows.length; i++){
+    for(let i=0; i <inputTable.rows.length; i++){
         array[i][0] = "P"+(i+1);
         array[i][1] = ar[i].value;
         array[i][2] = br[i].value;
     }
     console.log(array);
+    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
+    createShowTable();
+
     //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
-    createProcessBar();
+    createProgressBar();
 
     //종류 가져오기
-    chooseProcess();
-
-    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    createTable();
+    chooseProcessAlgorithm();
 
     //실행 progress 보여주기
-    showProgress();
+    showProgressBar();
 }
 

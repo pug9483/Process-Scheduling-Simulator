@@ -14,18 +14,18 @@
         <th>Arrival time</th>
         <th>Burst time</th>
       </thead>
-      <tbody id="t-body"></tbody>
+      <tbody id="input-table"></tbody>
     </table>
 
     <input
       type="button"
-      onclick="addRow();"
+      onclick="addInputRow();"
       value="프로세스 추가"
       id="addprocess"
     />
     <input
       type="button"
-      onclick="deleteRow();"
+      onclick="deleteLastIndexOfInputRow();"
       value="프로세스 제거"
       id="deleteprocess"
     />
@@ -52,10 +52,10 @@
       <tbody id="show-table"></tbody>
     </table>
 
-    <!-- <div class="prog">
-      <div class="progs"></div>
-    </div> -->
+    <div id="progressBars">
+    </div>
 
     <script src="index.js"></script>
+    <script src="algorithm.js"></script>
   </body>
 </html>
