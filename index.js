@@ -1,7 +1,8 @@
 const  tbody = document.querySelector("#t-body");
 const showtable = document.querySelector("#show-table");
+const body = document.querySelector("body");
 //FCFS 실행되는지 보기 위해 만든 배열
-var array = Array.from(Array(4), () => new Array(3));
+var array = Array.from(Array(4), () => new Array(6));
 
 //arrival time과 burst time을 저장하는 2차원 배열 만들기 
 //-> array에 저장(addRow을 할때마다 값을 저장해준다.)
@@ -51,34 +52,101 @@ function deleteShowRow(){
     }
 }
 
-function run(){
-    deleteShowRow();
-    //addRow에서 넣은 값 받아와서 배열에 저장
-    /*for(var table = tbody.firstChild; table != null; table = table.nextSibling){
-        let tmpArray = [];
-        for(i = table.firstChild; i != null; i = table.nextSibling){
-            tmpArray.push(table.childNodes);
-        }
-        console.log(tmpArray);
-    }*/
-    const ar = document.querySelectorAll(".arrivalTime");
-    const br = document.querySelectorAll(".burstTime");
+function chooseProcess(){
+    const selectprocess = document.querySelector(".selectprocess");
+    const processValue = selectprocess.value;
+    console.log(processValue);
+    // if(processValue == "fcfs"){
+    //     fcfs();
+    // }
+    // else if(processValue == "rr"){
+    //     rr();
+    // }
+    // else if(processValue == "spn"){
+    //     spn();
+    // }
+    // else if(processValue == "sptn"){
+    //     sptn();
+    // }
+    // else if(processValue == "hrrn"){
+    //     hrrn();
+    // }
+    // else if(processValue == "newalgorithm"){
+    //     newalgorithm();
+    // }
+}
 
-    //실행 progress 보여주기
+function createProcessBar(){
+    var ele = document.createElement("div");
+    ele.className = "prog";
+    body.appendChild(ele);
 
-    for(let i=0; i <tbody.rows.length; i++){
-        array[i][0] = ar[i].value;
-        array[i][1] = br[i].value;
+    for(let i=0; i < tbody.rows.length; i++){
+        var childProg = document.createElement("div");
+        childProg.className = "progs";
+        ele.appendChild(childProg);
     }
+}
 
-    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
+
+function createTable(){
     for(let i=0; i <tbody.rows.length; i++){
         var getRow = showtable.insertRow(showtable.rows.length);
         const row0 = getRow.insertCell(0);
         row0.innerText = 'P'+ (i+1);
         const row1 = getRow.insertCell(1);
-        row1.innerText = array[i][0];
+        row1.innerText = array[i][1];
         const row2 = getRow.insertCell(2);
-        row2.innerText = array[i][1];
+        row2.innerText = array[i][2];
     }
 }
+
+//20초를 100%로 잡고 시작 
+//1초당 5%씩 올라감
+function showProgress(){
+    const progress = document.querySelectorAll(".progs");
+    for(let i=0; i<progress.length; i++){
+        var width = 0;
+        var max = 100;
+        var id = setInterval(frame, 500);
+        var second = 1;
+        function frame(){
+            if(width >= max){
+                clearInterval(id);
+            }
+            else{
+                width += 5;
+                progress[i].style.width = width+"%";
+                progress[i].innerHTML = second++;
+            }
+        }
+    }
+}
+
+
+function run(){
+    deleteShowRow();
+
+    const ar = document.querySelectorAll(".arrivalTime");
+    const br = document.querySelectorAll(".burstTime");
+
+    //Name, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT 저장 배열
+    for(let i=0; i <tbody.rows.length; i++){
+        array[i][0] = "P"+(i+1);
+        array[i][1] = ar[i].value;
+        array[i][2] = br[i].value;
+    }
+    console.log(array);
+    //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
+    createProcessBar();
+
+    //종류 가져오기
+    chooseProcess();
+
+    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
+    createTable();
+
+    //실행 progress 보여주기
+    showProgress();
+}
+
