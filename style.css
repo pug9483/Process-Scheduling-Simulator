@@ -26,12 +26,7 @@ table {
   margin: 10px 0px;
 }
 
-/* #progressBars {
-  width: 850px;
-  background: rgb(189, 177, 177);
-} */
-
-#progressBar {
+.progressBar {
   width: 0;
   height: 50px;
   background: rgb(225, 149, 240);

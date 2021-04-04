@@ -10,5 +10,3 @@
 - SRTN
 - HRRN
 - Your own scheduling algorithm
-
--이전에 p1,p2만들어놓은 상태에서 실행 누르고 다시 프로세스 추가후 실행 누르면 오류 발생
