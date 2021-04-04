@@ -135,6 +135,9 @@ function run(){
     const ar = document.querySelectorAll(".arrivalTime");
     const br = document.querySelectorAll(".burstTime");
 
+    //프로세서 수 console창에 띄우기
+    console.log(document.querySelector(".numofprocessors").value);
+
     //Name, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT 저장 배열
     for(let i=0; i <inputTable.rows.length; i++){
         array[i][0] = "P"+(i+1);

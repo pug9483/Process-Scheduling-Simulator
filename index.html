@@ -8,6 +8,45 @@
     <title>Document</title>
   </head>
   <body>
+    <div class="processor-input">
+      <div class="processor-input__column">
+        <div class="processor-input__column-left">
+          <input
+            type="button"
+            onclick="addInputRow();"
+            value="프로세스 추가"
+            id="addprocess"
+          />
+          <input
+            type="button"
+            onclick="deleteLastIndexOfInputRow();"
+            value="프로세스 제거"
+            id="deleteprocess"
+          />
+        </div>
+
+        <div class="processor-input__column-right">
+          <span>프로세서 수</span>
+          <select class="numofprocessors">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+
+          <select class="selectprocess">
+            <option value="fcfs">FCFS</option>
+            <option value="rr">RR</option>
+            <option value="spn">SPN</option>
+            <option value="sptn">SPTN</option>
+            <option value="hrrn">HRRN</option>
+            <option value="newalgorithm">My Scheduling Algorithm</option>
+          </select>
+          <button onclick="run();">실행</button>
+        </div>
+      </div>
+    </div>
+
     <table border="1">
       <thead>
         <th>Process</th>
@@ -17,28 +56,37 @@
       <tbody id="input-table"></tbody>
     </table>
 
-    <input
-      type="button"
-      onclick="addInputRow();"
-      value="프로세스 추가"
-      id="addprocess"
-    />
-    <input
-      type="button"
-      onclick="deleteLastIndexOfInputRow();"
-      value="프로세스 제거"
-      id="deleteprocess"
-    />
-
-    <select class="selectprocess">
-      <option value="fcfs">FCFS</option>
-      <option value="rr">RR</option>
-      <option value="spn">SPN</option>
-      <option value="sptn">SPTN</option>
-      <option value="hrrn">HRRN</option>
-      <option value="newalgorithm">My Scheduling Algorithm</option>
-    </select>
-    <button onclick="run();">실행</button>
+    <div class="gantt_table">
+      <div class="gantt_table__top">
+        <div class="gantt_table__top-left"></div>
+        <div class="gantt_table__top-right">
+          <div id="progressBars"></div>
+        </div>
+      </div>
+      <div class="gantt_table__bottom">
+        <div>0</div>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+        <div>10</div>
+        <div>11</div>
+        <div>12</div>
+        <div>13</div>
+        <div>14</div>
+        <div>15</div>
+        <div>16</div>
+        <div>17</div>
+        <div>18</div>
+        <div>19</div>
+        <div>20</div>
+      </div>
+    </div>
 
     <table border="1">
       <thead>
@@ -51,9 +99,6 @@
       </thead>
       <tbody id="show-table"></tbody>
     </table>
-
-    <div id="progressBars">
-    </div>
 
     <script src="index.js"></script>
     <script src="algorithm.js"></script>
