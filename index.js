@@ -38,7 +38,7 @@ function chooseProcessAlgorithm(){
 
 // 프로세스 입력 추가 테이블
 function addInputRow(){
-    if(inputTable.rows.length < 5){
+    if(inputTable.rows.length < 15){
         let newRow = inputTable.insertRow(inputTable.rows.length );
         let size = inputTable.rows.length;
 
