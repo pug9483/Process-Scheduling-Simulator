@@ -1,45 +1,25 @@
+//-------------------태그 관리-------------------------
 const inputTable = document.querySelector("#input-table");
 const showTable = document.querySelector("#show-table");
 const body = document.querySelector("body");
+//------------------태그 관리 끝-----------------------
 
-//FCFS 실행되는지 보기 위해 만든 배열
-var array = Array.from(Array(4), () => new Array(6));
 
-//arrival time과 burst time을 저장하는 2차원 배열 만들기 
-//-> array에 저장(addRow을 할때마다 값을 저장해준다.)
 
-/*to do 
-1. 실행을 눌렀을 때 배열이 만들어지며 계산을 실행한다.
-2. 또한 설정값을 다르게 했을 때 다른 함수가 실행되도록 한다.*/
+//------------------전역변수 선언---------------------
+let numberOfProcess; //총 프로세스 수
+let processData = new Array(); /*프로세스수 x 6 배열생성 --> 각 프로세스 별 
+{프로세스번호, 도착시간, 실행시간, 시작시간, 종료시간, 대기시간}*/
+const quantumTime = document.querySelector(".quantumTime").value;
+//-----------------전역변수 선언 끝--------------------
 
-function chooseProcessAlgorithm(){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    //console.log(processValue);
-    // if(processValue == "fcfs"){
-    //     fcfs();
-    // }
-    // else if(processValue == "rr"){
-    //     rr();
-    // }
-    // else if(processValue == "spn"){
-    //     spn();
-    // }
-    // else if(processValue == "sptn"){
-    //     sptn();
-    // }
-    // else if(processValue == "hrrn"){
-    //     hrrn();
-    // }
-    // else if(processValue == "newalgorithm"){
-    //     newalgorithm();
-    // }
-}
 
-// 프로세스 입력 추가 테이블
+
+
+//------------------입력 데이터 처리-------------------
 function addInputRow(){
     if(inputTable.rows.length < 15){
-        let newRow = inputTable.insertRow(inputTable.rows.length );
+        let newRow = inputTable.insertRow(inputTable.rows.length);  
         let size = inputTable.rows.length;
 
         const cell0 = newRow.insertCell(0);
@@ -72,17 +52,50 @@ function deleteLastIndexOfInputRow(){
         showTable.deleteRow(-1);
     }
 }
+//------------------입력 데이터 처리 끝-----------------
 
+
+
+//------------------BackEnd-------------------------
+// 알고리즘 선택 함수
+function chooseProcessAlgorithm(){
+    const selectprocess = document.querySelector(".selectprocess");
+    const processValue = selectprocess.value;
+    //console.log(processValue);
+    // if(processValue == "fcfs"){
+    //     fcfs();
+    // }
+    // else if(processValue == "rr"){
+    //     rr();
+    // }
+    // else if(processValue == "spn"){
+    //     spn();
+    // }
+    // else if(processValue == "sptn"){
+    //     sptn();
+    // }
+    // else if(processValue == "hrrn"){
+    //     hrrn();
+    // }
+    // else if(processValue == "newalgorithm"){
+    //     newalgorithm();
+    // }
+}
+//------------------BackEnd-------------------------
+
+
+
+// --------------------- FrontEnd -------------------
 function createShowTable(){
     deleteAllOfShowTable();
     for(let i=0; i <inputTable.rows.length; i++){
         var getRow = showTable.insertRow(showTable.rows.length);
         const row0 = getRow.insertCell(0);
-        row0.innerText = array[i][0];
+        row0.innerText = processData[i][0];
         const row1 = getRow.insertCell(1);
-        row1.innerText = array[i][1];
+        row1.innerText = processData[i][1];
         const row2 = getRow.insertCell(2);
-        row2.innerText = array[i][2];
+        row2.innerText = processData[i][2];
     }
 }
 
@@ -102,9 +115,9 @@ function createProgressBar(){
     }
 }
 
-//20초를 100%로 잡고 시작 
-//1초당 5%씩 올라감
 function showProgressBar(){
+    //20초를 100%로 잡고 시작 
+    //1초당 5%씩 올라감
     const progress = document.querySelectorAll(".progressBar");
     for(let i=0; i<progress.length; i++){
         var width = 0;
@@ -131,20 +144,31 @@ function deleteAllOfProgressBar(){
     }
 }
 
+//-------------------- FrontEnd 끝--------------------
+
+
+
+
+//-------------------- 실행시 처리 ---------------------
 function run(){
+    //입력값 정리
     const ar = document.querySelectorAll(".arrivalTime");
     const br = document.querySelectorAll(".burstTime");
+    numberOfProcess = inputTable.rows.length;
 
     //프로세서 수 console창에 띄우기
     console.log(document.querySelector(".numofprocessors").value);
-
-    //Name, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT 저장 배열
-    for(let i=0; i <inputTable.rows.length; i++){
-        array[i][0] = "P"+(i+1);
-        array[i][1] = ar[i].value;
-        array[i][2] = br[i].value;
+    for(let i = 0; i<inputTable.rows.length; i++){
+        processData[i] = new Array(6);
     }
-    console.log(array);
+    //프로세스번호, 도착시간(index = 1), 실행 시간(index = 2) 저장 배열
+    for(let i=0; i <inputTable.rows.length; i++){
+        processData[i][0] = "P"+(i+1);
+        processData[i][1] = ar[i].value;
+        processData[i][2] = br[i].value;
+    }
+    console.log("numberOfProcess: ",numberOfProcess);
+    console.log("InputValue:",processData);
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     createShowTable();
 
