@@ -10,7 +10,7 @@ const body = document.querySelector("body");
 let numberOfProcess; //총 프로세스 수
 let processData = new Array(); /*프로세스수 x 6 배열생성 --> 각 프로세스 별 
 {프로세스번호, 도착시간, 실행시간, 시작시간, 종료시간, 대기시간}*/
-const quantumTime = document.querySelector(".quantumTime").value;
+let quantumTime;
 //-----------------전역변수 선언 끝--------------------
 
 
@@ -167,8 +167,10 @@ function run(){
         processData[i][1] = ar[i].value;
         processData[i][2] = br[i].value;
     }
+    quantumTime = document.querySelector(".quantumTime").value;
     console.log("numberOfProcess: ",numberOfProcess);
     console.log("InputValue:",processData);
+    console.log("quantumTime: ",quantumTime);
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     createShowTable();
 
