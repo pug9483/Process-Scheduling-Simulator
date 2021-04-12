@@ -7,11 +7,11 @@ const body = document.querySelector("body");
 
 
 //------------------전역변수 선언---------------------
-let numberOfProcess; //총 프로세스 수
-let numberOfprocessor; // 프로세서 수
-let processData = new Array(); /*프로세스수 x 6 배열생성 --> 각 프로세스 별 
-{프로세스번호, 도착시간, 실행시간, 시작시간, 종료시간, 대기시간}*/
-let quantumTime;
+let numberOfProcess;  // 총 프로세스 수
+let numberOfprocessor;  // 프로세서 수
+let processData = new Array(); /* 각 프로세스 별 정보:프로세스번호, 도착시간, 
+실행시간, 시작시간, 종료시간, 대기시간}*/
+let quantumTime; // 퀀텀 타임
 //-----------------전역변수 선언 끝--------------------
 
 
@@ -62,10 +62,10 @@ function deleteLastIndexOfInputRow(){
 function chooseProcessAlgorithm(){
     const selectprocess = document.querySelector(".selectprocess");
     const processValue = selectprocess.value;
-    //console.log(processValue);
-    // if(processValue == "fcfs"){
-    //     fcfs();
-    // }
+    console.log("Selected Algorithm: ",processValue);
+    if(processValue == "fcfs"){
+        fcfs();
+    }
     // else if(processValue == "rr"){
     //     rr();
     // }
@@ -81,6 +81,25 @@ function chooseProcessAlgorithm(){
     // else if(processValue == "newalgorithm"){
     //     newalgorithm();
     // }
+}
+
+function fcfs(){
+
+}
+function rr(){
+    
+}
+function spn(){
+    
+}
+function sptn(){
+    
+}
+function hrrn(){
+    
+}
+function newalgorithm(){
+    
 }
 //------------------BackEnd-------------------------
 
