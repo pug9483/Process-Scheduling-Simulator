@@ -12,6 +12,7 @@ let numberOfprocessor;  // 프로세서 수
 let processData = new Array(); /* 각 프로세스 별 정보:프로세스번호, 도착시간, 
 실행시간, 시작시간, 종료시간, 대기시간}*/
 let quantumTime; // 퀀텀 타임
+let processorRunning = new Array; // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수
 //-----------------전역변수 선언 끝--------------------
 
 
@@ -84,7 +85,7 @@ function chooseProcessAlgorithm(){
 }
 
 function fcfs(){
-
+    console.log("ddd");
 }
 function rr(){
     
@@ -127,7 +128,7 @@ function deleteAllOfShowTable(){
 
 function createProgressBar(){
     deleteAllOfProgressBar();
-    for(let i=0; i < inputTable.rows.length; i++){
+    for(let i=0; i < numberOfprocessor; i++){
         var childProg = document.createElement("div");
         childProg.className = "progressBar";
         childProg.id ="progressBar";
@@ -139,7 +140,7 @@ function showProgressBar(){
     //20초를 100%로 잡고 시작 
     //1초당 5%씩 올라감
     const progress = document.querySelectorAll(".progressBar");
-    for(let i=0; i<progress.length; i++){
+    for(let i=0; i<numberOfprocessor; i++){
         var width = 0;
         var max = 100;
         var id = setInterval(frame, 500);
@@ -177,6 +178,10 @@ function run(){
     numberOfProcess = inputTable.rows.length;
     numberOfprocessor = document.querySelector(".numofprocessors").value;
     quantumTime = document.querySelector(".quantumTime").value;
+
+    for(let i =0; i<numberOfprocessor; i++){
+        processorRunning[i] = -1;  // 프로세서 수 만큼 프로세서를 꺼진상태(-1)으로 초기화
+    }
     
     //프로세스 정보를 넣을 2차원 배열 생성하기
     for(let i = 0; i<inputTable.rows.length; i++){
@@ -193,8 +198,9 @@ function run(){
     //변수값 확인
     console.log("numberOfProcess: ",numberOfprocessor);
     console.log("numberOfProcess: ",numberOfProcess);
-    console.log("RunprocessData:",processData);
+    console.log("Run-processData:",processData);
     console.log("quantumTime: ",quantumTime);
+    console.log("Processor State: ",processorRunning);
     
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     createShowTable();
