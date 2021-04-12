@@ -147,6 +147,7 @@ function chooseProcessAlgorithm(){
     // }
 }
 
+// 알고리즘 6개
 function fcfs(){ 
     const readyQueue = new Queue();
     let processorRunningQueue = new Queue(); // 프로세서 실행 큐
@@ -154,6 +155,7 @@ function fcfs(){
     let exitCount = 0; // 종료된 프로세스 개수
     let dequeProcess = new Array();
     let runningProcess = 1;
+    let totoalTime;
     // 각 프로세서데이터에 프로세서실행큐를 할당
     for(let i=0;i<numberOfProcessor;i++){
         //우선 프로세서가 하나일 때만 고려
@@ -197,6 +199,8 @@ function fcfs(){
         
         
     }
+    totoalTime = presentTime; //전체실행시간을 저장.
+    console.log("Totaltime: ",presentTime);
 }
 function rr(){
     
