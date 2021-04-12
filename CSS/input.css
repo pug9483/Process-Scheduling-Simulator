@@ -1,0 +1,64 @@
+.processor_input {
+    width: 850px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  #input-table input {
+    border: none;
+    width: 90%;
+  }
+  
+  .processor_input__column {
+    width: 400px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border: 1px solid black;
+  }
+  
+  .processor_input__column-left {
+    height: 80px;
+    margin-left: 15px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  .processor_input__column-right {
+    width: 230px;
+    height: 80px;
+    margin-left: 15px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+  }
+
+  .processor_input__table table {
+    width: 420px;
+  }
+
+  .p {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .numofprocessors {
+    margin-left: 10px;
+  }
+  
+  .selectprocess {
+    margin-right: 10px;
+  }
+  
+  .p input {
+    width: 90px;
+  }
+  

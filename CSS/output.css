@@ -1,0 +1,39 @@
+.progressBar {
+  width: 0;
+  height: 50px;
+  background: rgb(225, 149, 240);
+  text-align: center;
+  line-height: 50px;
+}
+
+.gantt_table {
+  width: 850px;
+  height: 210px;
+  border: 1px solid black;
+}
+
+.gantt_table__top {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+.gantt_table__top-left {
+  width: 100px;
+  border-right: 1px solid black;
+}
+
+.gantt_table__top-right {
+  width: 750px;
+  height: 180px;
+}
+
+.gantt_table__bottom {
+  padding-left: 100px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.processor_show__table table {
+  width: 850px;
+}
