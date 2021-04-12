@@ -8,6 +8,7 @@ const body = document.querySelector("body");
 
 //------------------전역변수 선언---------------------
 let numberOfProcess; //총 프로세스 수
+let numberOfprocessor; // 프로세서 수
 let processData = new Array(); /*프로세스수 x 6 배열생성 --> 각 프로세스 별 
 {프로세스번호, 도착시간, 실행시간, 시작시간, 종료시간, 대기시간}*/
 let quantumTime;
@@ -155,22 +156,27 @@ function run(){
     const ar = document.querySelectorAll(".arrivalTime");
     const br = document.querySelectorAll(".burstTime");
     numberOfProcess = inputTable.rows.length;
-
-    //프로세서 수 console창에 띄우기
-    console.log(document.querySelector(".numofprocessors").value);
+    numberOfprocessor = document.querySelector(".numofprocessors").value;
+    quantumTime = document.querySelector(".quantumTime").value;
+    
+    //프로세스 정보를 넣을 2차원 배열 생성하기
     for(let i = 0; i<inputTable.rows.length; i++){
         processData[i] = new Array(6);
     }
+    
     //프로세스번호, 도착시간(index = 1), 실행 시간(index = 2) 저장 배열
     for(let i=0; i <inputTable.rows.length; i++){
         processData[i][0] = "P"+(i+1);
         processData[i][1] = ar[i].value;
         processData[i][2] = br[i].value;
     }
-    quantumTime = document.querySelector(".quantumTime").value;
+
+    //변수값 확인
+    console.log("numberOfProcess: ",numberOfprocessor);
     console.log("numberOfProcess: ",numberOfProcess);
-    console.log("InputValue:",processData);
+    console.log("RunprocessData:",processData);
     console.log("quantumTime: ",quantumTime);
+    
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     createShowTable();
 
