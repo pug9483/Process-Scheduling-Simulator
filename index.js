@@ -50,7 +50,7 @@ class Queue {
     toString() {
         var retStr = "";
         for (var i = 0;i < this.dataStore.length; ++i )    {
-            retStr += this.dataStore[i] + "\n";
+            retStr += "P"+this.dataStore[i][0] + "\n";
         }
         return retStr;
     }
@@ -61,6 +61,19 @@ class Queue {
             return true;
         } else {
             return false;
+        }
+    }
+
+    spnSort(){  // 삽입 정렬
+        this.n = this.dataStore.length;
+        for(let i=1; i< this.n; i++){
+            let key = this.dataStore[i];
+            let j = i - 1;
+            while (j >= 0 && this.dataStore[j][2] > key[2]){
+                this.dataStore[j+1] = this.dataStore[j];
+                j = j - 1
+            }
+            this.dataStore[j+1] = key;
         }
     }
 }
@@ -151,25 +164,24 @@ function fcfs(){
     
     while(checkRun == 1 && exitCount < numberOfProcess){ // run이 눌리면 시간 진행 && 종료프로세스수가 총 프로세스수보다 작을때
         presentTime++; // 현재시간 1추가   
+        console.log("presentime: ",presentTime);
+        console.log("presentReadyQueue: ",readyQueue.toString());  // 레디큐 확인
         
-         //시작시간 + 실행시간이 현재시간일 때
-         if((Number(cloneprocessData[runningProcess-1][2])+Number(cloneprocessData[runningProcess-1][3]) == presentTime)&&
-         processorState == 1){
-             console.log("종료=============");
-             processorData[0].dequeue();
-             exitCount++;
-             processorState[0] = -1; // 프로세서를 종료한다.
-         }
-
+        //시작시간 + 실행시간이 현재시간일 때
+        if((Number(cloneprocessData[runningProcess-1][2])+Number(cloneprocessData[runningProcess-1][3]) == presentTime)&&
+        processorState == 1){
+            let exitProcess = processorData[0].dequeue();
+            console.log("================= P"+exitProcess[0],"종료 =================");
+            exitCount++;
+            processorState[0] = -1; // 프로세서를 종료한다.
+        }
+        
         for(let i=0;i<numberOfProcess; i++){ // 현재시간 == 도착시간인 프로세스가 있으면 레디큐에 삽입
             if (presentTime == cloneprocessData[i][1]){
                 readyQueue.enqueue(cloneprocessData[i]);
             }
         }
 
-        // readyQueue.sort(function(a, b){  // bursttime에 따라 레디큐 오른차순 정렬
-        // return a[2]-b[2];
-        // });
         
         // 프로세서가 현재 작동중이 아니면 && 레디큐에 프로세스가 있으면
         if(readyQueue.empty() == false && processorState[0] == -1){ 
@@ -180,11 +192,9 @@ function fcfs(){
             cloneprocessData[runningProcess-1][3] = presentTime; // 프로세스의 시작시간을 현재시간으로 설정
         } 
         
-       
-            
-        console.log("presentime: ",presentTime);
-        console.log("presentReadyQueue: ",readyQueue.toString());
+        
         console.log("presentProceesorQueue: ",processorData[0].toString());
+        
         
     }
 }
@@ -208,25 +218,28 @@ function spn(){
     
     while(checkRun == 1 && exitCount < numberOfProcess){ // run이 눌리면 시간 진행 && 종료프로세스수가 총 프로세스수보다 작을때
         presentTime++; // 현재시간 1추가   
+        console.log("presentime: ",presentTime);
+        console.log("presentReadyQueue: ",readyQueue.toString());  // 레디큐 확인
         
-         //시작시간 + 실행시간이 현재시간일 때
-         if((Number(cloneprocessData[runningProcess-1][2])+Number(cloneprocessData[runningProcess-1][3]) == presentTime)&&
-         processorState == 1){
-             console.log("종료=============");
-             processorData[0].dequeue();
-             exitCount++;
-             processorState[0] = -1; // 프로세서를 종료한다.
-         }
-
+        //시작시간 + 실행시간이 현재시간일 때
+        if((Number(cloneprocessData[runningProcess-1][2])+Number(cloneprocessData[runningProcess-1][3]) == presentTime)&&
+        processorState == 1){
+            let exitProcess = processorData[0].dequeue();
+            console.log("================= P"+exitProcess[0],"종료 =============");
+            exitCount++;
+            processorState[0] = -1; // 프로세서를 종료한다.
+        }
+        
         for(let i=0;i<numberOfProcess; i++){ // 현재시간 == 도착시간인 프로세스가 있으면 레디큐에 삽입
             if (presentTime == cloneprocessData[i][1]){
                 readyQueue.enqueue(cloneprocessData[i]);
             }
         }
-
-        // readyQueue.sort(function(a, b){  // bursttime에 따라 레디큐 오른차순 정렬
-        // return a[2]-b[2];
-        // });
+        
+        // bursttime에 따라 레디큐 오른차순 정렬
+        readyQueue.spnSort()
+        
+        
         
         // 프로세서가 현재 작동중이 아니면 && 레디큐에 프로세스가 있으면
         if(readyQueue.empty() == false && processorState[0] == -1){ 
@@ -237,11 +250,9 @@ function spn(){
             cloneprocessData[runningProcess-1][3] = presentTime; // 프로세스의 시작시간을 현재시간으로 설정
         } 
         
-       
-            
-        console.log("presentime: ",presentTime);
-        console.log("presentReadyQueue: ",readyQueue.toString());
+        
         console.log("presentProceesorQueue: ",processorData[0].toString());
+        
         
     }
 }
