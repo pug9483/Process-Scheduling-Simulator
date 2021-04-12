@@ -12,11 +12,52 @@ let numberOfprocessor;  // 프로세서 수
 let processData = new Array(); /* 각 프로세스 별 정보:프로세스번호, 도착시간, 
 실행시간, 시작시간, 종료시간, 대기시간}*/
 let quantumTime; // 퀀텀 타임
-let processorRunning = new Array; // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수
+let processorRunningCheck = new Array; // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수
 //-----------------전역변수 선언 끝--------------------
 
+class Queue {
+    constructor(){ // 생성자
+        this.dataStore = []; 
+    }
 
+    //큐의 끝부분에 요소를 추가
+    enqueue(element) {
+        this.dataStore.push(element);
+    }
 
+    //큐의 앞부분에서 요소를 삭제
+    dequeue() {
+        return this.dataStore.shift();
+    }
+
+    //큐의 앞부분에 저장된 요소 확인
+    front() {
+        return this.dataStore[0];
+    }
+
+    //큐의 끝부분에 저장된 요소 확인
+    back() {
+        return this.dataStore[this.dataStore.length-1];
+    }
+
+    //큐의 모든 요소를 출력
+    toString() {
+        var retStr = "";
+        for (var i = 0;i < this.dataStore.length; ++i )    {
+            retStr += this.dataStore[i] + "\n";
+        }
+        return retStr;
+    }
+
+    //큐가 비어있는지 여부 확인
+    empty() {
+        if (this.dataStore.length == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 //------------------입력 데이터 처리-------------------
 function addInputRow(){
@@ -84,8 +125,16 @@ function chooseProcessAlgorithm(){
     // }
 }
 
-function fcfs(){
-    console.log("ddd");
+function fcfs(){ //
+    const readyQueue = new Queue();
+    let proccsorRunningQueue = new Array(); // 프로세서 실행 큐
+    readyQueue.enqueue("P1");
+    console.log(readyQueue.toString())
+    readyQueue.enqueue(1);
+    console.log(readyQueue.toString())
+    readyQueue.dequeue();
+    console.log(readyQueue.toString())
+
 }
 function rr(){
     
@@ -164,7 +213,6 @@ function deleteAllOfProgressBar(){
         del.removeChild( del.firstChild ); 
     }
 }
-
 //-------------------- FrontEnd 끝--------------------
 
 
@@ -180,7 +228,7 @@ function run(){
     quantumTime = document.querySelector(".quantumTime").value;
 
     for(let i =0; i<numberOfprocessor; i++){
-        processorRunning[i] = -1;  // 프로세서 수 만큼 프로세서를 꺼진상태(-1)으로 초기화
+        processorRunningCheck[i] = -1;  // 프로세서 수 만큼 프로세서를 꺼진상태(-1)으로 초기화
     }
     
     //프로세스 정보를 넣을 2차원 배열 생성하기
@@ -200,7 +248,7 @@ function run(){
     console.log("numberOfProcess: ",numberOfProcess);
     console.log("Run-processData:",processData);
     console.log("quantumTime: ",quantumTime);
-    console.log("Processor State: ",processorRunning);
+    console.log("Processor State: ",processorRunningCheck);
     
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     createShowTable();
