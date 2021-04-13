@@ -2,6 +2,9 @@
 const inputTable = document.querySelector("#input-table");
 const showTable = document.querySelector("#show-table");
 const body = document.querySelector("body");
+const addProcess = document.getElementById("addprocess");
+const deleteProcess = document.getElementById("deleteprocess");
+const runSimulator = document.getElementById("run");
 //------------------태그 관리 끝-----------------------
 
 
@@ -153,7 +156,6 @@ function fcfs(){
     let presentTime = -1; // 현재시간 -1으로 초기화
     let exitCount = 0; // 종료된 프로세스 개수
     let dequeProcess = new Array();
-    let totoalTime;
     let runningProcess = new Array();
     
     
@@ -408,3 +410,8 @@ function run(){
     showProgressBar();
 }
 
+
+//-------------------- 이벤트 처리 ---------------------
+addProcess.addEventListener("click", addInputRow);  // "프로세스 추가" 클릭시
+deleteProcess.addEventListener("click", deleteLastIndexOfInputRow); // "프로세스 제거" 클릭시
+runSimulator.addEventListener("click", run); // "실행" 클릭시
