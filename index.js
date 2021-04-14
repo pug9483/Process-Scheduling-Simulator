@@ -26,6 +26,7 @@ let processorData = new Array(); // 각 프로세서 별 실행중인 프로세�
 let quantumTime; // 퀀텀 타임
 let processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수
 let checkRun = -1; // run()이 실행되면 1로 바뀜
+let contextSwitching = [0,0,0,0]; // 문맥전환 배열
 //-----------------전역변수 선언 끝--------------------
 
 
@@ -196,6 +197,12 @@ function showProcessorRunning(){
     } 
 }
 
+function showContextSwit() {
+    for(let i= 0; i<contextSwitching.length;i++){
+        console.log("프로세서"+(i+1)+" context Switching: ",contextSwitching[i]-1);
+    }
+}
+
 // 알고리즘 6개
 function fcfs(){ 
     //큐
@@ -268,6 +275,7 @@ function rr(){
     let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
     let exitQuantumQueue = new Queue(); // 종료레디큐(퀀텀시간이 지나 종료된 프로세스)
     let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
+    
     
     //시간
     let presentTime = -1; // 현재시간 -1으로 선언 및 초기화
@@ -350,6 +358,7 @@ function rr(){
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            contextSwitching[workIndex]++;
             dequeProcess = readyQueue.dequeue();
             processorData[workIndex] = "P"+dequeProcess[0]; // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
             if(!dequeProcess[7]||!dequeProcess[3]){ // 디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면
@@ -374,6 +383,7 @@ function rr(){
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
     showProcessData();    
+    showContextSwit();
 }
 function spn(){ 
     //큐
