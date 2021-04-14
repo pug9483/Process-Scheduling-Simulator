@@ -125,6 +125,9 @@ class Queue {
         }
     }
 
+    search(e){
+        return this.dataStore.includes(e)
+    }
 
     spnSort(){  // 삽입 정렬
         this.n = this.dataStore.length;
@@ -260,7 +263,7 @@ function fcfs(){
 }
 function rr(){ 
     //큐
-    
+    for(let i=0;i<numberOfProcess;i++) processData[i][5]=0; // 대기시간초기화
     const readyQueue = new Queue(); // 레디큐 생성
     let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
     let exitQuantumQueue = new Queue(); // 종료레디큐(퀀텀시간이 지나 종료된 프로세스)
@@ -279,7 +282,6 @@ function rr(){
     
     
     while(checkRun == 1){ // run을 클릭했다면 && 모든 프로세스가 종료될때 까지 -> 시간시작
-        console.log("===========시간추가====================");
         presentTime++; // 현재시간 1추가   
         
         if(runningProcess.length != 0){ //하나라도 실행중인 프로세스가 있으면,
@@ -314,7 +316,7 @@ function rr(){
                             else if(runningProcess[j][2] <= 0){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
                                 processorData[runningProcess[j][1]] = -1; // 종료된 프로세서는 -1로 표시
-                                processData[runningProcess[j][0]][7] = 0;
+                                processData[runningProcess[j][0]][4] = presentTime;
                                 exitProcessQueue.enqueue(processData[runningProcess[j][0]]);
                                 runningProcess[j] = -1;
                                 exitCount++;
@@ -358,11 +360,20 @@ function rr(){
             processData[dequeProcess[0]-1][6] = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
             processData[dequeProcess[0]-1][3] = presentTime;
         }
+
+        //대기시간 측정
+        for(let i = 0; i< numberOfProcess; i++){
+            if(readyQueue.search(processData[i])==true){
+                processData[i][5]++;
+            }
+        }
         
-        if(presentTime>100) break;
+        if(presentTime>100) break; // 무한 루프 방지
     }
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("전체 실행 시간: ",totoalTime);    
+    console.log("=============결과=============== ");
+    console.log("전체 실행 시간: ",totoalTime);
+    showProcessData();    
 }
 function spn(){ 
     //큐
