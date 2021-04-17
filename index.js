@@ -517,6 +517,7 @@ function createProgressBar(){
 }
 */
 
+// ProgressBar 수정 부분
 function createProgressBar(){
     deleteAllOfProgressBar();
     for(let i=0; i < numberOfProcessor; i++){
