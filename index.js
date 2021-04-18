@@ -69,9 +69,7 @@ function run(){
     //=======================변수 선언 부===================
     //====================== 변수 선언 부 ====================
     createBottomIndex();
-    let resultData; // 결과배열
-    let max = 0;
-    let readyQLog =[];
+    let result;
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
@@ -86,11 +84,13 @@ function run(){
     console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
-    readyQLog, resultData, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+
 
     // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     // createShowTable();
 
+    debug(result);
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
     // createProgressBar();
     
@@ -100,7 +100,9 @@ function run(){
     // showProgressBar();
 }
 
-
+function debug(result){
+    console.log("1",result);;
+}
 //------------------BackEnd-------------------------
 // 큐 클래스 선언
 class Queue {
@@ -230,41 +232,12 @@ function showProcessorRunning(processorData , numberOfProcessor){
     } 
 }
 
-function showContextSwit() {
-    for(let i= 0; i<contextSwitching.length;i++){
-        console.log("프로세서"+(i+1)+" context Switching: ",contextSwitching[i]-1);
-    }
-}
+// function showContextSwit() {
+//     for(let i= 0; i<contextSwitching.length;i++){
+//         console.log("프로세서"+(i+1)+" context Switching: ",contextSwitching[i]-1);
+//     }
+// }
 
-// 알고리즘 선택 함수
-function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    let max = 0;
-    let readyQLog = []
-    let resultAlgorithm;
-    console.log("선택된 알고리즘: ",processValue.toUpperCase());
-    if(processValue == "fcfs"){
-        resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "rr"){
-        readyQLog, max, resultAlgorithm = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
-    }
-    else if(processValue == "spn"){
-        resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "sptn"){
-        resultAlgorithm = sptn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "hrrn"){
-        resultAlgorithm = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "newalgorithm"){
-        resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-
-    return readyQLog, resultAlgorithm, max;
-}
 
 
 // 알고리즘 6개`
@@ -357,9 +330,12 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     let runningProcess = new Array(); // 실행중인 프로세스
     let workIndex // 현재 작업중인 프로세서 인덱스
     
-    //최종 결과 배열
+    //최종 결과
+    let result = {};
     let resultData = new Array(new Array());
     let readyQLog = new Array();
+    let max;
+
     // ======================================================
 
 
@@ -479,13 +455,16 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
-    for(let i =0; i < nopr;i++){
-        console.log("dddd",processorData[i].toLength());
+    
+    //최종결과 처리
+    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
             resultData[i] = (processorData[i].dequeueAll())
         }
     }
-    let prRunTime = []
+
+
+    let prRunTime = []  // max 런타임 처리
     for(let i = 0;i<nopr;i++){
         console.log(i,resultData[i]);
         console.log("dd",resultData[i][resultData[i].length-1]);
@@ -493,14 +472,20 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         prRunTime[i] = lastindex[lastindex.length-1];
 
     }
-    console.log(prRunTime);
-    let max = Math.max.apply(null, prRunTime);
-    console.log(max);
+    max = Math.max.apply(null, prRunTime);
+    
+    console.log("max:",max);
 
     for(let i = 0; i< nopr; i++)
         console.log("result Data 프로세서"+i+" "+resultData[i]);
 
-    return readyQLog, max, resultData;
+    console.log("readyQlog: ",readyQLog);
+
+    result.readyQLog = readyQLog;
+    result.max = max;
+    result.resultData = resultData;
+    
+    return result;
 }
 
 function spn(){ 
@@ -645,6 +630,36 @@ function hrrn(){
 }
 function newalgorithm(){
     
+}
+
+
+// 알고리즘 선택 함수
+function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime){
+    const selectprocess = document.querySelector(".selectprocess");
+    const processValue = selectprocess.value;
+    let result;
+
+    console.log("선택된 알고리즘: ",processValue.toUpperCase());
+    if(processValue == "fcfs"){
+        resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "rr"){
+        result = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    }
+    else if(processValue == "spn"){
+        resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "sptn"){
+        resultAlgorithm = sptn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "hrrn"){
+        resultAlgorithm = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "newalgorithm"){
+        resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+
+    return result;
 }
 //------------------BackEnd-------------------------
 
