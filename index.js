@@ -84,7 +84,7 @@ function run(){
     console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
-    resultData, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    readyQLog, resultData, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
 
     // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     // createShowTable();
@@ -147,13 +147,9 @@ class Queue {
     }
 
     toString() {
-        var retStr = "";
-        if(this.dataStore.length == 0) return "";
-        else{
+        let retStr = [];
             for (let i = 0; i < this.dataStore.length; ++i )  
-                    retStr += (this.dataStore[i] + " ");
-            
-        }
+                    retStr[i] = this.dataStore[i][0];
         return retStr;
     }
 
@@ -249,7 +245,7 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
         resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "rr"){
-        max, resultAlgorithm = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+        readyQLog, max, resultAlgorithm = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
     }
     else if(processValue == "spn"){
         resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
@@ -264,7 +260,7 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
         resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
 
-    return resultAlgorithm, max;
+    return readyQLog, resultAlgorithm, max;
 }
 
 
@@ -359,7 +355,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     let workIndex // 현재 작업중인 프로세서 인덱스
     
     //최종 결과 배열
-    let resultData = new Array(new Array()); 
+    let resultData = new Array(new Array());
+    let readyQLog = new Array();
     // ======================================================
 
 
@@ -395,6 +392,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
         console.log("레디큐: ",readyQueue.toString());
+        readyQLog.push([presentTime,readyQueue.toString()]);
         //==================콘솔확인(디버깅)====================
 
 
@@ -407,9 +405,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                 processData[dequeProcess[0]-1][7] = dequeProcess[2]; // 잔여시간은 총 실행시간
                 processData[dequeProcess[0]-1][3] = presentTime; // 시작시간은 현재시간
             }
-            console.log("ss: ",processData[dequeProcess[0]-1][3]);
             processData[dequeProcess[0]-1][3] = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            console.log("ss2: ",processData[dequeProcess[0]-1][3]);
 
             processData[dequeProcess[0]-1][6] = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
             runningProcess.push(processData[dequeProcess[0]-1]); // 실행중인프로세스 목록에 디큐된 프로세스 추가
@@ -501,8 +497,9 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     for(let i = 0; i< nopr; i++)
         console.log("result Data 프로세서"+i+" "+resultData[i]);
 
-    return max, resultData;
+    return readyQLog, max, resultData;
 }
+
 function spn(){ 
     //큐
     const readyQueue = new Queue(); // 레디큐 생성
