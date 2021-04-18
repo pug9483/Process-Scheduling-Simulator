@@ -70,6 +70,8 @@ function run(){
     //====================== 변수 선언 부 ====================
     createBottomIndex();
     let resultData; // 결과배열
+    let max = 0;
+    let readyQLog =[];
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
@@ -239,6 +241,7 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
     const selectprocess = document.querySelector(".selectprocess");
     const processValue = selectprocess.value;
     let max = 0;
+    let readyQLog = []
     let resultAlgorithm;
     console.log("선택된 알고리즘: ",processValue.toUpperCase());
     if(processValue == "fcfs"){
@@ -445,7 +448,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                             
                             if((runningProcess[j][7] != 0) && (presentTime == exitByQuantum) && (processorState[i] == 1)){
                                 // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
-                                processorData[runningProcess[j][6]].enqueue([("P"+runningProcess[j][1]),runningProcess[j][3],presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                processorData[runningProcess[j][6]].enqueue([("P"+runningProcess[j][0]),runningProcess[j][3],presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 
                                 // processorData[runningProcess[j][6]].enqueue(presentTime); // 종료된 프로세스는 -1로 표시
                                 processorState[i] = -1; // 프로세서를 종료한다.
@@ -455,7 +458,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                                 break;
                             }else if(runningProcess[j][7] <= 0){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                processorData[runningProcess[j][6]].enqueue([("P"+runningProcess[j][1]),runningProcess[j][3],presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                processorData[runningProcess[j][6]].enqueue([("P"+runningProcess[j][0]),runningProcess[j][3],presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 runningProcess[j][4] = presentTime;  // 종료시간 업데이트
                                 processorState[i] = -1; // 프로세서를 종료한다.
                                 console.log("********************** P"+runningProcess[j][0]+" 종료 **********************")
