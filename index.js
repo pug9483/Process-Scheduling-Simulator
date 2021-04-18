@@ -1,3 +1,7 @@
+// 모듈 실패!
+// import { fcfs, rr, spn, sptn, hrrn, newalgorithm, test } from './algorithm.js';
+
+
 //-------------------태그 관리-------------------------
 const inputTable = document.querySelector("#input-table");
 const showTable = document.querySelector("#show-table");
@@ -228,6 +232,7 @@ function showContextSwit() {
     }
 }
 
+<<<<<<< HEAD
 // 알고리즘 선택 함수
 function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime){
     const selectprocess = document.querySelector(".selectprocess");
@@ -258,6 +263,10 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
 
 
 // 알고리즘 6개`
+=======
+
+// 알고리즘 6개
+>>>>>>> 729f6d67cf93da70d9d15f550bc6c1386bada4e2
 function fcfs(){ 
     //큐
     const readyQueue = new Queue(); // 레디큐 생성
@@ -633,7 +642,7 @@ function deleteAllOfShowTable(){
         showTable.deleteRow(0);
     }
 }
-
+/*
 function createProgressBar(){
     deleteAllOfProgressBar();
     for(let i=0; i < numberOfProcessor; i++){
@@ -641,27 +650,93 @@ function createProgressBar(){
         childProg.className = "progressBar";
         childProg.id ="progressBar";
         progressBars.appendChild(childProg);
+
+        var white = document.createElement("div");
+        white.className = "progressBar__time";
+        white.id ="progressBar__time";
+        progressBars.appendChild(white);
+
+        for(let j=0; j<processData.length; j++){
+            console.log(processData[j][0]);
+            if(processData[j][0] !== undefined){
+                var pro = document.createElement("div");
+                pro.className = "progressBar__process";
+                pro.id ="progressBar__process";
+                pro.innerHTML = "p" + processData[j][0];
+                pro.style.width = processData[j][2] * 10+"%";
+                var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
+                var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; // 점점 진하게
+                pro.style.backgroundColor = tmp2;
+                progressBar.appendChild(pro);
+            }
+        }
     }
 }
+*/
 
-function showProgressBar(){
-    //20초를 100%로 잡고 시작 
-    //1초당 5%씩 올라감
-    const progress = document.querySelectorAll(".progressBar");
-    for(let i=0; i<numberOfProcessor; i++){
-        var width = 0;
-        var max = 100;
+// ProgressBar 수정 부분
+function createProgressBar(){
+    deleteAllOfProgressBar();
+    for(let i=0; i < numberOfProcessor; i++){
+        var childProg = document.createElement("div");
+        childProg.className = "progressBar";
+        childProg.id ="progressBar";
+        progressBars.appendChild(childProg);
+
+        var white = document.createElement("div");
+        white.className = "progressBar__time";
+        white.id ="progressBar__time";
+        progressBars.appendChild(white);
+        white.style.width = 100+ "%";
+
+        for(let j=0; j<processData.length; j++){
+            if(processData[j][0] !== undefined){
+                var pro = document.createElement("div");
+                pro.className = "progressBar__process";
+                pro.id ="progressBar__process";
+                pro.innerHTML = "p" + processData[j][0];
+                pro.style.width = processData[j][2] * 10+"%";
+                var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
+                var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; // 점점 진하게
+                pro.style.backgroundColor = tmp2;
+                progressBar.appendChild(pro);
+            }
+        }
+        /*
+        var width = 100;
+        var min = 0;
         var id = setInterval(frame, 500);
-        var second = 1;
         function frame(){
-            if(width >= max){
+            if(width <= min){
                 clearInterval(id);
             }
             else{
-                width += 5;
-                progress[i].style.width = width+"%";
-                progress[i].innerHTML = second++;
+                width -= 5;
+                white.style.width = width + "%";
+                console.log(white.style.width);
             }
+        }
+        */
+    }
+    
+}
+
+function showProgressBar(){
+    const progress = document.querySelectorAll(".progressBar");
+
+    //20초를 100%로 잡고 시작 
+    //1초당 5%씩 올라감
+    
+    var width = 100;
+    var min = 0;
+    var id = setInterval(frame, 500);
+    function frame(){
+        if(width >= min){
+            clearInterval(id);
+        }
+        else{
+            width -= 5;
+            progress[i].style.width = width + "%";
         }
     }
 }
@@ -677,3 +752,53 @@ function deleteAllOfProgressBar(){
 
 
 
+<<<<<<< HEAD
+=======
+//-------------------- 실행시 처리 ---------------------
+function run(){
+    checkRun = 1; // run()실행을 알리는 변수
+    //입력값 정리
+    const atInput = document.querySelectorAll(".arrivalTime");
+    const btInput = document.querySelectorAll(".burstTime");
+    numberOfProcess = inputTable.rows.length;
+    numberOfProcessor = document.querySelector(".numofprocessors").value;
+    quantumTime = document.querySelector(".quantumTime").value;
+
+    for(let i =0; i<numberOfProcessor; i++){
+        processorState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+    }
+    
+    //프로세스 정보를 넣을 2차원 배열 생성하기
+    for(let i = 0; i<numberOfProcess; i++){
+        processData[i] = new Array();
+    }
+
+    //프로세스번호, 도착시간(index = 1), 실행 시간(index = 2) 저장 배열
+    for(let i=0; i <inputTable.rows.length; i++){
+        processData[i][0] = (i+1);
+        processData[i][1] = atInput[i].value;
+        processData[i][2] = btInput[i].value;
+    }
+
+    //변수값 확인
+    console.log("======================입력값 확인=====================");
+    console.log("프로세서 수: ",numberOfProcessor);
+    console.log("프로세서 상태: ",processorState);
+    console.log("프로세스 수: ",numberOfProcess);
+    showProcessData();
+    console.log("퀀텀타임: ",quantumTime);
+    console.log("=========================run=======================");
+    
+    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
+    createShowTable();
+
+    //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
+    createProgressBar();
+
+    //종류 가져오기
+    chooseProcessAlgorithm();
+
+    //실행 progress 보여주기
+    showProgressBar();
+}
+>>>>>>> 729f6d67cf93da70d9d15f550bc6c1386bada4e2
