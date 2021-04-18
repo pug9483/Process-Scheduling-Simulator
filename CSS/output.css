@@ -60,7 +60,6 @@
 .gantt_table__bottom {
   padding-left: 100px;
   display: flex;
-  justify-content: space-around;
 }
 
 .processor_show__table table {
