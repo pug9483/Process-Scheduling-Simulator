@@ -68,7 +68,7 @@ function deleteLastIndexOfInputRow(){
 function run(){
     //=======================변수 선언 부===================
     //====================== 변수 선언 부 ====================
-    
+    createBottomIndex();
     let resultArray; // 결과배열
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
@@ -695,26 +695,26 @@ function createProgressBar(){
 // ProgressBar 수정 부분
 function createProgressBar(){
     deleteAllOfProgressBar();
+
+    let resultData = [
+        [["P1", 0, 2], ["P2", 4, 7]], // core 1
+        [["P3", 1, 4], ["P4", 5, 6], ["P5", 14, 17]]
+    ];
+
     for(let i=0; i < numberOfProcessor; i++){
         var childProg = document.createElement("div");
         childProg.className = "progressBar";
         childProg.id ="progressBar";
         progressBars.appendChild(childProg);
 
-        var white = document.createElement("div");
-        white.className = "progressBar__time";
-        white.id ="progressBar__time";
-        progressBars.appendChild(white);
-        white.style.width = 100+ "%";
-
-        for(let j=0; j<processData.length; j++){
-            if(processData[j][0] !== undefined){
+        for(let j=0; j<resultData.length; j++){
+            if(resultData[j][0] !== undefined){
                 var pro = document.createElement("div");
                 pro.className = "progressBar__process";
                 pro.id ="progressBar__process";
-                pro.innerHTML = "p" + processData[j][0];
-                pro.style.width = processData[j][2] * 10+"%";
-                var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
+                pro.innerHTML = "P" + resultData[j][0];
+                pro.style.width = resultData[j][2] * 10+"%";
+                // var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
                 var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; // 점점 진하게
                 pro.style.backgroundColor = tmp2;
                 progressBar.appendChild(pro);
@@ -739,24 +739,32 @@ function createProgressBar(){
     
 }
 
+function createBottomIndex(){
+    let maxTime = 29;
+    let tmp = parseInt(maxTime / 30);
+    const ganttTableBottom = document.querySelector(".gantt_table__bottom");
+    for(let i=0; i<=maxTime; i++){
+        var time = document.createElement("div");
+        time.innerText = i;
+        ganttTableBottom.appendChild(time);
+        i += tmp;
+    }
+
+}
+
 function showProgressBar(){
     const progress = document.querySelectorAll(".progressBar");
 
     //20초를 100%로 잡고 시작 
     //1초당 5%씩 올라감
     
-    var width = 100;
-    var min = 0;
-    var id = setInterval(frame, 500);
-    function frame(){
-        if(width >= min){
-            clearInterval(id);
-        }
-        else{
-            width -= 5;
-            progress[i].style.width = width + "%";
-        }
-    }
+    var white = document.createElement("div");
+    white.className = "progressBar__time";
+    white.id ="progressBar__time";
+    progressBars.appendChild(white);
+    white.style.width = 100+ "%";
+
+
 }
 
 function deleteAllOfProgressBar(){
