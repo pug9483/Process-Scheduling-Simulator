@@ -69,7 +69,7 @@ function run(){
     //=======================변수 선언 부===================
     //====================== 변수 선언 부 ====================
     createBottomIndex();
-    let resultArray; // 결과배열
+    let resultData; // 결과배열
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
@@ -84,7 +84,7 @@ function run(){
     console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
-    resultArray, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    resultData, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
 
     // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     // createShowTable();
