@@ -58,9 +58,10 @@
 }
 
 .gantt_table__bottom {
-  padding-left: 100px;
+  padding-top: 3px;
+  padding-left: 97px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .processor_show__table table {
