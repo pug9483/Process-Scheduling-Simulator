@@ -84,7 +84,7 @@ function run(){
     console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
-    resultArray = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    resultArray, max = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
 
     // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
     // createShowTable();
@@ -98,30 +98,6 @@ function run(){
     // showProgressBar();
 }
 
-// 알고리즘 선택 함수
-function chooseProcessAlgorithm(){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    console.log("선택된 알고리즘: ",processValue.toUpperCase());
-    if(processValue == "fcfs"){
-        fcfs();
-    }
-    else if(processValue == "rr"){
-        rr();
-    }
-    else if(processValue == "spn"){
-        spn();
-    }
-    else if(processValue == "sptn"){
-        sptn();
-    }
-    else if(processValue == "hrrn"){
-        hrrn();
-    }
-    else if(processValue == "newalgorithm"){
-        newalgorithm();
-    }
-}
 
 //------------------BackEnd-------------------------
 // 큐 클래스 선언
@@ -266,13 +242,14 @@ function showContextSwit() {
 function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime){
     const selectprocess = document.querySelector(".selectprocess");
     const processValue = selectprocess.value;
+    let max = 0;
     let resultAlgorithm;
     console.log("선택된 알고리즘: ",processValue.toUpperCase());
     if(processValue == "fcfs"){
         resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "rr"){
-        resultAlgorithm = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+        max, resultAlgorithm = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
     }
     else if(processValue == "spn"){
         resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
@@ -287,7 +264,7 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
         resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
 
-    return resultAlgorithm;
+    return resultAlgorithm, max;
 }
 
 
@@ -509,11 +486,22 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
             resultData[i] = (processorData[i].dequeueAll())
         }
     }
+    let prRunTime = []
+    for(let i = 0;i<nopr;i++){
+        console.log(i,resultData[i]);
+        console.log("dd",resultData[i][resultData[i].length-1]);
+        let lastindex = resultData[i][resultData[i].length-1];
+        prRunTime[i] = lastindex[lastindex.length-1];
+
+    }
+    console.log(prRunTime);
+    let max = Math.max.apply(null, prRunTime);
+    console.log(max);
 
     for(let i = 0; i< nopr; i++)
         console.log("result Data 프로세서"+i+" "+resultData[i]);
 
-    return resultData;
+    return max, resultData;
 }
 function spn(){ 
     //큐
