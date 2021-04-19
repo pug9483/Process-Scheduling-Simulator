@@ -68,8 +68,20 @@ function deleteLastIndexOfInputRow(){
 function run(){
     //=======================변수 선언 부===================
     //====================== 변수 선언 부 ====================
+    
+    let resultData; // 결과배열
+    createProgressBar(resultData);
     createBottomIndex();
+<<<<<<< HEAD
     let result;
+=======
+<<<<<<< HEAD
+=======
+    let resultData; // 결과배열
+    let max = 0;
+    let readyQLog =[];
+>>>>>>> 17d68a82c4841f7e451d1afd965517cea545db66
+>>>>>>> 8c803077da0a13133803ba57cc6884a544813815
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
@@ -92,7 +104,7 @@ function run(){
 
     debug(result);
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
-    // createProgressBar();
+    createProgressBar(resultData);
     
     // //종류 가져오기
 
@@ -455,7 +467,12 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
+<<<<<<< HEAD
     max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+=======
+    // for(let i = 0; i< nopr; i++)
+    //     console.log(("result Data 프로세서"+i)+" "+resultData[i]);
+>>>>>>> 8c803077da0a13133803ba57cc6884a544813815
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -697,60 +714,55 @@ function createProgressBar(){
 */
 
 // ProgressBar 수정 부분
-function createProgressBar(){
+function createProgressBar(resultData){
     deleteAllOfProgressBar();
-
-    let resultData = [
-        [["P1", 0, 2], ["P2", 4, 7]], // core 1
-        [["P3", 1, 4], ["P4", 5, 6], ["P5", 14, 17]]
+    // const numberOfProcessor = resultData.length;
+    let tmpResultData = [
+        [["P1", 3, 5], ["P2", 7, 10]], // core 1
+        [["P3", 0, 3], ["P4", 5, 6], ["P5", 14, 17]]
     ];
-
+    let numberOfProcessor = tmpResultData.length;
+    console.log(tmpResultData);
+    console.log(numberOfProcessor); 
+    const maxTime = 30;
+    
     for(let i=0; i < numberOfProcessor; i++){
+        //하나의 코어 만들기
         var childProg = document.createElement("div");
-        childProg.className = "progressBar";
-        childProg.id ="progressBar";
+        childProg.className = "progressBar"+(i+1);
+        //childProg Flex로 만들어주기
+        childProg.style.display = "flex";
         progressBars.appendChild(childProg);
 
-        for(let j=0; j<resultData.length; j++){
-            if(resultData[j][0] !== undefined){
-                var pro = document.createElement("div");
-                pro.className = "progressBar__process";
-                pro.id ="progressBar__process";
-                pro.innerHTML = "P" + resultData[j][0];
-                pro.style.width = resultData[j][2] * 10+"%";
-                // var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
-                var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; // 점점 진하게
-                pro.style.backgroundColor = tmp2;
-                progressBar.appendChild(pro);
-            }
+        const plusWidth = 100 / maxTime;
+        //하나의 코어 안에 프로세스 노드들 만들어주기
+        for(let j=0; j<tmpResultData[i].length; j++){
+            const pro = document.createElement("div");
+            pro.className = "progressBar_process"+ (j+1);
+            pro.innerHTML = tmpResultData[i][j][0];
+            if(j === 0) pro.style.marginLeft = (tmpResultData[i][j][1] * plusWidth) + "%";
+            if(j !== 0) pro.style.marginLeft = ((tmpResultData[i][j][1] - tmpResultData[i][j-1][2])*plusWidth)+ "%";
+            pro.style.width = (tmpResultData[i][j][2] - tmpResultData[i][j][1]) * plusWidth + "%";
+            var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
+            pro.style.backgroundColor = tmp2;
+            pro.style.textAlign = "center";
+            childProg.appendChild(pro);
         }
-        /*
-        var width = 100;
-        var min = 0;
-        var id = setInterval(frame, 500);
-        function frame(){
-            if(width <= min){
-                clearInterval(id);
-            }
-            else{
-                width -= 5;
-                white.style.width = width + "%";
-                console.log(white.style.width);
-            }
-        }
-        */
     }
-    
 }
 
 function createBottomIndex(){
-    let maxTime = 29;
-    let tmp = parseInt(maxTime / 30);
+    const maxTime = 30;
+    const tmp = parseInt(maxTime / 30);
+    const plusWidth = 100 / maxTime * (tmp+1);
+
     const ganttTableBottom = document.querySelector(".gantt_table__bottom");
-    for(let i=0; i<=maxTime; i++){
+    for(let i=0; i<maxTime; i++){
         var time = document.createElement("div");
         time.innerText = i;
+        time.style.width = plusWidth + "%";
         ganttTableBottom.appendChild(time);
+
         i += tmp;
     }
 
@@ -758,17 +770,11 @@ function createBottomIndex(){
 
 function showProgressBar(){
     const progress = document.querySelectorAll(".progressBar");
-
-    //20초를 100%로 잡고 시작 
-    //1초당 5%씩 올라감
-    
     var white = document.createElement("div");
     white.className = "progressBar__time";
     white.id ="progressBar__time";
     progressBars.appendChild(white);
     white.style.width = 100+ "%";
-
-
 }
 
 function deleteAllOfProgressBar(){
