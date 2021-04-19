@@ -101,7 +101,7 @@ function run(){
     // //종류 가져오기
 
     // //실행 progress 보여주기
-    // showProgressBar();
+    showProgressBar(result.max);
 }
 
 //------------------BackEnd-------------------------
@@ -902,14 +902,40 @@ function deleteCoreName(){
     }
 }
 
-function showProgressBar(){
-    const progress = document.querySelectorAll(".progressBar");
+
+function showProgressBar(maxTime){
+    deleteProgressBar();
+    const progress = document.querySelector(".gantt_table__top-right");
     var white = document.createElement("div");
     white.className = "progressBar__time";
-    white.id ="progressBar__time";
-    progressBars.appendChild(white);
-    white.style.width = 100+ "%";
+    white.id ="progressBar__time";  
+    progress.appendChild(white);
+    
+    const timeInterval = 100 / (maxTime+1); // 길이/초
+    var id = setInterval(frame, 1000);
+    var width = 100;
+    var i =1;
+    function frame(){
+        width -= timeInterval;
+        console.log(width);
+        if(width < 0){
+            white.style.width = 0;
+            white.style.marginLeft = (timeInterval * i) + "%";
+            clearInterval(id);
+        }
+        else{
+            white.style.width = width + "%";
+            white.style.marginLeft = (timeInterval * i) + "%";
+            i++;
+        }
+        
+    }
 }
+function deleteProgressBar(){
+    var delParent = document.querySelector(".gantt_table__top-right"); 
+    delParent.removeChild(delParent.lastChild);
+}
+
 
 function deleteAllOfProgressBar(){
     var del = document.getElementById("progressBars"); 
