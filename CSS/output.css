@@ -1,5 +1,9 @@
-.progressBars {
+#progressBars {
   width: 750px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .progressBar {
@@ -13,26 +17,22 @@
 
 .progressBar__time {
   background-color: white;
-  height: 50px;
+  height: 180px;
+  width: 750px;
   position: relative;
-  top: -50px;
-
-  animation: fadein 3s;
+  top: -180px;
 }
 
-@keyframes fadein {
-  from {
-    width: 750px;
-  }
-  to {
-    width: 0px;
-  }
+.progressBar {
+  height: 30px;
 }
 
 .progressBar__process {
-  width: 60px;
-  background-color: rgb(95, 158, 160);
-  border: 1px solid rgb(255, 255, 255);
+  /* background-color: blue; */
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .gantt_table {
@@ -50,6 +50,11 @@
 .gantt_table__top-left {
   width: 100px;
   border-right: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: 600;
 }
 
 .gantt_table__top-right {
