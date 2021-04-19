@@ -101,7 +101,7 @@ function run(){
 }
 
 function debug(result){
-    console.log("1",result);;
+    console.log(result);;
 }
 //------------------BackEnd-------------------------
 // 큐 클래스 선언
@@ -139,21 +139,20 @@ class Queue {
     }
 
     //큐의 모든 요소를 출력
-    toString2() {
-        var retStr = "";
-        if(this.dataStore.length == 0) return "";
-        else{
-            for (var i = 0;i < this.dataStore.length; ++i )    {
-                retStr += this.dataStore[i]+"\n";
-            }
+    
+    toString() {
+        let retStr = [];
+        for (let i = 0; i < this.dataStore.length; ++i ){
+            retStr[i] = (this.dataStore[i].id+1);
         }
         return retStr;
     }
 
-    toString() {
+    toString2() {
         let retStr = [];
-            for (let i = 0; i < this.dataStore.length; ++i )  
-                    retStr[i] = this.dataStore[i].id;
+        for (let i = 0; i < this.dataStore.length; ++i ){
+            retStr[i] = (this.dataStore[i][0]);
+        }
         return retStr;
     }
 
@@ -197,8 +196,6 @@ class Queue {
             let key = this.dataStore[i];
             let j = i - 1;
             while (j >= 0 && (((this.dataStore[j][5]+this.dataStore[j][2])/this.dataStore[j][2]) < ((key[5]+key[2])/key[2]))){
-                console.log("1 ",((this.dataStore[j][5]+this.dataStore[j][2])/this.dataStore[j][2]));
-                console.log(("2 ",(key[5]+key[2])/key[2]));
                 this.dataStore[j+1] = this.dataStore[j];
                 j = j - 1
             }
@@ -211,7 +208,7 @@ class Queue {
 
 function showProcessorRunning(processorData , numberOfProcessor){
     for(let i =0; i< numberOfProcessor; i++){ 
-            console.log("프로세서"+(i+1)+" 큐: ",processorData[i].toString());
+            console.log("프로세서"+(i+1)+" 큐: ",processorData[i].toString2());
     } 
 }
 
@@ -305,8 +302,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     
     //시간
     
-    let prRunTime = [];  // max 런타임 처리
-    let presentTime = 0; // 현재시간 0으로 초기화
+    let prRunTime = new Array();  // max 런타임 처리
+    let presentTime; // 현재시간 0으로 초기화
     let totoalTime; // 알고리즘 실행시간
     let exitByQuantum // 퀀텀시간이 지났음을 비교할때 쓰는 변수
     
@@ -315,7 +312,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     let workIndex // 현재 작업중인 프로세서 인덱스
     
     //최종 결과
-    let result = {};  // 최종결과 객체 반환
+    let result = new Object();  // 최종결과 객체 반환
     // 객체에 들어갈 키값 변수
     let resultData = new Array(new Array());
     let readyQLog = new Array();
@@ -326,6 +323,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
 
     //==================== 초기화 ===========================
     
+    presentTime = 0;  // 현재시간 0 초로 초기화
+
     for(let i =0; i<nopr; i++) {
         processorState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
         processorData[i] = new Queue();
@@ -341,7 +340,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
     //=====================초기화 종료========================
     
 
-    // //====================== 실행부 =============================
+    //======================================== 실행부 ===============================================
     
     while(1){ // 무한루프
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
@@ -355,11 +354,11 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
 
 
 
-    //     //==================콘솔확인(디버깅)====================
+        //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
-        console.log("레디큐: ",readyQueue.toString());
-        readyQLog.push([presentTime,readyQueue.toString()]);  // 레디큐 로그 업데이트
-    //     //==================콘솔확인(디버깅)====================
+        console.log("레디큐: ","P"+readyQueue.toString());
+        //==================콘솔확인(디버깅)====================
+        readyQLog.push([presentTime,("P"+readyQueue.toString())]);  // 레디큐 로그 업데이트
 
 
         
@@ -372,9 +371,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-
             processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
-            runningProcess.push(processData[dequeProcess.id]); // 실행중인프로세스 목록에 디큐된 프로세스 추가
+            runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
 
         
@@ -389,42 +387,41 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
+        for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
+            if(runningProcess[i] == -1)  {
+                runningProcess.splice(i, 1);
+                i--;
+            }
+        }
         if(runningProcess.length != 0){ //하나라도 실행중인 프로세스가 있으면,
             for(let i=0; i<runningProcess.length;i++){ //실행중인 모든 프로세스의 잔여시간을 줄여라.
-                runningProcess[i].rt--;
+                processData[runningProcess[i]].rt--;
             }
         }
         
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
-                if(runningProcess[i] == -1)  {
-                    runningProcess.splice(i, 1);
-                    i--;
-                }
-            }
             for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
-                        exitByQuantum = runningProcess[j].st + qt; 
-                        if(runningProcess[j].pr == i) {
+                        exitByQuantum = processData[runningProcess[j]].st + qt; 
+                        if(processData[runningProcess[j]].pr == i) {
                             
-                            if((runningProcess[j].rt != 0) && (presentTime == exitByQuantum) && (processorState[i] == 1)){
+                            if((processData[runningProcess[j]].rt != 0) && (presentTime == exitByQuantum) && (processorState[i] == 1)){
                                 // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
-                                processorData[runningProcess[j].pr].enqueue([("P"+(runningProcess[j].id+1)),runningProcess[j].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                // processorData[runningProcess[j][6]].enqueue(presentTime); // 종료된 프로세스는 -1로 표시
+                                processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 processorState[i] = -1; // 프로세서를 종료한다.
-                                console.log("****************** P"+(runningProcess[j].id+1)+" 종료 By Quantum ******************")
-                                exitQuantumQueue.enqueue(processData[(runningProcess[j].id)]); // 퀀텀시간이 지나 레디큐로 이동
+                                console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
+                                exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
                                 runningProcess[j] = -1; // 프로세스를 종료한다.
                                 break;
-                            }else if(runningProcess[j].rt <= 0){
+                            }else if(processData[runningProcess[j]].rt <= 0){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                processorData[runningProcess[j].pr].enqueue([("P"+(runningProcess[j].id+1)),runningProcess[j].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                runningProcess[j].et = presentTime;  // 종료시간 업데이트
+                                processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 processorState[i] = -1; // 프로세서를 종료한다.
-                                console.log("********************** P"+(runningProcess[j].id+1)+" 종료 **********************")
-                                exitProcessQueue.enqueue(processData[(runningProcess[j].id)]); // 잔여시간이 다지나서 종료큐로 이동
+                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
+                                exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
                         }
@@ -436,7 +433,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
     
-    //======================== 실행부 종료 =============================
+    //============================================= 실행부 종료 ===========================================
 
     //======================== 결과, 리턴 처리 ==========================
 
@@ -454,14 +451,13 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
 
 
     for(let i = 0;i<nopr;i++){  // 최대시간 처리
-        console.log(i,resultData[i]);
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간
+    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
 
-    //결과값 수정
+    //결과값 넣어줌
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
