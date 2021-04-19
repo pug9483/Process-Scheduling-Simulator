@@ -71,10 +71,8 @@ function deleteLastIndexOfInputRow(){
 function run(){
     //====================== 변수 선언 부 ====================
     
-    let resultData; // 결과배열
-    createProgressBar(resultData);
-    createBottomIndex();
     let result;
+
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
@@ -97,8 +95,9 @@ function run(){
 
     debug(result);
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
-    createProgressBar(resultData);
-    
+    createProgressBar(result.resultData, result.max, numberOfProcessor); //배열, time
+    showCoreName(numberOfProcessor); //코어 개수
+    createBottomIndex(result.max);
     // //종류 가져오기
 
     // //실행 progress 보여주기
@@ -813,58 +812,94 @@ function createProgressBar(){
 */
 
 // ProgressBar 수정 부분
-function createProgressBar(resultData){
+function createProgressBar(resultData, maxTime, numberOfCore){
     deleteAllOfProgressBar();
-    // const numberOfProcessor = resultData.length;
-    let tmpResultData = [
-        [["P1", 3, 5], ["P2", 7, 10]], // core 1
-        [["P3", 0, 3], ["P4", 5, 6], ["P5", 14, 17]]
-    ];
-    let numberOfProcessor = tmpResultData.length;
-    console.log(tmpResultData);
-    console.log(numberOfProcessor); 
-    const maxTime = 30;
+    // let tmpResultData = [
+    //     [["P1", 3, 5], ["P2", 7, 10]], // core 1
+    //     [["P3", 0, 3], ["P4", 5, 6], ["P5", 12, 14]],
+    //     [["P6", 0, 3]],
+    //     [["P7", 0, 3]]
+    // ];
+    // let numberOfCore = tmpResultData.length;
+    // console.log(tmpResultData);
+    // console.log(numberOfCore); 
+    // const maxTime = 15;
     
-    for(let i=0; i < numberOfProcessor; i++){
+    for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
-        childProg.className = "progressBar"+(i+1);
+        childProg.className = "progressBar";
+        childProg.id = "progressBar"+(i+1);
         //childProg Flex로 만들어주기
         childProg.style.display = "flex";
         progressBars.appendChild(childProg);
 
-        const plusWidth = 100 / maxTime;
+        const plusWidth = 100 / (maxTime+1);
         //하나의 코어 안에 프로세스 노드들 만들어주기
-        for(let j=0; j<tmpResultData[i].length; j++){
+        for(let j=0; j<resultData[i].length; j++){
             const pro = document.createElement("div");
-            pro.className = "progressBar_process"+ (j+1);
-            pro.innerHTML = tmpResultData[i][j][0];
-            if(j === 0) pro.style.marginLeft = (tmpResultData[i][j][1] * plusWidth) + "%";
-            if(j !== 0) pro.style.marginLeft = ((tmpResultData[i][j][1] - tmpResultData[i][j-1][2])*plusWidth)+ "%";
-            pro.style.width = (tmpResultData[i][j][2] - tmpResultData[i][j][1]) * plusWidth + "%";
+            pro.className = "progressBar__process";
+            pro.id = "progressBar__process"+(j+1);
+            pro.innerHTML = resultData[i][j][0];
+            if(j === 0) pro.style.marginLeft = (resultData[i][j][1] * plusWidth) + "%";
+            if(j !== 0) pro.style.marginLeft = ((resultData[i][j][1] - resultData[i][j-1][2])*plusWidth)+ "%";
+            pro.style.width = (resultData[i][j][2] - resultData[i][j][1]) * plusWidth + "%";
             var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
             pro.style.backgroundColor = tmp2;
-            pro.style.textAlign = "center";
+            // pro.style.textAlign = "center";
             childProg.appendChild(pro);
         }
     }
 }
 
-function createBottomIndex(){
-    const maxTime = 30;
-    const tmp = parseInt(maxTime / 30);
+function createBottomIndex(maxTime){
+    deleteBottomIndex();
+    // const maxTime = 15;
+    const tmp = parseInt(maxTime / 16);
     const plusWidth = 100 / maxTime * (tmp+1);
 
     const ganttTableBottom = document.querySelector(".gantt_table__bottom");
-    for(let i=0; i<maxTime; i++){
+    var time = document.createElement("div");
+    for(let i=0; i<=maxTime; i++){
         var time = document.createElement("div");
         time.innerText = i;
         time.style.width = plusWidth + "%";
         ganttTableBottom.appendChild(time);
-
         i += tmp;
     }
+}
+function deleteBottomIndex(){
+    var del = document.querySelector(".gantt_table__bottom"); 
+    while ( del.hasChildNodes() ) { 
+        del.removeChild( del.firstChild ); 
+    }
+}
 
+function showCoreName(numberOfCore){
+    deleteCoreName();
+    const ganttTableLeft = document.querySelector(".gantt_table__top-left");
+
+    // let tmpResultData = [
+    //     [["P1", 3, 5], ["P2", 7, 10]], // core 1
+    //     [["P3", 0, 3], ["P4", 5, 6], ["P5", 14, 15]],
+    //     [["P6", 0, 3]],
+    //     [["P7", 0, 3]]
+    // ];
+    // let numberOfCore = tmpResultData.length;
+
+    for(let i=0; i < numberOfCore; i++){
+        var core = document.createElement("div");
+        core.className = "core";
+        core.innerText = "core" + (i+1);
+        ganttTableLeft.appendChild(core);
+    }
+}
+
+function deleteCoreName(){
+    var del = document.querySelector(".gantt_table__top-left"); 
+    while ( del.hasChildNodes() ) { 
+        del.removeChild( del.firstChild ); 
+    }
 }
 
 function showProgressBar(){
