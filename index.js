@@ -208,8 +208,7 @@ class Queue {
 
 
 function showProcessorRunning(processorData , numberOfProcessor){
-    for(let i =0; i< numberOfProcessor; i++){ 
-            console.log(processorData);
+    for(let i =0; i< numberOfProcessor; i++){
             console.log("프로세서"+(i+1)+" 큐: ",processorData[i].toString2());
     } 
 }
@@ -528,7 +527,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                             if((processData[runningProcess[j]].rt != 0) && (presentTime == exitByQuantum) && (processorState[i] == 1)){
                                 // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
                                 processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                console.log("ddfff", i);
                                 processorState[i] = -1; // 프로세서를 종료한다.
                                 console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
                                 exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
@@ -538,7 +536,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
                                 processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                console.log("ddfff", i);
                                 processorState[i] = -1; // 프로세서를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
@@ -569,7 +566,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){
         }
     }
 
-    console.log("dddddddddddd",resultData);
     for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
