@@ -71,7 +71,6 @@ function deleteLastIndexOfInputRow(){
 function run(){
     //====================== 변수 선언 부 ====================
     
-    let resultData; // 결과배열
     createProgressBar(resultData);
     createBottomIndex();
     let result;
@@ -225,15 +224,15 @@ function showProcessorRunning(processorData , numberOfProcessor){
 // 알고리즘 6개
 function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){ 
     // =======================선언부=======================
-    let nop = numberOfProcess;  // 총 프로세스 수
-    let nopr = numberOfProcessor;  // 프로세서 수
-    let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    let processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    let processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    const nop = numberOfProcess;  // 총 프로세스 수
+    const nopr = numberOfProcessor;  // 프로세서 수
+    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
+    const processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
+    const processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
 
     //큐
     const readyQueue = new Queue(); // 레디큐 생성
-    let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
     let exitQuantumQueue = new Queue(); // 퀀텀시간이 지난 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
     let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
     
