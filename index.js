@@ -1,8 +1,10 @@
+//import { test1 } from "./algorithm.js"
+// 모듈 실패!
+// import { fcfs, rr, spn, sptn, hrrn, newalgorithm, test } from './algorithm.js';
+
 function debug(result){
     console.log(result);;
 }
-// 모듈 실패!
-// import { fcfs, rr, spn, sptn, hrrn, newalgorithm, test } from './algorithm.js';
 
 
 //-------------------태그 관리-------------------------
@@ -65,12 +67,37 @@ function deleteLastIndexOfInputRow(){
 //------------------입력 끝-----------------
 
 
+//------------------빈 값 체크-----------------
+function inputCheck(atInput, btInput, selectprocess){
+    for(var i = 0; i < atInput.length; i++){
+        if(atInput[i].value === "" || isNaN(atInput[i].value)) {
+            return false;
+        }        
+    }
+
+    for(var i = 0; i < btInput.length; i++){
+        if(btInput[i].value === "" || isNaN(btInput[i].value)) {
+            return false;
+        }        
+    }
+
+    if(selectprocess.value === "rr"){
+        const quantumTime = document.querySelector(".quantumTime").value;
+        if(quantumTime === "" || isNaN(quantumTime)) {
+            return false;
+        }  
+    }
+    
+    return true;
+}
 
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
+    init(); // 초기화 함수
+    //test1();
+
     //====================== 변수 선언 부 ====================
-    
     let result;
 
     //입력값 정리
@@ -78,16 +105,24 @@ function run(){
     const btInput = document.querySelectorAll(".burstTime");
     const numberOfProcess = inputTable.rows.length;
     const numberOfProcessor = document.querySelector(".numofprocessors").value;
-    const quantumTime = Number(document.querySelector(".quantumTime").value);
+    const selectprocess = document.querySelector(".selectprocess");
+    //====================== 입력 체크 ====================
+
+    if(!inputCheck(atInput,btInput,selectprocess)){
+        alert("오류! 값을 다시 넣어주세요. (정수로)");
+        return;
+    } 
+
+
     
     //변수값 확인
     console.log("======================입력값 확인=====================");
     console.log("프로세서 수: ",numberOfProcessor);
     console.log("프로세스 수: ",numberOfProcess);
-    console.log("퀀텀타임: ",quantumTime);
+    // console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
-    result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+    result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
 
 
     // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
@@ -401,11 +436,11 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
-function rr(atInput, btInput, numberOfProcessor, numberOfProcess,quantumTime){ 
+function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
     const nopr = numberOfProcessor;  // 프로세서 수
-    const qt = quantumTime; // 퀀텀 타임
+    const qt =  Number(document.querySelector(".quantumTime").value); 
     const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
     const processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
     const processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
@@ -646,8 +681,209 @@ function spn(){
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("전체 실행 시간: ",totoalTime);
 }
-function sptn(){
+
+function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
+    // =============선언부==============
+    let nop = numberOfProcess;  // 총 프로세스 수
+    let nopr = numberOfProcessor;  // 프로세서 수
+    let processData = new Array(); //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
+    let processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
+    let processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     
+    //큐
+    const readyQueue = new Array(); // 레디큐 생성
+    let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
+    let exitQueue = new Array(); // Burst time이 길어진 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
+    let exitProcessQueue = new Array(); // 종료조건을 위해 종료프로세스들을 모아둠
+
+    // 시간
+    let prRunTime = new Array();  // max 런타임 처리
+    let presentTime; // 현재시간 0으로 초기화
+    let totoalTime; // 알고리즘 실행시간
+
+    
+    //실행 여부
+    let runningProcess = new Array(); // 실행중인 프로세스
+    let workIndex // 현재 작업중인 프로세서 인덱스
+    
+    //최종 결과
+    let result = new Object();  // 최종결과 객체 반환
+    // 객체에 들어갈 키값 변수
+    let resultData = new Array(new Array());
+    let readyQLog = new Array();
+    let max;
+
+    // =============선언부 종료==================
+
+    //-------------초기화------------------------
+
+    presentTime = 0; // 현재시간 초기화
+
+    for(let i =0; i<nopr; i++) {
+        processorState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        processorData[i] = new Queue();
+    }
+
+    for(let i=0; i <nop; i++){ 
+        processData[i] = {id: -1, at: -1, bt: -1,st:-1,et: -1, wt: 0, pr: -1, rt: -1};  // 프로세스 정보를 넣을 길이가 8인 배열 생성
+        processData[i].id = i;  // 프로세스 번호
+        processData[i].at = Number(atInput[i].value);  // 프로세스 도착시간
+        processData[i].bt = Number(btInput[i].value);  // 프로세스 실행시간
+        processData[i].rt = Number(btInput[i].value); //프로세스 잔여 시간
+    }
+
+    //---------------초기화 종료-------------------------
+
+    // ---------------------------------실행부---------------------------
+   
+
+    while(1){
+        for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
+            if (presentTime == processData[i].at) readyQueue.push(processData[i]);
+        
+        
+        if(exitQueue.length != 0){
+            temp = exitQueue.length(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
+            for(let i =0; i<temp;i++) readyQueue.push(exitQueue.shift()); // 비교에 의해 종료된 큐를 이후에 레디큐에 삽입
+        }
+
+        // 버그 !!!!!!!!!!!!!!
+        readyQueue.sort(function(a,b){// 잔여시간에 따라 오름차순 정렬
+            return a.rt < b.rt ? -1 : a.rt > b.rt ? 1: 0;
+        });
+
+        //==================콘솔확인(디버깅)====================
+        console.log("시간: ",presentTime);
+        console.log("레디큐: ",readyQueue.toString());
+        //==================콘솔확인(디버깅)====================
+        
+        while(readyQueue.length != 0 && processorState.indexOf(-1) >= 0){ // 빈 프로세서가 있는 경우
+            workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
+            processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            dequeProcess = readyQueue.shift(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
+            if((processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
+                processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
+            }
+            processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가    
+        }
+
+        while (processorData.indexOf(-1) == -1){// 프로세서가 다 차있으면 레디큐 내 잔여 최솟값과 실행 프로세서 내 잔여 최댓값 비교 후 swap 필요
+            let readyQMin = readyQueue[0].rt; // 레디큐 내 잔여 최솟값 (정렬돼있으므로 인덱스 0)
+            let runningPsMax = -1; //러닝프로세스중 rt 최댓값 담을 변수
+            let maxIndex = -1; //rt 최댓값인 러닝프로세스 인덱스 담을 변수
+            for(let i = 0; i<4; i++){
+                runningPsMax = Math.max(runningPsMax, processData[runningProcess[i]].rt) // rt 최댓값 찾기
+                if(runningPsMax == processdata[runningProcess[i]].rt) maxIndex = i; // 최댓값 rt 인덱스 찾기
+            }
+            if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
+                exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
+                runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
+                dequeProcess = readyQueue.shift(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
+                if((processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
+                    processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
+                }
+                processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
+                processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+                runningProcess.splice(maxIndex,0,dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
+            }
+            else{// 더이상 레디큐 내 잔여시간이 실행 프로세스 잔여시간 보다 작은게 없다는 뜻
+                break; // while 나감
+            }
+
+        }
+        console.log("break: ",processData[dequeProcess[0]-1]);    
+        
+        //대기시간 측정
+        for(let i = 0; i< nop; i++){
+            if(readyQueue.search(processData[i])==true){
+                processData[i].wt++;
+            }
+        }
+        
+        if(presentTime>100) break; // 무한 루프 방지
+        
+        presentTime++; //****************  현재시간 1추가 ******************  
+        
+        for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
+            if(runningProcess[i] == -1)  {
+                runningProcess.splice(i, 1);
+                i--;
+            }
+        }
+
+        for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
+            if(runningProcess[i] == -1)  {
+                runningProcess.splice(i, 1);
+                i--;
+            }
+        }
+
+        if(runningProcess.length != 0){ //하나라도 실행중인 프로세스가 있으면,
+            for(let i=0; i<runningProcess.length;i++){ //실행중인 모든 프로세스의 잔여시간을 줄여라.
+                processData[runningProcess[i]].rt--;
+            }
+        }
+        
+        // 종료조건
+        if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
+            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+                for(let j = 0; j< runningProcess.length; j++){
+                    if(runningProcess[j] != -1){
+                         
+                        if(processData[runningProcess[j]].pr == i) {
+                            
+                            if(processData[runningProcess[j]].rt <= 0){
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
+                                processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
+                                processorState[i] = -1; // 프로세서를 종료한다.
+                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
+                                exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
+                                runningProcess[j] = -1; //프로세스를 종료한다.
+                            }
+                        }
+                    }
+                }
+            }
+            showProcessorRunning(processorData , nopr)
+        }
+        if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
+    }
+    
+    //============================================= 실행부 종료 ===========================================
+
+    //======================== 결과, 리턴 처리 ==========================
+
+    totoalTime = presentTime; //전체실행시간을 저장.
+    console.log("=============결과=============== ");
+    console.log("전체 실행 시간: ",totoalTime);
+    // showContextSwit(); // 버그수정 필요
+    
+    //최종결과 처리
+    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+        for(let j =0; j<processorData[i].toLength(); j++){
+            resultData[i] = (processorData[i].dequeueAll())
+        }
+    }
+
+
+    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+        let lastindex = resultData[i][resultData[i].length-1];
+        prRunTime[i] = lastindex[lastindex.length-1];
+    }
+
+    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+
+    //결과값 넣어줌
+    result.readyQLog = readyQLog;
+    result.max = max;
+    result.resultData = resultData;
+    
+    return result;
+    //======================== 결과, 리턴 처리 종료 ==========================
+
 }
 function hrrn(){
     //큐
@@ -727,7 +963,7 @@ function newalgorithm(){
 
 
 // 알고리즘 선택 함수
-function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime){
+function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
     const selectprocess = document.querySelector(".selectprocess");
     const processValue = selectprocess.value;
     let result;
@@ -737,13 +973,13 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
         resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "rr"){
-        result = rr(atInput, btInput, numberOfProcessor, numberOfProcess, quantumTime);
+        result = rr(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "spn"){
         resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
-    else if(processValue == "sptn"){
-        resultAlgorithm = sptn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    else if(processValue == "srtn"){
+        resultAlgorithm = srtn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "hrrn"){
         resultAlgorithm = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
@@ -760,9 +996,15 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
 
 // --------------------- FrontEnd -------------------
  
+function init(){
+    deleteBottomIndex();
+    deleteAllOfProgressBar();
+    deleteProgressBar();
+    deleteCoreName();
+    deleteAllOfShowTable();
+}
 
 function createShowTable(){
-    deleteAllOfShowTable();
     for(let i=0; i <inputTable.rows.length; i++){
         var getRow = showTable.insertRow(showTable.rows.length);
         const row0 = getRow.insertCell(0);
@@ -774,57 +1016,8 @@ function createShowTable(){
     }
 }
 
-function deleteAllOfShowTable(){
-    while(showTable.rows.length>0){
-        showTable.deleteRow(0);
-    }
-}
-/*
-function createProgressBar(){
-    deleteAllOfProgressBar();
-    for(let i=0; i < numberOfProcessor; i++){
-        var childProg = document.createElement("div");
-        childProg.className = "progressBar";
-        childProg.id ="progressBar";
-        progressBars.appendChild(childProg);
-
-        var white = document.createElement("div");
-        white.className = "progressBar__time";
-        white.id ="progressBar__time";
-        progressBars.appendChild(white);
-
-        for(let j=0; j<processData.length; j++){
-            console.log(processData[j][0]);
-            if(processData[j][0] !== undefined){
-                var pro = document.createElement("div");
-                pro.className = "progressBar__process";
-                pro.id ="progressBar__process";
-                pro.innerHTML = "p" + processData[j][0];
-                pro.style.width = processData[j][2] * 10+"%";
-                var tmp1 = "rgb("+(103+30*j)+", "+(230+30*j)+", " +(220+30*j)+")"; // 점점 연하게
-                var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; // 점점 진하게
-                pro.style.backgroundColor = tmp2;
-                progressBar.appendChild(pro);
-            }
-        }
-    }
-}
-*/
-
-// ProgressBar 수정 부분
 function createProgressBar(resultData, maxTime, numberOfCore){
-    deleteAllOfProgressBar();
-    // let tmpResultData = [
-    //     [["P1", 3, 5], ["P2", 7, 10]], // core 1
-    //     [["P3", 0, 3], ["P4", 5, 6], ["P5", 12, 14]],
-    //     [["P6", 0, 3]],
-    //     [["P7", 0, 3]]
-    // ];
-    // let numberOfCore = tmpResultData.length;
-    // console.log(tmpResultData);
-    // console.log(numberOfCore); 
-    // const maxTime = 15;
-    
+
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
@@ -853,8 +1046,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
 }
 
 function createBottomIndex(maxTime){
-    deleteBottomIndex();
-    // const maxTime = 15;
+
     const tmp = parseInt(maxTime / 16);
     const plusWidth = 100 / maxTime * (tmp+1);
 
@@ -868,24 +1060,11 @@ function createBottomIndex(maxTime){
         i += tmp;
     }
 }
-function deleteBottomIndex(){
-    var del = document.querySelector(".gantt_table__bottom"); 
-    while ( del.hasChildNodes() ) { 
-        del.removeChild( del.firstChild ); 
-    }
-}
+
 
 function showCoreName(numberOfCore){
-    deleteCoreName();
-    const ganttTableLeft = document.querySelector(".gantt_table__top-left");
 
-    // let tmpResultData = [
-    //     [["P1", 3, 5], ["P2", 7, 10]], // core 1
-    //     [["P3", 0, 3], ["P4", 5, 6], ["P5", 14, 15]],
-    //     [["P6", 0, 3]],
-    //     [["P7", 0, 3]]
-    // ];
-    // let numberOfCore = tmpResultData.length;
+    const ganttTableLeft = document.querySelector(".gantt_table__top-left");
 
     for(let i=0; i < numberOfCore; i++){
         var core = document.createElement("div");
@@ -895,16 +1074,8 @@ function showCoreName(numberOfCore){
     }
 }
 
-function deleteCoreName(){
-    var del = document.querySelector(".gantt_table__top-left"); 
-    while ( del.hasChildNodes() ) { 
-        del.removeChild( del.firstChild ); 
-    }
-}
-
-
 function showProgressBar(maxTime){
-    deleteProgressBar();
+
     const progress = document.querySelector(".gantt_table__top-right");
     var white = document.createElement("div");
     white.className = "progressBar__time";
@@ -931,11 +1102,31 @@ function showProgressBar(maxTime){
         
     }
 }
+
+function deleteAllOfShowTable(){
+    while(showTable.rows.length>0){
+        showTable.deleteRow(0);
+    }
+}
+
+function deleteBottomIndex(){
+    var del = document.querySelector(".gantt_table__bottom"); 
+    while ( del.hasChildNodes() ) { 
+        del.removeChild( del.firstChild ); 
+    }
+}
+
+function deleteCoreName(){
+    var del = document.querySelector(".gantt_table__top-left"); 
+    while ( del.hasChildNodes() ) { 
+        del.removeChild( del.firstChild ); 
+    }
+}
+
 function deleteProgressBar(){
     var delParent = document.querySelector(".gantt_table__top-right"); 
     delParent.removeChild(delParent.lastChild);
 }
-
 
 function deleteAllOfProgressBar(){
     var del = document.getElementById("progressBars"); 
