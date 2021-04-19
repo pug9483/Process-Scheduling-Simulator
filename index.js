@@ -243,7 +243,7 @@ class Queue {
 
 
 function showProcessorRunning(processorData , numberOfProcessor){
-    for(let i =0; i< numberOfProcessor; i++){ 
+    for(let i =0; i< numberOfProcessor; i++){
             console.log("프로세서"+(i+1)+" 큐: ",processorData[i].toString2());
     } 
 }
@@ -259,15 +259,15 @@ function showProcessorRunning(processorData , numberOfProcessor){
 // 알고리즘 6개
 function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){ 
     // =======================선언부=======================
-    let nop = numberOfProcess;  // 총 프로세스 수
-    let nopr = numberOfProcessor;  // 프로세서 수
+    const nop = numberOfProcess;  // 총 프로세스 수
+    const nopr = numberOfProcessor;  // 프로세서 수
     let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
     let processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
     let processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
 
     //큐
     const readyQueue = new Queue(); // 레디큐 생성
-    let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
     let exitQuantumQueue = new Queue(); // 퀀텀시간이 지난 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
     let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
     
@@ -447,9 +447,9 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
 
     //큐
-    const readyQueue = new Queue(); // 레디큐 생성
-    const exitQuantumQueue = new Queue(); // 퀀텀시간이 지난 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
-    const exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
+    let readyQueue = new Queue(); // 레디큐 생성
+    let exitQuantumQueue = new Queue(); // 퀀텀시간이 지난 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
+    let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
     
     //시간
     let prRunTime = new Array();  // max 런타임 처리
@@ -513,7 +513,9 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
 
         
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
+            console.log("22Dd", processorState);
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
+            console.log("Dd", workIndex);
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
@@ -599,8 +601,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
         }
     }
 
-
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
