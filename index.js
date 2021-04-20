@@ -1242,7 +1242,14 @@ function createShowTable(){
     }
 }
 
+//2칸 16 17 18
 function createProgressBar(resultData, maxTime, numberOfCore){
+
+    const tmp = parseInt(maxTime / 16);
+    const lastWidth = 100 / (maxTime+1) * (tmp+1);
+    
+    const fullSize = 100 - lastWidth; // 전체 길이를 줄인다.
+    const plusWidth = 100 / maxTime; //전체 크기가 줄어들었기 때문에 width == 100%이다.
 
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
@@ -1253,8 +1260,8 @@ function createProgressBar(resultData, maxTime, numberOfCore){
         childProg.style.display = "flex";
         progressBars.appendChild(childProg);
 
-        // const tmp = parseInt(100 / maxTime);
-        const plusWidth = 100 / (maxTime+1);
+        childProg.style.width = fullSize + "%";
+        console.log(childProg.style.width);
         //하나의 코어 안에 프로세스 노드들 만들어주기
         // console.log(resultData[i]);
 
@@ -1279,8 +1286,8 @@ function createProgressBar(resultData, maxTime, numberOfCore){
 function createBottomIndex(maxTime){
 
     const tmp = parseInt(maxTime / 16);
-    const plusWidth = 100 / maxTime * (tmp+1);
-
+    const plusWidth = 100 / (maxTime+1) * (tmp+1);
+    
     const ganttTableBottom = document.querySelector(".gantt_table__bottom");
     var time = document.createElement("div");
     for(let i=0; i<=maxTime; i++){
@@ -1306,27 +1313,34 @@ function showCoreName(numberOfCore){
 }
 
 function showProgressBar(maxTime){
-
     const progress = document.querySelector(".gantt_table__top-right");
     var white = document.createElement("div");
     white.className = "progressBar__time";
     white.id ="progressBar__time";  
     progress.appendChild(white);
     
-    const timeInterval = 100 / (maxTime+1); // 길이/초
-    var id = setInterval(frame, 1000);
+    const tmp = parseInt(maxTime / 16);
+    const lastWidth = 100 / (maxTime+1) * (tmp+1);
+    
+    const fullSize = 100 - lastWidth; // 전체 길이를 줄인다.
+    const plusWidth = 100 / maxTime;
+    white.style.width = fullSize + "%";
+    
     var width = 100;
-    var i =1;
+    var id = setInterval(frame, 1000);
+
+    var i = 1;
     function frame(){
-        width -= timeInterval;
+        width -= plusWidth;
+        console.log(width);
         if(width < 0){
-            white.style.width = 0;
-            white.style.marginLeft = (timeInterval * i) + "%";
+            white.style.width = 0 + "px";
+            white.style.marginLeft = (plusWidth * i) + "%";
             clearInterval(id);
         }
         else{
-            white.style.width = width + "%";
-            white.style.marginLeft = (timeInterval * i) + "%";
+            white.style.width = (width - plusWidth) + "%";
+            white.style.marginLeft = (plusWidth * i) + "%";
             i++;
         }
         
