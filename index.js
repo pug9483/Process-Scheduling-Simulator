@@ -94,7 +94,9 @@ function inputCheck(atInput, btInput, selectprocess){
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
+    
     init(); // 초기화 함수
+
     //test1();
 
     //====================== 변수 선언 부 ====================
@@ -1213,7 +1215,7 @@ function newalgorithm(){
 
 
 // --------------------- FrontEnd -------------------
- 
+
 function init(){
     deleteBottomIndex();
     deleteAllOfProgressBar();
@@ -1334,6 +1336,44 @@ function showProgressBar(maxTime){
     }
 }
 
+function showReadyQueue(){
+    tmpReadyQueue = [
+        ["P1","P2","P5"],
+        ["P2", "P4"],
+        ["P3", "P5"],
+        ["P"],
+        ["P4", "P6"]
+    ];
+
+    const time = tmpReadyQueue.length;
+    let start = 0;
+
+    const id = setInterval(show, 1000);
+    function show(){
+        const parent = document.querySelector(".ready_queue__show"); 
+        //초기화
+        while ( parent.hasChildNodes() ) { 
+            parent.removeChild( parent.firstChild ); 
+        }
+
+        if(start >= time){
+            clearInterval(id);
+        }
+        else{
+            //다음 생성
+            for(let i = 0; i<tmpReadyQueue[start].length; i++){
+                if(tmpReadyQueue[start] == "P") break;
+                const node = document.createElement("div");
+                node.className = tmpReadyQueue[start][i];
+                node.innerHTML = tmpReadyQueue[start][i];
+                node.style.width = "60px";
+                parent.appendChild(node);
+            }
+            start++;
+        }
+    }
+}
+
 function deleteAllOfShowTable(){
     while(showTable.rows.length>0){
         showTable.deleteRow(0);
@@ -1363,44 +1403,6 @@ function deleteAllOfProgressBar(){
     var del = document.getElementById("progressBars"); 
     while ( del.hasChildNodes() ) { 
         del.removeChild( del.firstChild ); 
-    }
-}
-
-function showReadyQueue(){
-    tmpReadyQueue = [
-        ["P1","P2","P5"],
-        ["P2", "P4"],
-        ["P3", "P5"],
-        ["P"],
-        ["P4", "P6"]
-    ];
-
-    const time = tmpReadyQueue.length;
-    let start = 0;
-
-    const id = setInterval(show, 1000);
-    function show(){
-        const parent = document.querySelector(".ready_queue__show"); 
-        //초기화
-        while ( parent.hasChildNodes() ) { 
-            parent.removeChild( parent.firstChild ); 
-        }
-
-        if(start >= time){
-            clearInterval(id);
-        }
-        
-        //다음 생성
-        for(let i = 0; i<tmpReadyQueue[start].length; i++){
-            if(tmpReadyQueue[start] == "P") break;
-            const node = document.createElement("div");
-            node.className = tmpReadyQueue[start][i];
-            node.innerHTML = tmpReadyQueue[start][i];
-            node.style.width = "60px";
-            parent.appendChild(node);
-        }
-        console.log(start);
-        start++;
     }
 }
 //srtn 우선순위 큐  -> 
