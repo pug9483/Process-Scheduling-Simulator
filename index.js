@@ -129,10 +129,17 @@ function run(){
     // createShowTable();
 
     debug(result);
+    //2021-04-20 16:16 디버그 확인용
+    console.log("eeeeeeeeeeeeennnnnnnnnnnnnnnddddddddddd");
+    
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
     createProgressBar(result.resultData, result.max, numberOfProcessor); //배열, time
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
+
+    //2021-04-20 16:39 가상 데이터 삽입
+    showReadyQueue();
+
     // //종류 가져오기
 
     // //실행 progress 보여주기
@@ -156,13 +163,13 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
         result= spn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "srtn"){
-        resultAlgorithm = srtn(atInput, btInput, numberOfProcessor, numberOfProcess);
+        result = srtn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "hrrn"){
         result = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
     else if(processValue == "newalgorithm"){
-        resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
+        result = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
 
     return result;
@@ -251,6 +258,19 @@ class Queue {
         }
     }
 
+    srtnSort(){ // 삽입 정렬
+        this.n = this.dataStore.length;
+        for(let i=1; i<this.n;i++){
+            let key = this.dataStore[i];
+            let j = i - 1;
+            while(j>=0 && this.dataStore[j].rt > key.rt){
+                this.dataStore[j+1] = this.dataStore[j];
+                j = j - 1
+            }
+            this.dataStore[j+1] = key;
+        }
+    }
+
 
     hrrnSort(){  // 삽입 정렬
         this.n = this.dataStore.length;
@@ -267,7 +287,22 @@ class Queue {
         }
     }
 
+    // hrrnSort(){  // 삽입 정렬
+    //     this.n = this.dataStore.length;
+    //     for(let i=1; i< this.n; i++){
+    //         let key = this.dataStore[i];
+    //         let j = i - 1;
+    //         while (j >= 0 && (((this.dataStore[j].wt+this.dataStore[j].bt)/this.dataStore[j].bt) < ((key.wt+key.bt)/key.bt))){
+    //             this.dataStore[j+1] = this.dataStore[j];
+    //             j = j - 1
+    //         }
+    //         this.dataStore[j+1] = key;
+    //     }
+    // }
+
 }
+
+
 
 
 function showProcessorRunning(processorData , numberOfProcessor){
@@ -299,7 +334,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
     
     //시간
-    let prRunTime = new Array();  // max 런타임 처리
+    let prRunTime = [[]];  // max 런타임 처리
     let presentTime; // 현재시간 0으로 초기화
     let totoalTime; // 알고리즘 실행시간
     
@@ -360,7 +395,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
         
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = 1; // 작업할 프로세서를 작동시킨다              확인! 2020-04-20 15:38
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
@@ -369,7 +404,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
             processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
-        }
+        }processorState
 
         
         //대기시간 측정
@@ -611,6 +646,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     // showContextSwit(); // 버그수정 필요
     
     //최종결과 처리
+    console.log("aaaaaaaaaaaaaaaaaaa");
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
             resultData[i] = (processorData[i].dequeueAll())
@@ -628,7 +664,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
-    
+    console.log("sdfa", result.readyQLog);
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -809,12 +845,12 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let processData = new Array(); //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
     let processorData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
     let processorState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
     
     //큐
-    const readyQueue = new Array(); // 레디큐 생성
-    let dequeProcess = new Array(); // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
+    const readyQueue = new Queue(); // 레디큐 생성
     let exitQueue = new Array(); // Burst time이 길어진 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
-    let exitProcessQueue = new Array(); // 종료조건을 위해 종료프로세스들을 모아둠
+    let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
 
     // 시간
     let prRunTime = new Array();  // max 런타임 처리
@@ -859,29 +895,28 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
 
     while(1){
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
-            if (presentTime == processData[i].at) readyQueue.push(processData[i]);
+            if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
         
         
         if(exitQueue.length != 0){
-            temp = exitQueue.length(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
-            for(let i =0; i<temp;i++) readyQueue.push(exitQueue.shift()); // 비교에 의해 종료된 큐를 이후에 레디큐에 삽입
+            temp = exitQueue.length; // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
+            for(let i =0; i<temp;i++) readyQueue.enqueue(exitQueue.shift()); // 비교에 의해 종료된 큐를 이후에 레디큐에 삽입
         }
 
-        // 버그 !!!!!!!!!!!!!!
-        readyQueue.sort(function(a,b){// 잔여시간에 따라 오름차순 정렬
-            return a.rt < b.rt ? -1 : a.rt > b.rt ? 1: 0;
-        });
+        readyQueue.srtnSort(); // 레디큐 rt 기준 오름차순 정렬
 
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
-        console.log("레디큐: ",readyQueue.toString());
+        console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)====================
+        readyQLog.push([presentTime,("P"+readyQueue.toString())]);  // 레디큐 로그 업데이트
         
-        while(readyQueue.length != 0 && processorState.indexOf(-1) >= 0){ // 빈 프로세서가 있는 경우
+        while((readyQueue.empty() == false) && (processorState.indexOf(-1) >= 0)){ // 빈 프로세서가 있는 경우
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
-            dequeProcess = readyQueue.shift(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
-            if((processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
+            dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
+            console.log("dsdsd",dequeProcess);
+            if(processData[dequeProcess.id].st ==-1){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
@@ -889,18 +924,18 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가    
         }
 
-        while (processorData.indexOf(-1) == -1){// 프로세서가 다 차있으면 레디큐 내 잔여 최솟값과 실행 프로세서 내 잔여 최댓값 비교 후 swap 필요
-            let readyQMin = readyQueue[0].rt; // 레디큐 내 잔여 최솟값 (정렬돼있으므로 인덱스 0)
+        while ((readyQueue.empty() == false) && (processorData.indexOf(-1) == -1)){// 프로세서가 다 차있으면 레디큐 내 잔여 최솟값과 실행 프로세서 내 잔여 최댓값 비교 후 swap 필요
+            let readyQMin = readyQueue.front().rt; // 레디큐 내 잔여 최솟값 (정렬돼있으므로 인덱스 0)
             let runningPsMax = -1; //러닝프로세스중 rt 최댓값 담을 변수
             let maxIndex = -1; //rt 최댓값인 러닝프로세스 인덱스 담을 변수
-            for(let i = 0; i<4; i++){
+            for(let i = 0; i<runningProcess.length; i++){
                 runningPsMax = Math.max(runningPsMax, processData[runningProcess[i]].rt) // rt 최댓값 찾기
-                if(runningPsMax == processdata[runningProcess[i]].rt) maxIndex = i; // 최댓값 rt 인덱스 찾기
+                if(runningPsMax == processData[runningProcess[i]].rt) maxIndex = i; // 최댓값 rt 인덱스 찾기
             }
             if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
                 exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
                 runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
-                dequeProcess = readyQueue.shift(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
+                dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
                 if((processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
                     processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
                 }
@@ -912,8 +947,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 break; // while 나감
             }
 
-        }
-        console.log("break: ",processData[dequeProcess[0]-1]);    
+        } 
         
         //대기시간 측정
         for(let i = 0; i< nop; i++){
@@ -954,8 +988,8 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
                          
                         if(processData[runningProcess[j]].pr == i) {
                             
-                            if(processData[runningProcess[j]].rt <= 0){
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
+                            if((processData[runningProcess[j]].rt <= 0) && (processorState[i] == 1)){
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 때
                                 processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 processorState[i] = -1; // 프로세서를 종료한다.
@@ -1000,7 +1034,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
-    
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 
@@ -1173,6 +1206,9 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
+
+
+
 function newalgorithm(){
     
 }
@@ -1216,8 +1252,13 @@ function createProgressBar(resultData, maxTime, numberOfCore){
         childProg.style.display = "flex";
         progressBars.appendChild(childProg);
 
+        // const tmp = parseInt(100 / maxTime);
         const plusWidth = 100 / (maxTime+1);
         //하나의 코어 안에 프로세스 노드들 만들어주기
+        // console.log(resultData[i]);
+
+        if(resultData[i] === undefined) continue;
+
         for(let j=0; j<resultData[i].length; j++){
             const pro = document.createElement("div");
             pro.className = "progressBar__process";
@@ -1277,7 +1318,6 @@ function showProgressBar(maxTime){
     var i =1;
     function frame(){
         width -= timeInterval;
-        console.log(width);
         if(width < 0){
             white.style.width = 0;
             white.style.marginLeft = (timeInterval * i) + "%";
@@ -1323,6 +1363,45 @@ function deleteAllOfProgressBar(){
         del.removeChild( del.firstChild ); 
     }
 }
+
+function showReadyQueue(){
+    tmpReadyQueue = [
+        ["P1","P2","P5"],
+        ["P2", "P4"],
+        ["P3", "P5"],
+        ["P"],
+        ["P4", "P6"]
+    ];
+
+    const time = tmpReadyQueue.length;
+    let start = 0;
+
+    const id = setInterval(show, 1000);
+    function show(){
+        const parent = document.querySelector(".ready_queue__show"); 
+        //초기화
+        while ( parent.hasChildNodes() ) { 
+            parent.removeChild( parent.firstChild ); 
+        }
+
+        if(start >= time){
+            clearInterval(id);
+        }
+        
+        //다음 생성
+        for(let i = 0; i<tmpReadyQueue[start].length; i++){
+            if(tmpReadyQueue[start] == "P") break;
+            const node = document.createElement("div");
+            node.className = tmpReadyQueue[start][i];
+            node.innerHTML = tmpReadyQueue[start][i];
+            node.style.width = "60px";
+            parent.appendChild(node);
+        }
+        console.log(start);
+        start++;
+    }
+}
+//srtn 우선순위 큐  -> 
 //-------------------- FrontEnd 끝--------------------
 
 
