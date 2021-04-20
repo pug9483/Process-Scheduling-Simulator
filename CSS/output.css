@@ -50,6 +50,7 @@
 .gantt_table__top-left {
   width: 100px;
   border-right: 1px solid black;
+  font-size: large;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -69,4 +70,31 @@
 
 .processor_show__table table {
   width: 850px;
+}
+
+.ready_queue {
+  height: 60px;
+  width: 850px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.ready_queue__name {
+  width: 100px;
+  font-weight: 700;
+  font-size: medium;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ready_queue__show {
+  width: 750px;
+  border-left: 1px solid black;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 20px;
 }
