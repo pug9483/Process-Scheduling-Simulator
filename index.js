@@ -1504,32 +1504,27 @@ function showProgressBar(maxTime){
     white.className = "progressBar__time";
     white.id ="progressBar__time";  
     progress.appendChild(white);
-    
-    const tmp = parseInt(maxTime / 16);
-    const lastWidth = 100 / (maxTime+1) * (tmp+1);
-    
-    const fullSize = 100 - lastWidth; // 전체 길이를 줄인다.
-    const plusWidth = 100 / maxTime;
-    white.style.width = fullSize + "%";
-    
-    var width = 100;
+   
+    const tmp = parseInt(maxTime / 16) + 1; //눈금 사이 숫자 차이 구하기 
+    const progressBarWidth = 100 / (maxTime+tmp); //한 칸의 너비(%)
+    let width = 100
+    white.style.width = width + "%";
     var id = setInterval(frame, 1000);
 
     var i = 1;
     function frame(){
-        width -= plusWidth;
+        width -= progressBarWidth;
         console.log(width);
         if(width < 0){
             white.style.width = 0 + "px";
-            white.style.marginLeft = (plusWidth * i) + "%";
+            white.style.marginLeft = (progressBarWidth * i) + "%";
             clearInterval(id);
         }
         else{
-            white.style.width = (width - plusWidth) + "%";
-            white.style.marginLeft = (plusWidth * i) + "%";
+            white.style.width = width + "%";
+            white.style.marginLeft = (progressBarWidth * i) + "%";
             i++;
         }
-        
     }
 }
 
