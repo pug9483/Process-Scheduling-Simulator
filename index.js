@@ -69,6 +69,9 @@ function deleteLastIndexOfInputRow(){
 
 //------------------빈 값 체크-----------------
 function inputCheck(atInput, btInput, selectprocess){
+    //프로세스 칸을 추가하지 않고 바로 만들경우 에러 탐지 추가.
+    if(atInput.length == 0 && btInput.length == 0) return false;
+
     for(var i = 0; i < atInput.length; i++){
         if(atInput[i].value === "" || isNaN(atInput[i].value)) {
             return false;
@@ -109,7 +112,7 @@ function run(){
     const numberOfProcessor = document.querySelector(".numofprocessors").value;
     const selectprocess = document.querySelector(".selectprocess");
     //====================== 입력 체크 ====================
-
+    console.log("atInput, btInput", atInput, btInput);
     if(!inputCheck(atInput,btInput,selectprocess)){
         alert("오류! 값을 다시 넣어주세요. (정수로)");
         return;
@@ -127,25 +130,28 @@ function run(){
     result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
 
 
-    // // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    // createShowTable();
-
-    debug(result);
-    //2021-04-20 16:16 디버그 확인용
-    console.log("eeeeeeeeeeeeennnnnnnnnnnnnnnddddddddddd");
     
+
+    console.log("---------------------디버그 시작---------------------");
+    debug(result);
+    console.log("---------------------디버그 종료---------------------");
+
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
     createProgressBar(result.resultData, result.max, numberOfProcessor); //배열, time
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
 
-    //2021-04-20 16:39 가상 데이터 삽입
-    showReadyQueue();
-
+    //2021-04-21 1:22 실제 데이터 삽입
+    showReadyQueue(result.readyQLog);
+  
     // //종류 가져오기
 
     // //실행 progress 보여주기
     showProgressBar(result.max);
+
+    ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
+    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
+    //createShowTable();
 }
 
 // 알고리즘 선택 함수
@@ -1224,7 +1230,7 @@ function init(){
     deleteAllOfShowTable();
 }
 
-function createShowTable(){
+function createShowTable(showTable){
     for(let i=0; i <inputTable.rows.length; i++){
         var getRow = showTable.insertRow(showTable.rows.length);
         const row0 = getRow.insertCell(0);
@@ -1265,14 +1271,13 @@ function createProgressBar(resultData, maxTime, numberOfCore){
         for(let j=0; j<resultData[i].length; j++){
             const pro = document.createElement("div");
             pro.className = "progressBar__process";
-            pro.id = "progressBar__process"+(j+1);
-            pro.innerHTML = resultData[i][j][0];
+            pro.id = "progressBar__process"+ resultData[i][j][0];
+            pro.innerHTML = resultData[i][j][0] + "[" + resultData[i][j][1] +"," + + resultData[i][j][2] +"]";
             if(j === 0) pro.style.marginLeft = (resultData[i][j][1] * widthInterval) + "%";
             if(j !== 0) pro.style.marginLeft = ((resultData[i][j][1] - resultData[i][j-1][2])*widthInterval)+ "%";
             pro.style.width = (resultData[i][j][2] - resultData[i][j][1]) * widthInterval + "%";
-            var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
-            pro.style.backgroundColor = tmp2;
-            // pro.style.textAlign = "center";
+            // var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
+            // pro.style.backgroundColor = tmp2;
             childProg.appendChild(pro);
         }
     }
@@ -1292,7 +1297,6 @@ function createBottomIndex(maxTime){
     const plusWidth = 100 / (parseInt(maxTime/tmp) + 1);
 
     while(index <= maxTime){
-        console.log(index);
         const time = document.createElement("div");
         time.innerText = index;
         time.style.width = plusWidth + "%";
@@ -1334,12 +1338,11 @@ function showProgressBar(maxTime){
     const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
     let width = 100;
     white.style.width = width + "%";
-    var id = setInterval(frame, 500);
+    var id = setInterval(frame, 1000);
 
     var i = 1;
     function frame(){
         width -= progressBarWidth;
-        // console.log(width);
         if(width < 0){
             white.style.width = 0 + "px";
             clearInterval(id);
@@ -1352,19 +1355,11 @@ function showProgressBar(maxTime){
     }
 }
 
-function showReadyQueue(){
-    tmpReadyQueue = [
-        ["P1","P2","P5"],
-        ["P2", "P4"],
-        ["P3", "P5"],
-        ["P"],
-        ["P4", "P6"]
-    ];
-
-    const time = tmpReadyQueue.length;
+function showReadyQueue(readyQueue){
+    const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 500);
+    const id = setInterval(show, 1000);
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화
@@ -1377,11 +1372,10 @@ function showReadyQueue(){
         }
         else{
             //다음 생성
-            for(let i = 0; i<tmpReadyQueue[start].length; i++){
-                if(tmpReadyQueue[start] == "P") break;
+            for(let i = 0; i<readyQueue[start].length; i++){
                 const node = document.createElement("div");
-                node.className = tmpReadyQueue[start][i];
-                node.innerHTML = tmpReadyQueue[start][i];
+                node.className = "P" + readyQueue[start][i];
+                node.innerHTML = readyQueue[start][i];
                 node.style.width = "60px";
                 parent.appendChild(node);
             }

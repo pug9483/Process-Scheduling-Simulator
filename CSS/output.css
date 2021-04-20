@@ -16,8 +16,8 @@
 }
 
 .progressBar__time {
-  background-color: yellow;
-  opacity: 0.3;
+  background-color: black;
+  opacity: 0.6;
   height: 180px;
   width: 750px;
   position: relative;
@@ -99,4 +99,53 @@
   justify-content: flex-start;
   align-items: center;
   padding-left: 20px;
+}
+
+#progressBar__processP1 {
+  background-color: #eb4d4b;
+}
+#progressBar__processP2 {
+  background-color: #ff7979;
+}
+#progressBar__processP3 {
+  background-color: #f0932b;
+}
+#progressBar__processP4 {
+  background-color: #ffbe76;
+}
+#progressBar__processP5 {
+  background-color: #f9ca24;
+}
+#progressBar__processP6 {
+  background-color: #f6e58d;
+}
+#progressBar__processP7 {
+  background-color: #6ab04c;
+}
+#progressBar__processP8 {
+  background-color: #badc58;
+}
+#progressBar__processP9 {
+  background-color: #c7ecee;
+}
+#progressBar__processP10 {
+  background-color: #95afc0;
+}
+#progressBar__processP11 {
+  background-color: #22a6b3;
+}
+#progressBar__processP12 {
+  background-color: #7ed6df;
+}
+#progressBar__processP13 {
+  background-color: #be2edd;
+}
+#progressBar__processP14 {
+  background-color: #4834d4;
+}
+#progressBar__processP15 {
+  background-color: #686de0;
+}
+#progressBar__processP16 {
+  background-color: #535c68;
 }
