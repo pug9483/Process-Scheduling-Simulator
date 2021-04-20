@@ -1236,28 +1236,29 @@ function createShowTable(){
     }
 }
 
-//2칸 16 17 18
 function createProgressBar(resultData, maxTime, numberOfCore){
+    let totalTime;
+    let tmp;
 
-    const tmp = parseInt(maxTime / 16);
-    const lastWidth = 100 / (maxTime+1) * (tmp+1);
-    
-    const fullSize = 100 - lastWidth; // 전체 길이를 줄인다.
-    const plusWidth = 100 / maxTime; //전체 크기가 줄어들었기 때문에 width == 100%이다.
+    if(maxTime % 15 === 0){
+        tmp = parseInt(maxTime / 15);
+        totalTime = maxTime + tmp;
+    }
+    else{
+        tmp = parseInt(maxTime / 15) + 1;
+        totalTime = maxTime - (maxTime % tmp) + tmp;
+    }
+    console.log("totalTime" ,totalTime);
+    //1초의 간격
+    const widthInterval = 100 / totalTime;
+    console.log("widthInterval", widthInterval);
 
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
         childProg.className = "progressBar";
         childProg.id = "progressBar"+(i+1);
-        //childProg Flex로 만들어주기
-        childProg.style.display = "flex";
         progressBars.appendChild(childProg);
-
-        childProg.style.width = fullSize + "%";
-        console.log(childProg.style.width);
-        //하나의 코어 안에 프로세스 노드들 만들어주기
-        // console.log(resultData[i]);
 
         if(resultData[i] === undefined) continue;
 
@@ -1266,9 +1267,9 @@ function createProgressBar(resultData, maxTime, numberOfCore){
             pro.className = "progressBar__process";
             pro.id = "progressBar__process"+(j+1);
             pro.innerHTML = resultData[i][j][0];
-            if(j === 0) pro.style.marginLeft = (resultData[i][j][1] * plusWidth) + "%";
-            if(j !== 0) pro.style.marginLeft = ((resultData[i][j][1] - resultData[i][j-1][2])*plusWidth)+ "%";
-            pro.style.width = (resultData[i][j][2] - resultData[i][j][1]) * plusWidth + "%";
+            if(j === 0) pro.style.marginLeft = (resultData[i][j][1] * widthInterval) + "%";
+            if(j !== 0) pro.style.marginLeft = ((resultData[i][j][1] - resultData[i][j-1][2])*widthInterval)+ "%";
+            pro.style.width = (resultData[i][j][2] - resultData[i][j][1]) * widthInterval + "%";
             var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
             pro.style.backgroundColor = tmp2;
             // pro.style.textAlign = "center";
@@ -1278,26 +1279,31 @@ function createProgressBar(resultData, maxTime, numberOfCore){
 }
 
 function createBottomIndex(maxTime){
-
-    const tmp = parseInt(maxTime / 16);
-    const plusWidth = 100 / (maxTime+1) * (tmp+1);
-    
     const ganttTableBottom = document.querySelector(".gantt_table__bottom");
-    var time = document.createElement("div");
-    for(let i=0; i<=maxTime; i++){
-        var time = document.createElement("div");
-        time.innerText = i;
+    let index = 0;
+    let tmp;
+    
+    if(maxTime % 15 === 0){
+        tmp = parseInt(maxTime / 15);
+    }
+    else{
+        tmp = parseInt(maxTime / 15) + 1;
+    }
+    const plusWidth = 100 / (parseInt(maxTime/tmp) + 1);
+
+    while(index <= maxTime){
+        console.log(index);
+        const time = document.createElement("div");
+        time.innerText = index;
         time.style.width = plusWidth + "%";
         ganttTableBottom.appendChild(time);
-        i += tmp;
+        index += tmp;
     }
 }
 
 
 function showCoreName(numberOfCore){
-
     const ganttTableLeft = document.querySelector(".gantt_table__top-left");
-
     for(let i=0; i < numberOfCore; i++){
         var core = document.createElement("div");
         core.className = "core";
@@ -1312,20 +1318,30 @@ function showProgressBar(maxTime){
     white.className = "progressBar__time";
     white.id ="progressBar__time";  
     progress.appendChild(white);
-   
-    const tmp = parseInt(maxTime / 16) + 1; //눈금 사이 숫자 차이 구하기 
-    const progressBarWidth = 100 / (maxTime+tmp); //한 칸의 너비(%)
-    let width = 100
+    
+    let totalTime;
+    let tmp;
+
+    if(maxTime % 15 === 0){
+        tmp = parseInt(maxTime / 15);
+        totalTime = maxTime + tmp;
+    }
+    else{
+        tmp = parseInt(maxTime / 15) + 1;
+        totalTime = maxTime - (maxTime % tmp) + tmp;
+    }
+
+    const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
+    let width = 100;
     white.style.width = width + "%";
-    var id = setInterval(frame, 1000);
+    var id = setInterval(frame, 500);
 
     var i = 1;
     function frame(){
         width -= progressBarWidth;
-        console.log(width);
+        // console.log(width);
         if(width < 0){
             white.style.width = 0 + "px";
-            white.style.marginLeft = (progressBarWidth * i) + "%";
             clearInterval(id);
         }
         else{
@@ -1348,7 +1364,7 @@ function showReadyQueue(){
     const time = tmpReadyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 1000);
+    const id = setInterval(show, 500);
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화

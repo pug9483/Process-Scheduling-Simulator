@@ -16,7 +16,8 @@
 }
 
 .progressBar__time {
-  background-color: white;
+  background-color: yellow;
+  opacity: 0.3;
   height: 180px;
   width: 750px;
   position: relative;
@@ -25,6 +26,7 @@
 
 .progressBar {
   height: 30px;
+  display: flex;
 }
 
 .progressBar__process {
