@@ -297,15 +297,12 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
 
     //큐
     const readyQueue = new Queue(); // 레디큐 생성
-    let exitQuantumQueue = new Queue(); // 퀀텀시간이 지난 프로세스를 레디큐에 옮기기 위해 잠시 보관해두는 큐
     let exitProcessQueue = new Queue(); // 종료조건을 위해 종료프로세스들을 모아둠
     
     //시간
-    
     let prRunTime = new Array();  // max 런타임 처리
     let presentTime; // 현재시간 0으로 초기화
     let totoalTime; // 알고리즘 실행시간
-    let exitByQuantum // 퀀텀시간이 지났음을 비교할때 쓰는 변수
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
