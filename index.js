@@ -139,6 +139,35 @@ function run(){
     showProgressBar(result.max);
 }
 
+// 알고리즘 선택 함수
+function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
+    const selectprocess = document.querySelector(".selectprocess");
+    const processValue = selectprocess.value;
+    let result;
+
+    console.log("선택된 알고리즘: ",processValue.toUpperCase());
+    if(processValue == "fcfs"){
+        result = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "rr"){
+        result = rr(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "spn"){
+        resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "srtn"){
+        resultAlgorithm = srtn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "hrrn"){
+        resultAlgorithm = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+    else if(processValue == "newalgorithm"){
+        resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
+    }
+
+    return result;
+}
+
 //------------------BackEnd-------------------------
 // 큐 클래스 선언
 class Queue {
@@ -318,10 +347,10 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
         
         
-        if(!exitQuantumQueue.empty()){
-            temp = exitQuantumQueue.toLength(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
-            for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
-        }
+        // if(!exitQuantumQueue.empty()){
+        //     temp = exitQuantumQueue.toLength(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
+        //     for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
+        // }
 
 
 
@@ -375,18 +404,9 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
-                        exitByQuantum = processData[runningProcess[j]].st + qt; 
                         if(processData[runningProcess[j]].pr == i) {
                             
-                            if((processData[runningProcess[j]].rt != 0) && (presentTime == exitByQuantum) && (processorState[i] == 1)){
-                                // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
-                                processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                processorState[i] = -1; // 프로세서를 종료한다.
-                                console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
-                                exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
-                                runningProcess[j] = -1; // 프로세스를 종료한다.
-                                break;
-                            }else if(processData[runningProcess[j]].rt <= 0){
+                            if((processData[runningProcess[j]].rt <= 0) && (processorState[i] == 1)){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
                                 processorData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
@@ -963,34 +983,7 @@ function newalgorithm(){
 }
 
 
-// 알고리즘 선택 함수
-function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    let result;
 
-    console.log("선택된 알고리즘: ",processValue.toUpperCase());
-    if(processValue == "fcfs"){
-        resultAlgorithm = fcfs(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "rr"){
-        result = rr(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "spn"){
-        resultAlgorithm = spn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "srtn"){
-        resultAlgorithm = srtn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "hrrn"){
-        resultAlgorithm = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-    else if(processValue == "newalgorithm"){
-        resultAlgorithm = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
-    }
-
-    return result;
-}
 //------------------BackEnd-------------------------
 
 
