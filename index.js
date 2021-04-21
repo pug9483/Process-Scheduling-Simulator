@@ -120,12 +120,12 @@ function run(){
     //====================== 입력 체크 ====================
     console.log("atInput, btInput", atInput, btInput);
     if(!inputCheck(atInput,btInput,selectprocess)){
-        alert("오류! 값을 다시 넣어주세요. (정수로)");
+        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR이라면 Time quantum을 넣어 주세요.)");
+        init();
+        // run();
         return;
     } 
 
-
-    
     //변수값 확인
     console.log("======================입력값 확인=====================");
     console.log("프로세서 수: ",numberOfProcessor);
@@ -300,20 +300,6 @@ class Queue {
             this.dataStore[j+1] = key;
         }
     }
-
-    // hrrnSort(){  // 삽입 정렬
-    //     this.n = this.dataStore.length;
-    //     for(let i=1; i< this.n; i++){
-    //         let key = this.dataStore[i];
-    //         let j = i - 1;
-    //         while (j >= 0 && (((this.dataStore[j].wt+this.dataStore[j].bt)/this.dataStore[j].bt) < ((key.wt+key.bt)/key.bt))){
-    //             this.dataStore[j+1] = this.dataStore[j];
-    //             j = j - 1
-    //         }
-    //         this.dataStore[j+1] = key;
-    //     }
-    // }
-
 }
 
 
@@ -1230,25 +1216,36 @@ function newalgorithm(){
 
 function init(){
     deleteBottomIndex();
-    deleteAllOfProgressBar();
     deleteProgressBar();
     deleteCoreName();
     deleteAllOfShowTable();
+    deleteAllOfProgressBar();
 }
 
-function createShowTable(showTable){
+function createShowTable(){
+    console.log("테이블 출력 부분");
+    console.log(inputTable);
+    console.log(showTable);
     for(let i=0; i <inputTable.rows.length; i++){
         var getRow = showTable.insertRow(showTable.rows.length);
         const row0 = getRow.insertCell(0);
         row0.innerText = "P"+processData[i][0];
+
         const row1 = getRow.insertCell(1);
         row1.innerText = "P"+processData[i][1];
+
         const row2 = getRow.insertCell(2);
         row2.innerText = "P"+processData[i][2];
     }
 }
 
 function createProgressBar(resultData, maxTime, numberOfCore){
+    const progress = document.querySelector(".gantt_table__top-right");
+    const progressBars = document.createElement("div");
+    progressBars.className = "progressBars";
+    progressBars.id = "progressBars";
+    progress.appendChild(progressBars);
+
     let totalTime;
     let tmp;
 
@@ -1264,7 +1261,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
     //1초의 간격
     const widthInterval = 100 / totalTime;
     console.log("widthInterval", widthInterval);
-
+    
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
@@ -1401,9 +1398,9 @@ function showReadyQueue(readyQueue){
             //다음 생성
             for(let i = 0; i<readyQueue[start].length; i++){
                 const node = document.createElement("div");
-                node.className = "P" + readyQueue[start][i];
-                node.innerHTML = readyQueue[start][i];
-                node.style.width = "60px";
+                node.className = "readyQueue__process";
+                node.id = "P" + readyQueue[start][i];
+                node.innerHTML = "P" +readyQueue[start][i];
                 parent.appendChild(node);
             }
             start++;
@@ -1432,13 +1429,15 @@ function deleteCoreName(){
 }
 
 function deleteProgressBar(){
-    var delParent = document.querySelector(".gantt_table__top-right"); 
-    delParent.removeChild(delParent.lastChild);
+    var delParent = document.querySelector(".gantt_table__top-right");
+    while(delParent !== null && delParent.hasChildNodes()){ 
+        delParent.removeChild(delParent.firstChild);
+    }
 }
 
 function deleteAllOfProgressBar(){
     var del = document.getElementById("progressBars"); 
-    while ( del.hasChildNodes() ) { 
+    while ( del !== null && del.hasChildNodes() ) { 
         del.removeChild( del.firstChild ); 
     }
 }
