@@ -86,7 +86,6 @@ function inputCheck(atInput, btInput, selectprocess){
     
     //burstTime이 0초일 때 false 추가
     for(var i = 0; i < btInput.length; i++){
-        console.log(btInput[i].value);
         if(btInput[i].value === "0" || btInput[i].value === "" || isNaN(btInput[i].value)) {
             return false;
         }        
@@ -94,7 +93,7 @@ function inputCheck(atInput, btInput, selectprocess){
 
     if(selectprocess.value === "rr"){
         const quantumTime = document.querySelector(".quantumTime").value;
-        if(quantumTime === "" || isNaN(quantumTime)) {
+        if(quantumTime === "0" || quantumTime === "" || isNaN(quantumTime)) {
             return false;
         }  
     }
@@ -158,7 +157,7 @@ function run(){
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    //createShowTable();
+    createShowTable(result.resultTable);
 }
 
 // 알고리즘 선택 함수
@@ -1289,20 +1288,29 @@ function init(){
     deleteAllOfProgressBar();
 }
 
-function createShowTable(){
+function createShowTable(resultTable){
     console.log("테이블 출력 부분");
-    console.log(inputTable);
-    console.log(showTable);
-    for(let i=0; i <inputTable.rows.length; i++){
-        var getRow = showTable.insertRow(showTable.rows.length);
-        const row0 = getRow.insertCell(0);
-        row0.innerText = "P"+processData[i][0];
+    console.log(resultTable);
+    //showTable
+    for(let i=0; i <resultTable.length; i++){
+        let newRow = showTable.insertRow(showTable.rows.length);  
+        const cell0 = newRow.insertCell(0);
+        cell0.innerText = "P"+ (resultTable[i][0]+1);
 
-        const row1 = getRow.insertCell(1);
-        row1.innerText = "P"+processData[i][1];
+        const cell1 = newRow.insertCell(1);
+        cell1.innerText = resultTable[i][1];
 
-        const row2 = getRow.insertCell(2);
-        row2.innerText = "P"+processData[i][2];
+        const cell2 = newRow.insertCell(2);
+        cell2.innerText = resultTable[i][2];
+
+        const cell3 = newRow.insertCell(3);
+        cell3.innerText = resultTable[i][3];
+
+        const cell4 = newRow.insertCell(4);
+        cell4.innerText = resultTable[i][4];
+
+        const cell5 = newRow.insertCell(5);
+        cell5.innerText = resultTable[i][5];
     }
 }
 
@@ -1513,5 +1521,4 @@ function deleteAllOfProgressBar(){
 }
 //srtn 우선순위 큐  -> 
 //-------------------- FrontEnd 끝--------------------
-
 
