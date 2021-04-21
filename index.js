@@ -811,7 +811,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
@@ -1018,7 +1018,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
@@ -1187,11 +1187,10 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
-
     max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
 
     //결과값 넣어줌
@@ -1353,7 +1352,7 @@ function showProgressBar(maxTime){
     
     let totalTime;
     let tmp;
-
+    
     if(maxTime % 15 === 0){
         tmp = parseInt(maxTime / 15);
         totalTime = maxTime + tmp;
@@ -1363,31 +1362,27 @@ function showProgressBar(maxTime){
         totalTime = maxTime - (maxTime % tmp) + tmp;
     }
 
+<<<<<<< HEAD
     const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
     let width = 100;
     white.style.width = width + "%";
     var id = setInterval(frame, 100);
+=======
+    white.style.animation = "leftmargin "+totalTime+"s linear 1 both";
+>>>>>>> e2bc21f04ea6f34a5e561976aeae17cd26d31622
 
-    var i = 1;
-    function frame(){
-        width -= progressBarWidth;
-        if(width < 0){
-            white.style.width = 0 + "px";
-            clearInterval(id);
-        }
-        else{
-            white.style.width = width + "%";
-            white.style.marginLeft = (progressBarWidth * i) + "%";
-            i++;
-        }
-    }
+    console.log("leftmargin "+(totalTime)+"s steps("+totalTime+") 1");
 }
 
 function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
+<<<<<<< HEAD
     const id = setInterval(show, 100);
+=======
+    const id = setInterval(show, 945);
+>>>>>>> e2bc21f04ea6f34a5e561976aeae17cd26d31622
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화
