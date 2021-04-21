@@ -1278,12 +1278,16 @@ function createProgressBar(resultData, maxTime, numberOfCore){
             const pro = document.createElement("div");
             pro.className = "progressBar__process";
             pro.id = "progressBar__process"+ resultData[i][startIndex][0];
-            if(widthInterval > 3){
-                pro.innerHTML = resultData[i][startIndex][0];
-            }
+         
+
             if(startIndex === 0) pro.style.marginLeft = (resultData[i][startIndex][1] * widthInterval) + "%";
             else pro.style.marginLeft = ((resultData[i][startIndex][1] - resultData[i][startIndex-1][2])*widthInterval)+ "%";
-            pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
+            let processWidth = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval;
+            pro.style.width = processWidth + "%";
+           
+            console.log("processWidth",processWidth);
+            if(processWidth > 3) pro.innerHTML = resultData[i][startIndex][0];
+            else pro.innerHTML = "";
 
             pro.addEventListener("mouseover", function(){
                 if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
@@ -1297,7 +1301,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
                     pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
                     pro.style.height = 30 + "px";
                 }
-                if(widthInterval > 3){
+                if(processWidth > 3){
                     pro.innerHTML = resultData[i][startIndex][0];
                 }
                 else pro.innerHTML = "";
