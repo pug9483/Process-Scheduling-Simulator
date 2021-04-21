@@ -21,11 +21,7 @@
   }
 }
 .progressBar__time {
-<<<<<<< HEAD
-  background-color:white;
-=======
   background-color: white;
->>>>>>> 73931fce55a6c8ac4061b023dd85a3c00b6630ef
   /* opacity: 0.6; */
   height: 180px;
   width: 750px;
