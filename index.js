@@ -1362,14 +1362,7 @@ function showProgressBar(maxTime){
         totalTime = maxTime - (maxTime % tmp) + tmp;
     }
 
-<<<<<<< HEAD
-    const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
-    let width = 100;
-    white.style.width = width + "%";
-    var id = setInterval(frame, 100);
-=======
     white.style.animation = "leftmargin "+totalTime+"s linear 1 both";
->>>>>>> e2bc21f04ea6f34a5e561976aeae17cd26d31622
 
     console.log("leftmargin "+(totalTime)+"s steps("+totalTime+") 1");
 }
@@ -1378,11 +1371,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-<<<<<<< HEAD
-    const id = setInterval(show, 100);
-=======
     const id = setInterval(show, 945);
->>>>>>> e2bc21f04ea6f34a5e561976aeae17cd26d31622
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화
