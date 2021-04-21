@@ -94,7 +94,7 @@ function inputCheck(atInput, btInput, selectprocess){
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
-    
+
     init(); // 초기화 함수
 
     //test1();
@@ -115,8 +115,6 @@ function run(){
         return;
     } 
 
-
-    
     //변수값 확인
     console.log("======================입력값 확인=====================");
     console.log("프로세서 수: ",numberOfProcessor);
