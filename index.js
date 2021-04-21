@@ -102,7 +102,6 @@ function inputCheck(atInput, btInput, selectprocess){
     return true;
 }
 
-
 //-------------------- 실행시 처리 ---------------------
 function run(){
     
@@ -410,7 +409,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -579,7 +577,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -755,7 +752,6 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -952,7 +948,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1131,7 +1126,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1205,7 +1199,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
 }
 
 function newalgorithm(){ 
-    
 }
 
 
@@ -1406,10 +1399,9 @@ function showReadyQueue(readyQueue){
         }
     }
 }
-
 function deleteReadyQueue(){
     var del = document.querySelector(".ready_queue"); 
-    if( del !== null && del.hasChildNodes() ) { 
+    if(del !== null && del.hasChildNodes() ) { 
         del.removeChild( del.lastChild ); 
     }
 }
