@@ -1366,7 +1366,7 @@ function showProgressBar(maxTime){
     const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
     let width = 100;
     white.style.width = width + "%";
-    var id = setInterval(frame, 100);
+    var id = setInterval(frame, 500);
 
     var i = 1;
     function frame(){
@@ -1387,7 +1387,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 100);
+    const id = setInterval(show, 500);
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화
@@ -1447,7 +1447,6 @@ function deleteAllOfProgressBar(){
 }
 //srtn 우선순위 큐  -> 
 //-------------------- FrontEnd 끝--------------------
-
 
 
 
