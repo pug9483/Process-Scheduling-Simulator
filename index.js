@@ -83,23 +83,23 @@ function inputCheck(atInput, btInput, selectprocess){
             return false;
         }        
     }
-
+    
+    //burstTime이 0초일 때 false 추가
     for(var i = 0; i < btInput.length; i++){
-        if(btInput[i].value === "" || isNaN(btInput[i].value)) {
+        if(btInput[i].value === "0" || btInput[i].value === "" || isNaN(btInput[i].value)) {
             return false;
         }        
     }
 
     if(selectprocess.value === "rr"){
         const quantumTime = document.querySelector(".quantumTime").value;
-        if(quantumTime === "" || isNaN(quantumTime)) {
+        if(quantumTime === "0" || quantumTime === "" || isNaN(quantumTime)) {
             return false;
         }  
     }
     
     return true;
 }
-
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
@@ -157,7 +157,7 @@ function run(){
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    createShowTable(result);
+    createShowTable(result.resultTable);
 }
 
 // 알고리즘 선택 함수
@@ -592,6 +592,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -646,22 +647,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
 
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
-    console.log("프로세스 데이터",processData);
     console.log("전체 실행 시간: ",totoalTime);
-
-    //결과표 배열 처리
-    for(let i =0;i<nop; i++) {
-        let tt = (processData[i].et) - (processData[i].at);
-        let wt = tt - processData[i].bt;
-        resultTable[i] = [
-            processData[i].id, 
-            processData[i].at, 
-            processData[i].bt,
-            wt,
-            tt, 
-            Number((tt/processData[i].bt).toFixed(3))
-        ];
-    }
     // showContextSwit(); // 버그수정 필요
     
     //수정
@@ -794,7 +780,8 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-                
+        
+        
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -1196,7 +1183,8 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-                
+        
+        
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -1281,7 +1269,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
 }
 
 function newalgorithm(){ 
-
 }
 
 
@@ -1296,24 +1283,34 @@ function init(){
     deleteBottomIndex();
     deleteProgressBar();
     deleteCoreName();
+    deleteReadyQueue();
     deleteAllOfShowTable();
     deleteAllOfProgressBar();
 }
 
-function createShowTable(){
+function createShowTable(resultTable){
     console.log("테이블 출력 부분");
-    console.log(inputTable);
-    console.log(showTable);
-    for(let i=0; i <inputTable.rows.length; i++){
-        var getRow = showTable.insertRow(showTable.rows.length);
-        const row0 = getRow.insertCell(0);
-        row0.innerText = "P"+processData[i][0];
+    console.log(resultTable);
+    //showTable
+    for(let i=0; i <resultTable.length; i++){
+        let newRow = showTable.insertRow(showTable.rows.length);  
+        const cell0 = newRow.insertCell(0);
+        cell0.innerText = "P"+ (resultTable[i][0]+1);
 
-        const row1 = getRow.insertCell(1);
-        row1.innerText = "P"+processData[i][1];
+        const cell1 = newRow.insertCell(1);
+        cell1.innerText = resultTable[i][1];
 
-        const row2 = getRow.insertCell(2);
-        row2.innerText = "P"+processData[i][2];
+        const cell2 = newRow.insertCell(2);
+        cell2.innerText = resultTable[i][2];
+
+        const cell3 = newRow.insertCell(3);
+        cell3.innerText = resultTable[i][3];
+
+        const cell4 = newRow.insertCell(4);
+        cell4.innerText = resultTable[i][4];
+
+        const cell5 = newRow.insertCell(5);
+        cell5.innerText = resultTable[i][5];
     }
 }
 
@@ -1356,13 +1353,16 @@ function createProgressBar(resultData, maxTime, numberOfCore){
             const pro = document.createElement("div");
             pro.className = "progressBar__process";
             pro.id = "progressBar__process"+ resultData[i][startIndex][0];
-            
+         
+
             if(startIndex === 0) pro.style.marginLeft = (resultData[i][startIndex][1] * widthInterval) + "%";
             else pro.style.marginLeft = ((resultData[i][startIndex][1] - resultData[i][startIndex-1][2])*widthInterval)+ "%";
-            pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
-            if(parseInt(pro.style.width - "%") > 3){
-                pro.innerHTML = resultData[i][startIndex][0];
-            }
+            let processWidth = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval;
+            pro.style.width = processWidth + "%";
+           
+            console.log("processWidth",processWidth);
+            if(processWidth > 3) pro.innerHTML = resultData[i][startIndex][0];
+            else pro.innerHTML = "";
 
             pro.addEventListener("mouseover", function(){
                 if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
@@ -1376,7 +1376,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
                     pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
                     pro.style.height = 30 + "px";
                 }
-                if(widthInterval > 3){
+                if(processWidth > 3){
                     pro.innerHTML = resultData[i][startIndex][0];
                 }
                 else pro.innerHTML = "";
@@ -1438,21 +1438,28 @@ function showProgressBar(maxTime){
         totalTime = maxTime - (maxTime % tmp) + tmp;
     }
 
-    white.style.animation = "leftmargin "+totalTime+"s linear 1 both";
+    setTimeout(function(){
+        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
+    }, 1000);
 
     // console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
 }
 
 function showReadyQueue(readyQueue){
+    const readyqueue = document.querySelector(".ready_queue"); 
+    var readyqueueShow = document.createElement("div");
+    readyqueueShow.className = "ready_queue__show";
+    readyqueue.appendChild(readyqueueShow);
+
     const time = readyQueue.length;
     let start = 0;
 
     const id = setInterval(show, 1000);
     function show(){
-        const parent = document.querySelector(".ready_queue__show"); 
+        
         //초기화
-        while ( parent.hasChildNodes() ) { 
-            parent.removeChild( parent.firstChild ); 
+        while ( readyqueueShow.hasChildNodes() ) { 
+            readyqueueShow.removeChild( readyqueueShow.firstChild ); 
         }
 
         if(start >= time){
@@ -1465,7 +1472,7 @@ function showReadyQueue(readyQueue){
                 node.className = "readyQueue__process";
                 node.id = "P" + readyQueue[start][i];
                 node.innerHTML = "P" +readyQueue[start][i];
-                parent.appendChild(node);
+                readyqueueShow.appendChild(node);
             }
             start++;
         }
@@ -1500,9 +1507,9 @@ function deleteCoreName(){
 }
 
 function deleteProgressBar(){
-    var delParent = document.querySelector(".gantt_table__top-right");
-    while(delParent !== null && delParent.hasChildNodes()){ 
-        delParent.removeChild(delParent.firstChild);
+    var del = document.querySelector(".gantt_table__top-right");
+    while(del !== null && del.hasChildNodes()){ 
+        del.removeChild(del.firstChild);
     }
 }
 
