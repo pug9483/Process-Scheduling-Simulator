@@ -409,7 +409,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -594,8 +593,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -788,9 +785,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
-        if(presentTime>100) break; // 무한 루프 방지
-        
+                
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -1003,7 +998,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1198,9 +1192,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
-        if(presentTime>100) break; // 무한 루프 방지
-        
+                
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
