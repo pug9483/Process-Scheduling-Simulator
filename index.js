@@ -406,7 +406,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -575,7 +574,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -751,7 +749,6 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -948,7 +945,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1127,7 +1123,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1377,7 +1372,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 1000);
+    const id = setInterval(show, 500);
     function show(){
         
         //초기화
