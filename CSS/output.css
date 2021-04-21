@@ -16,8 +16,13 @@
 }
 
 @keyframes leftmargin {
-  0% {margin-left: 0; width : 100%}
-  100% {margin-left: 100%; width : 0%;
+  0% {
+    margin-left: 0;
+    width: 100%;
+  }
+  100% {
+    margin-left: 100%;
+    width: 0%;
   }
 }
 .progressBar__time {
