@@ -83,9 +83,11 @@ function inputCheck(atInput, btInput, selectprocess){
             return false;
         }        
     }
-
+    
+    //burstTime이 0초일 때 false 추가
     for(var i = 0; i < btInput.length; i++){
-        if(btInput[i].value === "" || isNaN(btInput[i].value)) {
+        console.log(btInput[i].value);
+        if(btInput[i].value === "0" || btInput[i].value === "" || isNaN(btInput[i].value)) {
             return false;
         }        
     }
