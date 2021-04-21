@@ -811,7 +811,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
@@ -1018,7 +1018,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
@@ -1187,11 +1187,10 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
 
-    for(let i = 0;i<nopr;i++){  // 최대시간 처리
+    for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
-
     max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
 
     //결과값 넣어줌
@@ -1204,6 +1203,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
 }
 
 function newalgorithm(){ 
+    
 }
 
 
@@ -1218,6 +1218,7 @@ function init(){
     deleteBottomIndex();
     deleteProgressBar();
     deleteCoreName();
+    deleteReadyQueue();
     deleteAllOfShowTable();
     deleteAllOfProgressBar();
 }
@@ -1353,7 +1354,7 @@ function showProgressBar(maxTime){
     
     let totalTime;
     let tmp;
-
+    
     if(maxTime % 15 === 0){
         tmp = parseInt(maxTime / 15);
         totalTime = maxTime + tmp;
@@ -1363,36 +1364,28 @@ function showProgressBar(maxTime){
         totalTime = maxTime - (maxTime % tmp) + tmp;
     }
 
-    const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
-    let width = 100;
-    white.style.width = width + "%";
-    var id = setInterval(frame, 500);
+    setTimeout(function(){
+        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
+    }, 1000);
 
-    var i = 1;
-    function frame(){
-        width -= progressBarWidth;
-        if(width < 0){
-            white.style.width = 0 + "px";
-            clearInterval(id);
-        }
-        else{
-            white.style.width = width + "%";
-            white.style.marginLeft = (progressBarWidth * i) + "%";
-            i++;
-        }
-    }
+    console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
 }
 
 function showReadyQueue(readyQueue){
+    const readyqueue = document.querySelector(".ready_queue"); 
+    var readyqueueShow = document.createElement("div");
+    readyqueueShow.className = "ready_queue__show";
+    readyqueue.appendChild(readyqueueShow);
+
     const time = readyQueue.length;
     let start = 0;
 
     const id = setInterval(show, 500);
     function show(){
-        const parent = document.querySelector(".ready_queue__show"); 
+        
         //초기화
-        while ( parent.hasChildNodes() ) { 
-            parent.removeChild( parent.firstChild ); 
+        while ( readyqueueShow.hasChildNodes() ) { 
+            readyqueueShow.removeChild( readyqueueShow.firstChild ); 
         }
 
         if(start >= time){
@@ -1405,12 +1398,20 @@ function showReadyQueue(readyQueue){
                 node.className = "readyQueue__process";
                 node.id = "P" + readyQueue[start][i];
                 node.innerHTML = "P" +readyQueue[start][i];
-                parent.appendChild(node);
+                readyqueueShow.appendChild(node);
             }
             start++;
         }
     }
 }
+
+function deleteReadyQueue(){
+    var del = document.querySelector(".ready_queue"); 
+    if( del !== null && del.hasChildNodes() ) { 
+        del.removeChild( del.lastChild ); 
+    }
+}
+
 
 function deleteAllOfShowTable(){
     while(showTable.rows.length>0){
@@ -1433,9 +1434,9 @@ function deleteCoreName(){
 }
 
 function deleteProgressBar(){
-    var delParent = document.querySelector(".gantt_table__top-right");
-    while(delParent !== null && delParent.hasChildNodes()){ 
-        delParent.removeChild(delParent.firstChild);
+    var del = document.querySelector(".gantt_table__top-right");
+    while(del !== null && del.hasChildNodes()){ 
+        del.removeChild(del.firstChild);
     }
 }
 
