@@ -94,8 +94,8 @@
 
 .ready_queue__name {
   width: 150px;
-  margin-bottom: 10px;
   font-weight: 700;
+  margin-bottom: 10px;
   font-size: large;
 }
 
@@ -117,6 +117,10 @@
   border-radius: 50px;
 }
 
+.progressBar__process {
+  font-size: 13px;
+  font-weight: 600;
+}
 #progressBar__processP1,
 #P1 {
   background-color: #f08c8c;
