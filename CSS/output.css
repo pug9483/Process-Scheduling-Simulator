@@ -93,18 +93,14 @@
 }
 
 .ready_queue__name {
-  width: 100px;
+  width: 150px;
   font-weight: 700;
-  font-size: medium;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 10px;
+  font-size: large;
 }
 
 .ready_queue__show {
   width: 750px;
-  border-left: 1px solid black;
   display: flex;
   justify-content: flex-start;
   align-items: center;

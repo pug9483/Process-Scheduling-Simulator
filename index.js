@@ -349,7 +349,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
-    
+    let resultTable = new Array();
     // ================ 선언부 종료 ========================
     
 
@@ -458,6 +458,21 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //2021-04-21 17:47 결과표 배열
+    for(let i =0;i<nop; i++) {
+    let tt = (processData[i].et) - (processData[i].at);
+    let wt = tt - processData[i].bt;
+    resultTable[i] = [
+        processData[i].id, 
+        processData[i].at, 
+        processData[i].bt,
+        wt,
+        tt, 
+        Number((tt/processData[i].bt).toFixed(3))
+    ];
+}
+
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -476,6 +491,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -511,7 +527,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
-    
+    let resultTable = new Array();
     // ================ 선언부 종료 ========================
     
 
@@ -635,6 +651,19 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //수정
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -653,6 +682,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -685,7 +715,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
-    
+    let resultTable = new Array();
     // ================ 선언부 종료 ========================
     
 
@@ -800,7 +830,20 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
-    
+    //수정
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -820,7 +863,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
-    
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -855,6 +898,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
 
     // =============선언부 종료==================
 
@@ -1007,6 +1051,19 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -1026,6 +1083,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 
@@ -1059,7 +1117,8 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
-    
+    let resultTable = new Array();
+
     // ================ 선언부 종료 ========================
     
 
@@ -1174,7 +1233,19 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
-    
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -1193,7 +1264,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
-    
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -1360,10 +1431,10 @@ function showProgressBar(maxTime){
     }
 
     setTimeout(function(){
-        white.style.animation = "leftmargin "+(0)+"s linear 1 both";
+        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
     }, 1000);
 
-    console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
+    // console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
 }
 
 function showReadyQueue(readyQueue){
@@ -1399,13 +1470,13 @@ function showReadyQueue(readyQueue){
         }
     }
 }
+
 function deleteReadyQueue(){
     var del = document.querySelector(".ready_queue"); 
     if(del !== null && del.hasChildNodes() ) { 
         del.removeChild( del.lastChild ); 
     }
 }
-
 
 function deleteAllOfShowTable(){
     while(showTable.rows.length>0){
