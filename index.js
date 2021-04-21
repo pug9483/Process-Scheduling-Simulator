@@ -25,9 +25,6 @@ runSimulator.addEventListener("click", run); // "실행" 클릭시
 //-------------------- 이벤트 처리 ----------------------
 
 
-
-
-
 //------------------입력 처리-------------------
 function addInputRow(){
     if(inputTable.rows.length < 15){
@@ -158,7 +155,7 @@ function run(){
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    //createShowTable();
+    createShowTable(result.);
 }
 
 // 알고리즘 선택 함수
