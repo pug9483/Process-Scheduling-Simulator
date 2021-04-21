@@ -1360,7 +1360,7 @@ function showProgressBar(maxTime){
     }
 
     setTimeout(function(){
-        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
+        white.style.animation = "leftmargin "+(0)+"s linear 1 both";
     }, 1000);
 
     console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
@@ -1375,7 +1375,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 500);
+    const id = setInterval(show, 1000);
     function show(){
         
         //초기화

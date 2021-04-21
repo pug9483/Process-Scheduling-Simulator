@@ -121,6 +121,10 @@
   border-radius: 50px;
 }
 
+.progressBar__process {
+  font-size: 13px;
+  font-weight: 600;
+}
 #progressBar__processP1,
 #P1 {
   background-color: #f08c8c;
