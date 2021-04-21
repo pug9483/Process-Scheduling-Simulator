@@ -348,6 +348,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
     
     // ================ 선언부 종료 ========================
     
@@ -458,6 +459,20 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //결과표 배열 처리
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -476,6 +491,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -511,6 +527,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
+
     
     // ================ 선언부 종료 ========================
     
@@ -633,7 +651,22 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
 
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
+    console.log("프로세스 데이터",processData);
     console.log("전체 실행 시간: ",totoalTime);
+
+    //결과표 배열 처리
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
     // showContextSwit(); // 버그수정 필요
     
     //최종결과 처리
@@ -654,6 +687,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
@@ -686,6 +720,8 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
+
     
     // ================ 선언부 종료 ========================
     
@@ -803,6 +839,20 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //결과표 배열 처리
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -822,6 +872,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
@@ -857,6 +908,8 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
+
 
     // =============선언부 종료==================
 
@@ -1010,6 +1063,20 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //결과표 배열 처리
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -1029,6 +1096,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 
@@ -1062,6 +1130,8 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let resultData = new Array(new Array());
     let readyQLog = new Array();
     let max;
+    let resultTable = new Array();
+
     
     // ================ 선언부 종료 ========================
     
@@ -1179,6 +1249,20 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     console.log("전체 실행 시간: ",totoalTime);
     // showContextSwit(); // 버그수정 필요
     
+    //결과표 배열 처리
+    for(let i =0;i<nop; i++) {
+        let tt = (processData[i].et) - (processData[i].at);
+        let wt = tt - processData[i].bt;
+        resultTable[i] = [
+            processData[i].id, 
+            processData[i].at, 
+            processData[i].bt,
+            wt,
+            tt, 
+            Number((tt/processData[i].bt).toFixed(3))
+        ];
+    }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -1197,12 +1281,14 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.readyQLog = readyQLog;
     result.max = max;
     result.resultData = resultData;
+    result.resultTable = resultTable;
     
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
 
 function newalgorithm(){ 
+
 }
 
 
