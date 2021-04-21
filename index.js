@@ -56,6 +56,12 @@ function addInputRow(){
         burstText.className = "burstTime";
     }
 }
+function showProcess(){
+    const width = 80;
+    const height = 80;
+    processNode.style.width = width + "px";
+    processNode.style.height = height + "px";
+}
 
 function deleteLastIndexOfInputRow(){
     // const table = document.querySelector("table");
@@ -1269,15 +1275,36 @@ function createProgressBar(resultData, maxTime, numberOfCore){
         if(resultData[i] === undefined) continue;
 
         for(let j=0; j<resultData[i].length; j++){
+            const startIndex = j;
+            while(j < resultData[i].length-1 && resultData[i][j][0] === resultData[i][j+1][0]) j++;
+
             const pro = document.createElement("div");
             pro.className = "progressBar__process";
-            pro.id = "progressBar__process"+ resultData[i][j][0];
-            pro.innerHTML = resultData[i][j][0] + "[" + resultData[i][j][1] +"," + + resultData[i][j][2] +"]";
-            if(j === 0) pro.style.marginLeft = (resultData[i][j][1] * widthInterval) + "%";
-            if(j !== 0) pro.style.marginLeft = ((resultData[i][j][1] - resultData[i][j-1][2])*widthInterval)+ "%";
-            pro.style.width = (resultData[i][j][2] - resultData[i][j][1]) * widthInterval + "%";
-            // var tmp2 = "rgb("+(255-10*j)+", "+(204-10*j)+", " +(204-10*j)+")"; 
-            // pro.style.backgroundColor = tmp2;
+            pro.id = "progressBar__process"+ resultData[i][startIndex][0];
+            if(widthInterval > 3){
+                pro.innerHTML = resultData[i][startIndex][0];
+            }
+            if(startIndex === 0) pro.style.marginLeft = (resultData[i][startIndex][1] * widthInterval) + "%";
+            else pro.style.marginLeft = ((resultData[i][startIndex][1] - resultData[i][startIndex-1][2])*widthInterval)+ "%";
+            pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
+
+            pro.addEventListener("mouseover", function(){
+                if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
+                    pro.style.width =  "12%";
+                    pro.style.height = 40 + "px";
+                }
+                pro.innerHTML = resultData[i][startIndex][0] + "[" + resultData[i][startIndex][1] +"," + + resultData[i][j][2] +"]";
+            });
+            pro.addEventListener("mouseout", function(){
+                if(pro.style.width === "12%"){
+                    pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
+                    pro.style.height = 30 + "px";
+                }
+                if(widthInterval > 3){
+                    pro.innerHTML = resultData[i][startIndex][0];
+                }
+                else pro.innerHTML = "";
+            });
             childProg.appendChild(pro);
         }
     }
@@ -1338,7 +1365,7 @@ function showProgressBar(maxTime){
     const progressBarWidth = 100 / totalTime; //한 칸의 너비(%)
     let width = 100;
     white.style.width = width + "%";
-    var id = setInterval(frame, 1000);
+    var id = setInterval(frame, 100);
 
     var i = 1;
     function frame(){
@@ -1359,7 +1386,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 1000);
+    const id = setInterval(show, 100);
     function show(){
         const parent = document.querySelector(".ready_queue__show"); 
         //초기화
