@@ -155,7 +155,7 @@ function run(){
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    createShowTable(result.);
+    createShowTable(result);
 }
 
 // 알고리즘 선택 함수
@@ -406,6 +406,7 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -574,6 +575,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -749,6 +751,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -945,6 +948,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1123,6 +1127,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
+        if(presentTime>100) break; // 무한 루프 방지
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1372,7 +1377,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 500);
+    const id = setInterval(show, 1000);
     function show(){
         
         //초기화
