@@ -21,7 +21,11 @@
   }
 }
 .progressBar__time {
+<<<<<<< HEAD
   background-color:white;
+=======
+  background-color: white;
+>>>>>>> 73931fce55a6c8ac4061b023dd85a3c00b6630ef
   /* opacity: 0.6; */
   height: 180px;
   width: 750px;
@@ -106,51 +110,77 @@
   padding-left: 20px;
 }
 
-#progressBar__processP1 {
-  background-color: #eb4d4b;
+.readyQueue__process {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50px;
 }
-#progressBar__processP2 {
-  background-color: #ff7979;
+
+#progressBar__processP1,
+#P1 {
+  background-color: #f08c8c;
 }
-#progressBar__processP3 {
-  background-color: #f0932b;
+#progressBar__processP2,
+#P2 {
+  background-color: #bf82bf;
 }
-#progressBar__processP4 {
-  background-color: #ffbe76;
+#progressBar__processP3,
+#P3 {
+  background-color: #ff7f50;
 }
-#progressBar__processP5 {
+#progressBar__processP4,
+#P4 {
+  background-color: #8c8cbe;
+}
+#progressBar__processP5,
+#P5 {
   background-color: #f9ca24;
 }
-#progressBar__processP6 {
+#progressBar__processP6,
+#P6 {
+  background-color: #6fcc98;
+}
+#progressBar__processP7,
+#P7 {
   background-color: #f6e58d;
 }
-#progressBar__processP7 {
-  background-color: #6ab04c;
-}
-#progressBar__processP8 {
+#progressBar__processP8,
+#P8 {
   background-color: #badc58;
 }
-#progressBar__processP9 {
+#progressBar__processP9,
+#P9 {
   background-color: #c7ecee;
 }
-#progressBar__processP10 {
+#progressBar__processP10,
+#P10 {
   background-color: #95afc0;
 }
-#progressBar__processP11 {
+#progressBar__processP11,
+#P11 {
   background-color: #22a6b3;
 }
-#progressBar__processP12 {
+#progressBar__processP12,
+#P12 {
   background-color: #7ed6df;
 }
-#progressBar__processP13 {
-  background-color: #be2edd;
+#progressBar__processP13,
+#P13 {
+  background-color: #ff91dc;
 }
-#progressBar__processP14 {
-  background-color: #4834d4;
+#progressBar__processP14,
+#P14 {
+  background-color: #6e9fed;
 }
-#progressBar__processP15 {
-  background-color: #686de0;
+#progressBar__processP15,
+#P15 {
+  background-color: #a0a0ff;
 }
-#progressBar__processP16 {
-  background-color: #535c68;
+#progressBar__processP16,
+#P16 {
+  background-color: #a0a0a0;
 }
