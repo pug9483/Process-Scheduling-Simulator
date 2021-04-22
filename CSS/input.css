@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=BenchNine:700);
+
 .processor_input {
   width: 850px;
   display: flex;
@@ -89,8 +90,6 @@ tr {
   background-color: #f0f0f2;
   border-radius: 10px;
   display: flex;
-  /* border: 2.5px solid rgb(139, 166, 214); */
-  /* border-radius: 5px; */
 }
 
 .processor_input__column-left {

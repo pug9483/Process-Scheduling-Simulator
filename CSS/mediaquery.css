@@ -1,0 +1,151 @@
+@media (max-width: 830px) {
+  .simulator {
+    width: 480px;
+    background-color: #f5f5f7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border: 3px solid black;
+  }
+
+  .processor_input {
+    width: 480px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .processor_input__column {
+    margin-top: 20px;
+  }
+
+  .logo {
+    width: 480px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    height: 50px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid white;
+    padding: 10px;
+  }
+
+  img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+  }
+  @keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(359deg);
+    }
+  }
+
+  #baram {
+    width: 20%;
+    height: 20%;
+    float: right;
+    animation: rotation 2s infinite linear;
+    animation-play-state: paused;
+    align-self: inherit;
+  }
+
+  .processor_input__column-right {
+    height: 110px;
+    display: block;
+  }
+
+  .ready_queue {
+    height: 60px;
+    width: 480px;
+    margin-bottom: 10px;
+    background-color: #f0f0f2;
+    border-radius: 10px;
+    display: flex;
+  }
+
+  .processor_show__table table {
+    width: 480px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .progressBar__time {
+    background-color: #f0f0f2;
+    /* opacity: 0.6; */
+    height: 180px;
+    width: 480px;
+    position: relative;
+    top: -180px;
+  }
+
+  .progressBar {
+    height: 30px;
+    display: flex;
+  }
+
+  .progressBar__process {
+    /* background-color: blue; */
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .gantt_table {
+    width: 480px;
+    height: 210px;
+    background-color: #f0f0f2;
+    border-radius: 10px;
+    padding-bottom: 10px;
+  }
+
+  .gantt_table__top {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(158, 158, 158);
+    border-width: 50%;
+    margin: 0px 10px;
+  }
+
+  .gantt_table__top-left {
+    width: 40px;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  .gantt_table__top-right {
+    width: 430px;
+    height: 180px;
+  }
+
+  .gantt_table__bottom {
+    padding-left: 40px;
+    display: flex;
+    margin: 0px 10px;
+  }
+
+  #progressBars {
+    width: 430px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .progressBar {
+    width: 430px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    display: flex;
+    position: relative;
+  }
+}
