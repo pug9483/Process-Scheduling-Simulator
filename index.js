@@ -1558,6 +1558,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
     const widthInterval = 100 / totalTime;
     console.log("widthInterval", widthInterval);
     
+    
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
