@@ -1,4 +1,17 @@
 @media (max-width: 830px) {
+  .color_list{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .progressColor{
+    padding:5px;
+    margin: 5px;
+    border-radius: 2px;
+  }
+  .result_table_name{
+    font-size: 10px;
+  }
+
   .simulator {
     width: 480px;
     background-color: #f5f5f7;

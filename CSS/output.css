@@ -117,9 +117,19 @@
   border: 2px solid black;
   border-radius: 5px;
 }
+.color_list{
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+}
+.progressColor{
+  padding:5px;
+  margin: 5px;
+  border-radius: 2px;
+}
 
-
-.ready_queue__name {
+.ready_queue__name,
+.result_table_name {
   width: 150px;
   font-weight: 700;
   margin-bottom: 10px;

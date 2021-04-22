@@ -1,6 +1,5 @@
-//import { test1 } from "./algorithm.js"
-// 모듈 실패!
-// import { fcfs, rr, spn, sptn, hrrn, newalgorithm, test } from './algorithm.js';
+const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
+"#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];
 
 function debug(result){
     console.log("결과값 디버그:  ", result);;
@@ -140,7 +139,7 @@ function run(){
     debug(result);
 
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
-    createProgressBar(result.resultData, result.max, numberOfProcessor); //배열, time
+    createProgressBar(result.resultData, result.max, numberOfProcessor, numberOfProcess); //배열, time
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
 
@@ -1535,7 +1534,7 @@ function createShowTable(resultTable, max){
     
 }
 
-function createProgressBar(resultData, maxTime, numberOfCore){
+function createProgressBar(resultData, maxTime, numberOfCore, nop){
     const progress = document.querySelector(".gantt_table__top-right");
     const progressBars = document.createElement("div");
     progressBars.className = "progressBars";
@@ -1558,7 +1557,7 @@ function createProgressBar(resultData, maxTime, numberOfCore){
     const widthInterval = 100 / totalTime;
     console.log("widthInterval", widthInterval);
     
-    
+
     for(let i=0; i < numberOfCore; i++){
         //하나의 코어 만들기
         var childProg = document.createElement("div");
@@ -1611,6 +1610,15 @@ function createProgressBar(resultData, maxTime, numberOfCore){
               
             childProg.appendChild(pro);
         }
+    }
+    for(let j=0; j<nop; j++){
+        let colorList = document.querySelector(".color_list");
+        let childColor = document.createElement("div");
+        colorList.appendChild(childColor);
+        childColor.className = "progressColor";
+        childColor.id = "Color"+(j+1);
+        childColor.innerHTML = "P"+(j+1);
+        childColor.style.backgroundColor =colorListArray[j];
     }
 }
 
