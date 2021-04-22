@@ -15,6 +15,9 @@ body {
 
 .simulator {
   width: 850px;
+  background-color: #f5f5f7;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 table tr {
