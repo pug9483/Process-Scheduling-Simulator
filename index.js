@@ -3,7 +3,7 @@
 // import { fcfs, rr, spn, sptn, hrrn, newalgorithm, test } from './algorithm.js';
 
 function debug(result){
-    console.log(result);;
+    console.log("결과값 디버그:  ", result);;
 }
 
 
@@ -119,7 +119,6 @@ function run(){
     const numberOfProcessor = document.querySelector(".numofprocessors").value;
     const selectprocess = document.querySelector(".selectprocess");
     //====================== 입력 체크 ====================
-    console.log("atInput, btInput", atInput, btInput);
     if(!inputCheck(atInput,btInput,selectprocess)){
         alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR이라면 Time quantum을 넣어 주세요.)");
         init();
@@ -131,7 +130,6 @@ function run(){
     console.log("======================입력값 확인=====================");
     console.log("프로세서 수: ",numberOfProcessor);
     console.log("프로세스 수: ",numberOfProcess);
-    // console.log("퀀텀타임: ",quantumTime);
     console.log("=========================run=======================");
     
     result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
@@ -139,9 +137,7 @@ function run(){
 
     
 
-    console.log("---------------------디버그 시작---------------------");
     debug(result);
-    console.log("---------------------디버그 종료---------------------");
 
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
     createProgressBar(result.resultData, result.max, numberOfProcessor); //배열, time
@@ -951,7 +947,11 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
                 processData[runningProcess[maxIndex]].cs++;
                 exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
-                processorData[processData[maxIndex].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여)
+
+
+
+
+                processorData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여)
                 workIndex = processData[runningProcess[maxIndex]].pr;
                 runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
                 dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
@@ -1482,30 +1482,56 @@ function init(){
 function createShowTable(resultTable){
     console.log("테이블 출력 부분");
     console.log(resultTable);
+    let totalWt = 0;
+    let totalCs = 0;
     //showTable
     for(let i=0; i <resultTable.length; i++){
+        console.log("dddddddddddddd",showTable.rows.length);
         let newRow = showTable.insertRow(showTable.rows.length);  
         const cell0 = newRow.insertCell(0);
         cell0.innerText = "P"+ (resultTable[i][0]+1);
-
+        
         const cell1 = newRow.insertCell(1);
         cell1.innerText = resultTable[i][1];
-
+        
         const cell2 = newRow.insertCell(2);
         cell2.innerText = resultTable[i][2];
-
+        
         const cell3 = newRow.insertCell(3);
         cell3.innerText = resultTable[i][3];
+        totalWt += resultTable[i][3];
 
         const cell4 = newRow.insertCell(4);
         cell4.innerText = resultTable[i][4];
-
+        
         const cell5 = newRow.insertCell(5);
         cell5.innerText = resultTable[i][5];
-
+        
         const cell6 = newRow.insertCell(6);
         cell6.innerText = resultTable[i][6];
+        totalCs += resultTable[i][6];
     }
+    let totalLaw = showTable.insertRow(showTable.rows.length);  
+        const cell0 = totalLaw.insertCell(0);
+        cell0.innerText = "TOTAL";
+    
+        const cell1 = totalLaw.insertCell(1);
+        cell1.innerText = "-";
+    
+        const cell2 = totalLaw.insertCell(2);
+        cell2.innerText = "-";
+    
+        const cell3 = totalLaw.insertCell(3);
+        cell3.innerText = totalWt;
+    
+        const cell4 = totalLaw.insertCell(4);
+        cell4.innerText = "-";
+    
+        const cell5 = totalLaw.insertCell(5);
+        cell5.innerText = "-";
+    
+        const cell6 = totalLaw.insertCell(6);
+        cell6.innerText = totalCs;
     
 }
 

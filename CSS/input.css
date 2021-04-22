@@ -1,10 +1,18 @@
 @import url(https://fonts.googleapis.com/css?family=BenchNine:700);
 
 .processor_input {
+  padding:8px 4px;
   width: 850px;
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+
+.processor_input:hover{
+padding:8px 4px;
+border: 2px solid black;
+border-radius: 5px;
 }
 
 table,

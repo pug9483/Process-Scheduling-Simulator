@@ -53,6 +53,7 @@
   background-color: #f0f0f2;
   border-radius: 10px;
   padding-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .gantt_table__top {
@@ -92,7 +93,7 @@
 
 .processor_show__table table {
   width: 850px;
-  margin-top: 30px;
+  margin-top: 5px;
   margin-bottom: 30px;
 }
 
@@ -103,7 +104,16 @@
   background-color: #f0f0f2;
   border-radius: 10px;
   display: flex;
+  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+
 }
+.processor_show__table:hover,
+.gantt_table:hover,
+.ready_queue:hover {
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
 
 .ready_queue__name {
   width: 150px;
