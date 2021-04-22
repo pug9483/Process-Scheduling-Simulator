@@ -12,7 +12,10 @@
   <body>
     <div class="simulator">
       <div class="logo">
-        <img src="image/logo.png" />
+        <img src="image/logo_login.png" />
+        <div style="padding-right: 10px;">
+          <img src="image/baramgabee.png" id = "baram" class = "baram">
+        </div>
       </div>
       <div class="processor_input">
         <div class="processor_input__table">
@@ -25,14 +28,15 @@
             <tbody id="input-table"></tbody>
           </table>
         </div>
+        <div class = "containr">
         <div class="processor_input__column">
           <div class="processor_input__column-left">
-            <input type="button" value="프로세스 추가" id="addprocess" />
-            <input type="button" value="프로세스 제거" id="deleteprocess" />
+            <input type="button" value="Add Process" id="addprocess" />
+            <input type="button" value="Delete Process" id="deleteprocess" />
           </div>
           <div class="processor_input__column-right">
             <div class="p">
-              <span>프로세서 수</span>
+              <span>Number of Process</span>
               <select class="numofprocessors">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -49,7 +53,7 @@
                 <option value="hrrn">HRRN</option>
                 <option value="newalgorithm">My Scheduling Algorithm</option>
               </select>
-              <button id="run">실행</button>
+              <button id="run">Run!</button>
             </div>
             <div class="p">
               <input
@@ -59,6 +63,8 @@
               />
             </div>
           </div>
+         
+        </div>
         </div>
       </div>
       <div class="ready_queue__name">
@@ -77,11 +83,12 @@
         <table border="1">
           <thead>
             <th>Name</th>
-            <th>Arrival time</th>
-            <th>Burst time</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
             <th>Waiting Time</th>
             <th>Turnaound Time</th>
             <th>Nomalized Time</th>
+            <th>Context Switches</th>
           </thead>
           <tbody id="show-table"></tbody>
         </table>

@@ -26,7 +26,7 @@
   }
 }
 .progressBar__time {
-  background-color: white;
+  background-color: #f0f0f2;
   /* opacity: 0.6; */
   height: 180px;
   width: 750px;
@@ -50,18 +50,21 @@
 .gantt_table {
   width: 850px;
   height: 210px;
-  border: 1px solid black;
+  background-color: #f0f0f2;
+  border-radius: 10px;
+  padding-bottom: 10px;
 }
 
 .gantt_table__top {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(158, 158, 158);
+  border-width: 50%;
+  margin: 0px 10px;
 }
 
 .gantt_table__top-left {
   width: 100px;
-  border-right: 1px solid black;
   font-size: large;
   display: flex;
   flex-direction: column;
@@ -76,19 +79,26 @@
 }
 
 .gantt_table__bottom {
-  padding-left: 100px;
+  padding-left: 80px;
   display: flex;
+  margin: 0px 10px;
+}
+.gantt_table__bottom div {
+  padding-top: 5px;
 }
 
 .processor_show__table table {
   width: 850px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .ready_queue {
   height: 60px;
   width: 850px;
-  border: 1px solid black;
   margin-bottom: 10px;
+  background-color: #f0f0f2;
+  border-radius: 10px;
   display: flex;
 }
 
