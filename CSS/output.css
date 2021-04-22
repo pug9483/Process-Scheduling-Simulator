@@ -87,6 +87,9 @@
 .gantt_table__bottom div {
   padding-top: 5px;
 }
+.gantt_table__bottom div {
+  padding-top: 5px;
+}
 
 .processor_show__table table {
   width: 850px;

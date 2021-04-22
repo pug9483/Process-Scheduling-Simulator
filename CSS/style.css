@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap");
 @import "input.css";
 @import "logo.css";
 @import "output.css";
@@ -27,9 +27,9 @@ table tr {
 
 table {
   margin: 10px 0px;
-  border : none;
+  border: none;
 }
 
-*{
-  font-family: 'Antonio', sans-serif;
+* {
+  font-family: "Antonio", sans-serif;
 }

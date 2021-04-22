@@ -1,4 +1,4 @@
-
+@import url(https://fonts.googleapis.com/css?family=BenchNine:700);
 .processor_input {
   padding:8px 4px;
   width: 850px;
@@ -26,17 +26,17 @@ table,
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
-  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  transition: all 0.3s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
 
 #input-table input:hover,
-.quantumTime:hover{
-border: 2px solid black;
-transform: scale(1.1);
--webkit-transform: scale(1.1);
--moz-transform: scale(1.1);
--ms-transform: scale(1.1);
--o-transform: scale(1.1);
+.quantumTime:hover {
+  border: 2px solid black;
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
 }
 
 thead {
@@ -49,7 +49,7 @@ thead {
 input {
   background-color: transparent;
   outline: none;
-  border : 2px solid #bdbcbc;
+  border: 2px solid #bdbcbc;
   border-radius: 2px;
 }
 
@@ -63,18 +63,17 @@ tr {
   height: 30px;
 }
 
-
 #addprocess,
 #deleteprocess,
 #run {
-  border : 2px solid #bdbcbc;
+  border: 2px solid #bdbcbc;
   border-radius: 5px;
   transform: scale(1);
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
-  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  transition: all 0.1s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
 #addprocess:hover,
 #deleteprocess:hover,
@@ -85,9 +84,8 @@ tr {
   -moz-transform: scale(1.1);
   -ms-transform: scale(1.1);
   -o-transform: scale(1.1);
-  cursor:pointer;
+  cursor: pointer;
 }
-
 
 .processor_input__column {
   width: 400px;
@@ -126,13 +124,11 @@ tr {
   width: 420px;
 }
 
-.processor_input__table{
+.processor_input__table {
   background-color: #f0f0f2;
   border-radius: 10px;
   padding: 0px 10px 10px 10px;
-  
 }
-
 
 /* .p {
   display: flex;
@@ -152,13 +148,13 @@ tr {
   width: 90px;
 }
 
-select{
-  border : 2px solid #bdbcbc;
+select {
+  border: 2px solid #bdbcbc;
   border-radius: 2px;
   background-color: #f0f0f2;
 }
 
-.container{
+.container {
   display: flex;
   flex-direction: column;
 }

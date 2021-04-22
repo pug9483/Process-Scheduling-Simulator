@@ -17,15 +17,19 @@ img {
   object-fit: cover;
 }
 @keyframes rotation {
-    from {-webkit-transform: rotate(0deg);}
-    to   {-webkit-transform: rotate(359deg);}
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+  }
 }
 
-#baram{
-  width:15%;
-  height:15%;
+#baram {
+  width: 15%;
+  height: 15%;
   float: right;
   animation: rotation 2s infinite linear;
   animation-play-state: paused;
-  align-self:inherit;
+  align-self: inherit;
 }
