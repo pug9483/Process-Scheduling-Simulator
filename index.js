@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-const  tbody = document.querySelector("#t-body");
-const showtable = document.querySelector("#show-table");
-//FCFS 실행되는지 보기 위해 만든 배열
-var array = Array.from(Array(4), () => new Array(3));
-=======
 function debug(result){  // 디버그 함수
     console.log("결과값 디버그:  ", result);;
 }
 
->>>>>>> gh-pages
 
 //-------------------태그 관리-------------------------
 const inputTable = document.querySelector("#input-table");
@@ -21,25 +14,6 @@ const baram = document.querySelector(".baram");
 //------------------태그 관리 끝-----------------------
 
 
-<<<<<<< HEAD
-function addRow(){
-    if(tbody.rows.length < 4){
-        let newRow = tbody.insertRow(tbody.rows.length );
-        let size = tbody.rows.length;
-
-        const cell0 = newRow.insertCell(0);
-        cell0.innerText = "P" + size;
-
-        //arrival time
-        const arrival = newRow.insertCell(1);
-        let arrivalText = document.createElement("input");
-        arrivalText.setAttribute("value", "");
-        arrival.appendChild(arrivalText);
-
-        arrivalText.type="text";
-        arrivalText.className = "arrivalTime";
-
-=======
 
 //-------------------- 이벤트 처리 ---------------------
 addProcess.addEventListener("click", addInputRow);  // "프로세스 추가" 클릭시
@@ -71,30 +45,11 @@ function addInputRow(){
         arrivalText.type="text";
         arrivalText.className = "arrivalTime";
         
->>>>>>> gh-pages
         //burst time
         const burst = newRow.insertCell(2);
         let burstText = document.createElement("input");
         burstText.setAttribute("value", "");
         burst.appendChild(burstText);
-<<<<<<< HEAD
-
-        burstText.type="text";
-        burstText.className = "burstTime";
-    }
-}
-
-function deleteRow(){
-    // const table = document.querySelector("table");
-    if(tbody.rows.length >= 1){
-        tbody.deleteRow(-1);
-        showtable.deleteRow(tbody.rows.length);
-    }
-}
-function deleteShowRow(){
-    for(let i=0; i <showtable.rows.length; i++){
-        showtable.deleteRow(i);
-=======
         
         burstText.type="text";
         burstText.className = "burstTime";
@@ -112,7 +67,6 @@ function deleteLastIndexOfInputRow(){
     if(inputTable.rows.length >= 1){
         inputTable.deleteRow(-1);
         showTable.deleteRow(-1);
->>>>>>> gh-pages
     }
 }
 //------------------입력 끝-----------------
@@ -153,38 +107,6 @@ function inputCheck(atInput, btInput, selectprocess){
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
-<<<<<<< HEAD
-    deleteShowRow();
-    //addRow에서 넣은 값 받아와서 배열에 저장
-    /*for(var table = tbody.firstChild; table != null; table = table.nextSibling){
-        let tmpArray = [];
-        for(i = table.firstChild; i != null; i = table.nextSibling){
-            tmpArray.push(table.childNodes);
-        }
-        console.log(tmpArray);
-    }*/
-    const ar = document.querySelectorAll(".arrivalTime");
-    const br = document.querySelectorAll(".burstTime");
-
-    //실행 progress 보여주기
-
-    for(let i=0; i <tbody.rows.length; i++){
-        array[i][0] = ar[i].value;
-        array[i][1] = br[i].value;
-    }
-
-    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    for(let i=0; i <tbody.rows.length; i++){
-        var getRow = showtable.insertRow(showtable.rows.length);
-        const row0 = getRow.insertCell(0);
-        row0.innerText = 'P'+ (i+1);
-        const row1 = getRow.insertCell(1);
-        row1.innerText = array[i][0];
-        const row2 = getRow.insertCell(2);
-        row2.innerText = array[i][1];
-    }
-}
-=======
     
     init(); // 초기화 함수
     baram.style.animationPlayState = "running";  // 바람개비 돌리기
@@ -1746,4 +1668,3 @@ function deleteAllOfProgressBar(){
 //srtn 우선순위 큐  -> 
 //-------------------- FrontEnd 끝--------------------
 
->>>>>>> gh-pages
