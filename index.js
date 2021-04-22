@@ -80,14 +80,14 @@ function inputCheck(atInput, btInput, selectprocess){
     if(atInput.length == 0 && btInput.length == 0) return false;
 
     for(var i = 0; i < atInput.length; i++){
-        if(atInput[i].value === "" || isNaN(atInput[i].value)) {
+        if(parseInt(atInput[i].value) <= -1 || atInput[i].value === "" || isNaN(atInput[i].value)) {
             return false;
         }        
     }
     
     //burstTime이 0초일 때 false 추가
     for(var i = 0; i < btInput.length; i++){
-        if(btInput[i].value === "0" || btInput[i].value === "" || isNaN(btInput[i].value)) {
+        if(parseInt(btInput[i].value) <= 0 || btInput[i].value === "" || isNaN(btInput[i].value)) {
             return false;
         }        
     }

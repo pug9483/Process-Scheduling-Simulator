@@ -13,13 +13,7 @@ body {
   font-weight: 400;
 }
 
-.simulator {
-  width: 850px;
-  background-color: #F5F5F7;
-  padding: 5px 20px 20px 20px;
-  border-radius: 10px;
-  border : 3px solid black;
-}
+
 
 table tr {
   text-align: center;
@@ -32,4 +26,23 @@ table {
 
 *{
   font-family: 'Antonio', sans-serif;
+}
+
+@media (max-width:1024px){
+  .simulator {
+    width: 850px;
+    background-color: #F5F5F7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border : 3px solid black;
+  }
+}
+@media (max-width:767px){
+  .simulator {
+    width: 550px;
+    background-color: #F5F5F7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border : 3px solid black;
+  }
 }
