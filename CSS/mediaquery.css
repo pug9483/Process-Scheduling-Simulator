@@ -181,4 +181,39 @@
     font-family: "Antonio", sans-serif;
     font-size: 10px;
   }
+
+  .processor_input:hover,
+#input-table input:hover,
+.quantumTime:hover{
+  border: 2px solid #dedede;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+}
+
+#addprocess:hover,
+#deleteprocess:hover,
+#run:hover {
+  border: 2px solid #dedede;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+
+}
+
+.processor_show__table:hover,
+.gantt_table:hover,
+.ready_queue:hover {
+  border: 2px solid #dedede;
+}
+
+#addprocess,
+#deleteprocess,
+#run {
+  border: 2px solid #dedede;
+}
 }

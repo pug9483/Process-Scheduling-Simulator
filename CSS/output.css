@@ -93,9 +93,8 @@
 }
 
 .processor_show__table table {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 30px;
+  width: 830px;
+  margin: 10px 10px;
 }
 .processor_show__table{
   border: 2px solid #dedede;
