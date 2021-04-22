@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap");
 @import "input.css";
 @import "logo.css";
 @import "output.css";
@@ -13,17 +13,34 @@ body {
   font-weight: 400;
 }
 
-.simulator {
-  width: 850px;
-  background-color: #f5f5f7;
-  padding: 20px;
-  border-radius: 10px;
-}
-
 table tr {
   text-align: center;
 }
 
 table {
   margin: 10px 0px;
+  border: none;
+}
+
+* {
+  font-family: "Antonio", sans-serif;
+}
+
+@media (max-width: 1024px) {
+  .simulator {
+    width: 850px;
+    background-color: #f5f5f7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border: 3px solid black;
+  }
+}
+@media (max-width: 767px) {
+  .simulator {
+    width: 550px;
+    background-color: #f5f5f7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border: 3px solid black;
+  }
 }
