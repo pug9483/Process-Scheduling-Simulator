@@ -290,10 +290,6 @@ class Queue {
     }
 }
 
-
-
-
-
 // 알고리즘 6개
 function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     // =======================선언부=======================
@@ -328,7 +324,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     
 
     //==================== 초기화 ===========================
-    
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -342,25 +337,18 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
         processData[i].at = Number(atInput[i].value);  // 프로세스 도착시간
         processData[i].bt = Number(btInput[i].value);  // 프로세스 실행시간
     }
-    
     //=====================초기화 종료========================
-    
 
     //======================================== 실행부 ===============================================
-    
     while(1){ // 무한루프
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
-
-
 
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
         console.log("레디큐: ",readyQueue.toString());
         //==================콘솔확인(디버깅)====================
-        
-        
-        
+               
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
@@ -382,7 +370,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -425,7 +412,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     //============================================= 실행부 종료 ===========================================
 
     //======================== 결과, 리턴 처리 ==========================
-
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
@@ -443,8 +429,8 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
         tt, 
         Number((tt/processData[i].bt).toFixed(3)),
         processData[i].cs
-    ];
-}
+        ];
+    }
 
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
@@ -459,7 +445,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
 
     max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
-
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -503,10 +488,8 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     let max;
     let resultTable = new Array();
     // ================ 선언부 종료 ========================
-    
 
     //==================== 초기화 ===========================
-    
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -522,7 +505,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
     }
     
     //=====================초기화 종료========================
-    
 
     //======================================== 실행부 ===============================================
     
@@ -530,21 +512,16 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
         
-        
         if(!exitQuantumQueue.empty()){
             temp = exitQuantumQueue.toLength(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
             for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
         }
 
-
-
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
         console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)====================
-        
-        
-        
+
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
@@ -616,17 +593,13 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
-    
     //============================================= 실행부 종료 ===========================================
 
     //======================== 결과, 리턴 처리 ==========================
-
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
-    
-    //수정
+
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
         let wt = tt - processData[i].bt;
@@ -640,6 +613,7 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
             processData[i].cs
         ];
     }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -692,11 +666,9 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let readyQLog = new Array();
     let max;
     let resultTable = new Array();
-    // ================ 선언부 종료 ========================
-    
+    // ================ 선언부 종료 ========================   
 
     //==================== 초기화 ===========================
-    
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -715,25 +687,14 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
     
 
     //======================================== 실행부 ===============================================
-    
     while(1){ // 무한루프
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
         
-        
-        // if(!exitQuantumQueue.empty()){
-        //     temp = exitQuantumQueue.toLength(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
-        //     for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
-        // }
-
-
-
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
         console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)====================
-        
-        
         
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
@@ -758,7 +719,6 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -767,6 +727,7 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 i--;
             }
         }
+
         if(runningProcess.length != 0){ //하나라도 실행중인 프로세스가 있으면,
             for(let i=0; i<runningProcess.length;i++){ //실행중인 모든 프로세스의 잔여시간을 줄여라.
                 processData[runningProcess[i]].rt--;
@@ -794,13 +755,12 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 }
             }
         }
+
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
-    
     //============================================= 실행부 종료 ===========================================
 
     //======================== 결과, 리턴 처리 ==========================
-
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
@@ -826,7 +786,6 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
             resultData[i] = (processorData[i].dequeueAll())
         }
     }
-
 
     for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
@@ -862,7 +821,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let prRunTime = new Array();  // max 런타임 처리
     let presentTime; // 현재시간 0으로 초기화
     let totoalTime; // 알고리즘 실행시간
-
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
@@ -875,11 +833,9 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let readyQLog = new Array();
     let max;
     let resultTable = new Array();
-
     // =============선언부 종료==================
 
     //-------------초기화------------------------
-
     presentTime = 0; // 현재시간 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -894,16 +850,12 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
         processData[i].bt = Number(btInput[i].value);  // 프로세스 실행시간
         processData[i].rt = Number(btInput[i].value); //프로세스 잔여 시간
     }
-
     //---------------초기화 종료-------------------------
 
     // ---------------------------------실행부---------------------------
-   
-
     while(1){
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
-        
         
         if(exitQueue.length != 0){
             temp = exitQueue.length; // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
@@ -928,10 +880,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
                 processData[runningProcess[maxIndex]].cs++;
                 exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
-
-
-
-
                 processorData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여)
                 workIndex = processData[runningProcess[maxIndex]].pr;
                 runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
@@ -960,9 +908,7 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가    
         }
         
-        
         readyQLog.push(readyQueue.toString());  // 레디큐 로그 업데이트
-        
         
         //대기시간 측정
         for(let i = 0; i< nop; i++){
@@ -970,7 +916,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1027,7 +972,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
     
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -1065,7 +1009,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
     result.resultTable = resultTable;
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
-
 }
 
 function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){ 
@@ -1097,12 +1040,9 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     let readyQLog = new Array();
     let max;
     let resultTable = new Array();
-
     // ================ 선언부 종료 ========================
-    
 
     //==================== 초기화 ===========================
-    
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -1116,12 +1056,9 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
         processData[i].at = Number(atInput[i].value);  // 프로세스 도착시간
         processData[i].bt = Number(btInput[i].value);  // 프로세스 실행시간
     }
-    
     //=====================초기화 종료========================
-    
 
     //======================================== 실행부 ===============================================
-    
     while(1){ // 무한루프
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
@@ -1158,7 +1095,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
@@ -1205,7 +1141,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
+
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
         let wt = tt - processData[i].bt;
@@ -1226,7 +1162,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
             resultData[i] = (processorData[i].dequeueAll())
         }
     }
-
 
     for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
@@ -1276,10 +1211,8 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
     let max;
     let resultTable = new Array();
     // ================ 선언부 종료 ========================
-    
 
     //==================== 초기화 ===========================
-    
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
@@ -1293,31 +1226,22 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
         processData[i].at = Number(atInput[i].value);  // 프로세스 도착시간
         processData[i].bt = Number(btInput[i].value);  // 프로세스 실행시간
     }
-    
     //=====================초기화 종료========================
-    
 
     //======================================== 실행부 ===============================================
-    
     while(1){ // 무한루프
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
-        
         
         if(!exitQuantumQueue.empty()){
             temp = exitQuantumQueue.toLength(); // dequeue에 의해 큐의 길이가 계속 변하기 때문에, 먼저 temp에 길이를 복사
             for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
         }
 
-
-
         //==================콘솔확인(디버깅)====================
         console.log("시간: ",presentTime);
         console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
-        
-        
-        
+        //==================콘솔확인(디버깅)=================== 
         while(readyQueue.empty() == false && processorState.indexOf(-1) >= 0){ 
             workIndex = processorState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
             processorState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
@@ -1340,7 +1264,6 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
             }
         }
         
-        
         presentTime++; //****************  현재시간 1추가 ******************  
         
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
@@ -1349,6 +1272,7 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
                 i--;
             }
         }
+
         if(runningProcess.length != 0){ //하나라도 실행중인 프로세스가 있으면,
             for(let i=0; i<runningProcess.length;i++){ //실행중인 모든 프로세스의 잔여시간을 줄여라.
                 processData[runningProcess[i]].rt--;
@@ -1392,19 +1316,16 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
                 }
             }
         }
+
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
-    
     //============================================= 실행부 종료 ===========================================
 
     //======================== 결과, 리턴 처리 ==========================
-
     totoalTime = presentTime; //전체실행시간을 저장.
     console.log("=============결과=============== ");
     console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
     
-    //수정
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
         let wt = tt - processData[i].bt;
@@ -1418,6 +1339,7 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
             processData[i].cs
         ];
     }
+
     //최종결과 처리
     for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
         for(let j =0; j<processorData[i].toLength(); j++){
@@ -1440,14 +1362,11 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
-
-
 //------------------BackEnd-------------------------
 
 
 
 // --------------------- FrontEnd -------------------
-
 function init(){
     deleteBottomIndex();
     deleteProgressBar();
