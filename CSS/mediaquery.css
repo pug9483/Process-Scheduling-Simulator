@@ -1,0 +1,232 @@
+@media (max-width: 830px) {
+  .color_list{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .progressColor{
+    padding:5px;
+    margin: 5px;
+    border-radius: 2px;
+  }
+  .result_table_name{
+    font-size: 10px;
+  }
+
+  .simulator {
+    width: 480px;
+    background-color: #f5f5f7;
+    padding: 5px 20px 20px 20px;
+    border-radius: 10px;
+    border: 3px solid black;
+  }
+
+  .processor_input {
+    width: 480px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .processor_input__table {
+    padding-top:10px;
+    text-align: center;
+  }
+
+  .processor_input__table table{
+    width: 100%;
+  }
+
+  .processor_input__column {
+    margin-top: 20px;
+    justify-content: center;
+    width: 100%;
+
+  }
+
+  .logo {
+    width: 480px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    height: 50px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid white;
+    padding: 10px;
+  }
+
+  img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+  }
+  @keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(359deg);
+    }
+  }
+
+  #baram {
+    width: 35px;
+    height: 35px;
+    float: right;
+    animation: rotation 2s infinite linear;
+    animation-play-state: paused;
+    align-self: inherit;
+  }
+
+  .processor_input__column-right {
+    height: 110px;
+    display: flex;
+    align-content: center;
+  }
+
+  .ready_queue {
+    height: 60px;
+    width: 480px;
+    margin-bottom: 10px;
+    background-color: #f0f0f2;
+    border-radius: 10px;
+    display: flex;
+  }
+
+  .readyQueue__process {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50px;
+  }
+
+  .processor_show__table table {
+    width: 455px;
+    margin : 10px 10px;
+  }
+
+  .progressBar__time {
+    background-color: #f0f0f2;
+    /* opacity: 0.6; */
+    height: 180px;
+    width: 100%;
+    position: relative;
+    top: -180px;
+  }
+
+  .progressBar {
+    height: 30px;
+    display: flex;
+    align-items: center;
+
+  }
+
+  .progressBar__process {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 18px;
+  }
+
+  .gantt_table {
+    width: 480px;
+    height: 210px;
+    background-color: #f0f0f2;
+    border-radius: 10px;
+    padding-bottom: 10px;
+  }
+
+  .gantt_table__top {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(158, 158, 158);
+    border-width: 50%;
+    margin: 0px 10px;
+  }
+
+  .gantt_table__top-left {
+    width: 40px;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  .gantt_table__top-right {
+    width: 430px;
+    height: 180px;
+    align-content: center;
+  }
+
+  .gantt_table__bottom {
+    padding-left: 40px;
+    display: flex;
+    margin: 0px 10px;
+  }
+
+  #progressBars {
+    width: 430px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .progressBar {
+    width: 430px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    display: flex;
+    position: relative;
+  }
+
+  #show-table{
+    text-align: center;
+  }
+
+  * {
+    font-family: "Antonio", sans-serif;
+    font-size: 10px;
+  }
+
+  .processor_input:hover,
+#input-table input:hover,
+.quantumTime:hover{
+  border: 2px solid #dedede;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+}
+
+#addprocess:hover,
+#deleteprocess:hover,
+#run:hover {
+  border: 2px solid #dedede;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+
+}
+
+.processor_show__table:hover,
+.gantt_table:hover,
+.ready_queue:hover {
+  border: 2px solid #dedede;
+}
+
+#addprocess,
+#deleteprocess,
+#run {
+  border: 2px solid #dedede;
+}
+}

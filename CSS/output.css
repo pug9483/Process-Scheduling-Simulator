@@ -1,0 +1,224 @@
+#progressBars {
+  width: 750px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.progressBar {
+  width: 750px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  display: flex;
+  position: relative;
+}
+
+@keyframes leftmargin {
+  0% {
+    margin-left: 0;
+    width: 100%;
+  }
+  100% {
+    margin-left: 100%;
+    width: 0%;
+  }
+}
+.progressBar__time {
+  background-color: #f0f0f2;
+  /* opacity: 0.6; */
+  height: 180px;
+  width: 750px;
+  position: relative;
+  top: -180px;
+}
+
+.progressBar {
+  height: 30px;
+  display: flex;
+}
+
+.progressBar__process {
+  /* background-color: blue; */
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.gantt_table {
+  width: 850px;
+  height: 210px;
+  background-color: #f0f0f2;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  border: 2px solid #dedede;
+}
+
+.gantt_table__top {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(158, 158, 158);
+  border-width: 50%;
+  margin: 0px 10px;
+}
+
+.gantt_table__top-left {
+  width: 100px;
+  font-size: large;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: 600;
+}
+
+.gantt_table__top-right {
+  width: 750px;
+  height: 180px;
+}
+
+.gantt_table__bottom {
+  padding-left: 80px;
+  display: flex;
+  margin: 0px 10px;
+}
+.gantt_table__bottom div {
+  padding-top: 5px;
+}
+.gantt_table__bottom div {
+  padding-top: 5px;
+}
+
+.processor_show__table table {
+  width: 830px;
+  margin: 10px 10px;
+}
+.processor_show__table{
+  border: 2px solid #dedede;
+}
+
+.ready_queue {
+  height: 60px;
+  width: 850px;
+  margin-bottom: 10px;
+  border: 2px solid #dedede;
+  background-color: #f0f0f2;
+  border-radius: 10px;
+  display: flex;
+  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+
+.processor_show__table:hover,
+.gantt_table:hover,
+.ready_queue:hover {
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.color_list{
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+}
+.progressColor{
+  padding:5px;
+  margin: 5px;
+  border-radius: 2px;
+}
+
+.ready_queue__name,
+.result_table_name {
+  width: 150px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: large;
+}
+ 
+.ready_queue__show {
+  width: 750px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.readyQueue__process {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50px;
+}
+
+.progressBar__process {
+  font-size: 13px;
+  font-weight: 600;
+}
+#progressBar__processP1,
+#P1 {
+  background-color: #f08c8c;
+}
+#progressBar__processP2,
+#P2 {
+  background-color: #bf82bf;
+}
+#progressBar__processP3,
+#P3 {
+  background-color: #ff7f50;
+}
+#progressBar__processP4,
+#P4 {
+  background-color: #8c8cbe;
+}
+#progressBar__processP5,
+#P5 {
+  background-color: #f9ca24;
+}
+#progressBar__processP6,
+#P6 {
+  background-color: #6fcc98;
+}
+#progressBar__processP7,
+#P7 {
+  background-color: #f6e58d;
+}
+#progressBar__processP8,
+#P8 {
+  background-color: #badc58;
+}
+#progressBar__processP9,
+#P9 {
+  background-color: #c7ecee;
+}
+#progressBar__processP10,
+#P10 {
+  background-color: #95afc0;
+}
+#progressBar__processP11,
+#P11 {
+  background-color: #22a6b3;
+}
+#progressBar__processP12,
+#P12 {
+  background-color: #7ed6df;
+}
+#progressBar__processP13,
+#P13 {
+  background-color: #ff91dc;
+}
+#progressBar__processP14,
+#P14 {
+  background-color: #6e9fed;
+}
+#progressBar__processP15,
+#P15 {
+  background-color: #a0a0ff;
+}
+#progressBar__processP16,
+#P16 {
+  background-color: #a0a0a0;
+}

@@ -4,54 +4,104 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <link rel=" shortcut icon" href="image/baramgabee.png">
+    <link rel="icon" href="image/baramgabee.png">
+    <link rel="stylesheet" href="CSS/style.css" />
+    <title>Scheduling-Simulator</title>
   </head>
   <body>
-    <table border="1">
-      <thead>
-        <th>Process</th>
-        <th>Arrival time</th>
-        <th>Burst time</th>
-      </thead>
-      <tbody id="t-body"></tbody>
-    </table>
+    <div class="simulator">
 
-    <input
-      type="button"
-      onclick="addRow();"
-      value="프로세스 추가"
-      id="addprocess"
-    />
-    <input
-      type="button"
-      onclick="deleteRow();"
-      value="프로세스 제거"
-      id="deleteprocess"
-    />
+      <div class="logo">
+        <img src="image/logo.png" />
+        <div style="padding-right: 10px;">
+          <img src="image/baramgabee.png" id = "baram" class = "baram">
+        </div>
+      </div>
 
-    <select>
-      <option value="FCFS">FCFS</option>
-      <option value="rr">RR</option>
-      <option value="spn">SPN</option>
-      <option value="sptn">SPTN</option>
-      <option value="hrrn">HRRN</option>
-      <option value="newalgorithm">My Scheduling Algorithm</option>
-    </select>
-    <button onclick="run();">실행</button>
+      <div class="processor_input">
+        <div class="processor_input__table">
+          <table border="1">
+            <thead>
+              <th>Process</th>
+              <th>Arrival time</th>
+              <th>Burst time</th>
+            </thead>
+            <tbody id="input-table"></tbody>
+          </table>
+        </div>
+        <div class="processor_input__column">
+          <div class="processor_input__column-left">
+            <input type="button" value="Add Process" id="addprocess" />
+            <input type="button" value="Delete Process" id="deleteprocess" />
+          </div>
+          <div class="processor_input__column-right">
+            <div class="p">
+              <span>Number of Process</span>
+              <select class="numofprocessors">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            <div class="p">
+              <select class="selectprocess">
+                <option value="fcfs">FCFS</option>
+                <option value="rr">RR</option>
+                <option value="spn">SPN</option>
+                <option value="srtn">SRTN</option>
+                <option value="hrrn">HRRN</option>
+                <option value="newalgorithm">My Scheduling Algorithm</option>
+              </select>
+              <button id="run">Run!</button>
+            </div>
+            <div class="p">
+              <input
+                type="text"
+                class="quantumTime"
+                placeholder="Time quantum"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <table border="1">
-      <thead>
-        <th>Name</th>
-        <th>Arrival time</th>
-        <th>Burst time</th>
-        <th>Waiting Time</th>
-        <th>Turnaound Time</th>
-        <th>Nomalized Time</th>
-      </thead>
-      <tbody id="show-table"></tbody>
-    </table>
+      <div class="ready_queue__name">
+        <div>Ready Queue</div>
+      </div>
 
-    <script src="index.js"></script>
+      <div class="ready_queue"></div>
+
+      <div class="gantt_table">
+        <div class="gantt_table__top">
+          <div class="gantt_table__top-left"></div>
+          <div class="gantt_table__top-right"></div>
+        </div>
+        <div class="gantt_table__bottom"></div>
+      </div>
+
+      <div class="color_list">
+      </div>
+
+      <div class = "result_table_name">Result Table</div>
+
+      <div class="processor_show__table">
+        <table border="1">
+          <thead>
+            <th>Name</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
+            <th>Waiting Time</th>
+            <th>Turnaound Time</th>
+            <th>Nomalized Time</th>
+            <th>Context Switches</th>
+          </thead>
+          <tbody id="show-table"></tbody>
+        </table>
+      </div>
+      
+      <script src="index.js"></script>
+    </div>
   </body>
 </html>
