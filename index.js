@@ -1585,23 +1585,29 @@ function createProgressBar(resultData, maxTime, numberOfCore){
             if(processWidth > 3) pro.innerHTML = resultData[i][startIndex][0];
             else pro.innerHTML = "";
 
-            pro.addEventListener("mouseover", function(){
-                if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
-                    pro.style.width =  "15%";
-                    pro.style.height = 40 + "px";
-                }
-                pro.innerHTML = resultData[i][startIndex][0] + "    [     " + resultData[i][startIndex][1] +" -> " + + resultData[i][j][2]+ "   ]   ";
-            });
-            pro.addEventListener("mouseout", function(){
-                if(pro.style.width === "15%"){
-                    pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
-                    pro.style.height = 30 + "px";
-                }
-                if(processWidth > 3){
-                    pro.innerHTML = resultData[i][startIndex][0];
-                }
-                else pro.innerHTML = "";
-            });
+
+            if (matchMedia("screen and (min-width: 831px)").matches) {
+                pro.addEventListener("mouseover", function(){
+                    if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
+                        pro.style.width =  "15%";
+                        pro.style.height = 40 + "px";
+                    }
+                    pro.innerHTML = resultData[i][startIndex][0] + "    [     " + resultData[i][startIndex][1] +" -> " + + resultData[i][j][2]+ "   ]   ";
+                });
+                pro.addEventListener("mouseout", function(){
+                    if(pro.style.width === "15%"){
+                        pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
+                        pro.style.height = 30 + "px";
+                    }
+                    if(processWidth > 3){
+                        pro.innerHTML = resultData[i][startIndex][0];
+                    }
+                    else pro.innerHTML = "";
+                });
+              }
+
+
+              
             childProg.appendChild(pro);
         }
     }
