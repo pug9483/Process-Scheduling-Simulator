@@ -1,7 +1,4 @@
-const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
-"#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];
-
-function debug(result){
+function debug(result){  // 디버그 함수
     console.log("결과값 디버그:  ", result);;
 }
 
@@ -23,6 +20,8 @@ addProcess.addEventListener("click", addInputRow);  // "프로세스 추가" 클
 deleteProcess.addEventListener("click", deleteLastIndexOfInputRow); // "프로세스 제거" 클릭시
 runSimulator.addEventListener("click", run); // "실행" 클릭시
 //-------------------- 이벤트 처리 ----------------------
+const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
+"#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];  // 컬러 배열
 
 
 
@@ -56,6 +55,7 @@ function addInputRow(){
         burstText.className = "burstTime";
     }
 }
+
 function showProcess(){
     const width = 80;
     const height = 80;
@@ -64,13 +64,14 @@ function showProcess(){
 }
 
 function deleteLastIndexOfInputRow(){
-    // const table = document.querySelector("table");
     if(inputTable.rows.length >= 1){
         inputTable.deleteRow(-1);
         showTable.deleteRow(-1);
     }
 }
 //------------------입력 끝-----------------
+
+
 
 
 //------------------빈 값 체크-----------------
@@ -100,31 +101,32 @@ function inputCheck(atInput, btInput, selectprocess){
     
     return true;
 }
+//------------------빈 값 체크 끝-----------------
+
+
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
     
     init(); // 초기화 함수
-    baram.style.animationPlayState = "running";
-    //test1();
-
-    //====================== 변수 선언 부 ====================
+    baram.style.animationPlayState = "running";  // 바람개비 돌리기
     let result;
-
+    
     //입력값 정리
     const atInput = document.querySelectorAll(".arrivalTime");
     const btInput = document.querySelectorAll(".burstTime");
     const numberOfProcess = inputTable.rows.length;
     const numberOfProcessor = document.querySelector(".numofprocessors").value;
     const selectprocess = document.querySelector(".selectprocess");
-    //====================== 입력 체크 ====================
+    
+    //입력 체크
     if(!inputCheck(atInput,btInput,selectprocess)){
         alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR이라면 Time quantum을 넣어 주세요.)");
         init();
         // run();
         return;
     } 
-
+    
     //변수값 확인
     console.log("======================입력값 확인=====================");
     console.log("프로세서 수: ",numberOfProcessor);
@@ -132,22 +134,16 @@ function run(){
     console.log("=========================run=======================");
     
     result = chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
-
-
+    debug(result); // 디버깅 함수 호출
     
-
-    debug(result);
-
     // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
     createProgressBar(result.resultData, result.max, numberOfProcessor, numberOfProcess); //배열, time
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
-
+    
     //2021-04-21 1:22 실제 데이터 삽입
     showReadyQueue(result.readyQLog);
   
-    // //종류 가져오기
-
     // //실행 progress 보여주기
     showProgressBar(result.max);
 
@@ -184,6 +180,9 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
 
     return result;
 }
+//-------------------- 실행시 처리 끝 ---------------------
+
+
 
 //------------------BackEnd-------------------------
 // 큐 클래스 선언
@@ -202,6 +201,7 @@ class Queue {
         return this.dataStore.shift();
     }
 
+    //큐의 모든 요소 배열에 합쳐서 반환
     dequeueAll() {
         let arr = []
         for(let i =0; i<this.dataStore.length;i++){
@@ -226,14 +226,6 @@ class Queue {
         let retStr = [];
         for (let i = 0; i < this.dataStore.length; ++i ){
             retStr[i] = (this.dataStore[i].id+1);
-        }
-        return retStr;
-    }
-
-    toString2() {
-        let retStr = [];
-        for (let i = 0; i < this.dataStore.length; ++i ){
-            retStr[i] = (this.dataStore[i][0]);
         }
         return retStr;
     }
@@ -299,13 +291,6 @@ class Queue {
 }
 
 
-
-
-function showProcessorRunning(processorData , numberOfProcessor){
-    for(let i =0; i< numberOfProcessor; i++){
-            console.log("프로세서"+(i+1)+" 큐: ",processorData[i].toString2());
-    } 
-}
 
 
 
@@ -433,7 +418,6 @@ function fcfs(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr);
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
@@ -629,7 +613,6 @@ function rr(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr);
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
@@ -810,7 +793,6 @@ function spn(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr)
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
@@ -1033,7 +1015,6 @@ function srtn(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr)
         }
 
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
@@ -1213,7 +1194,6 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr)
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
@@ -1411,7 +1391,6 @@ function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
                     }
                 }
             }
-            showProcessorRunning(processorData , nopr);
         }
         if(exitProcessQueue.toLength() >= nop) break; // 모든 프로세스가 종료되면 반복문 종료
     }
@@ -1476,6 +1455,7 @@ function init(){
     deleteReadyQueue();
     deleteAllOfShowTable();
     deleteAllOfProgressBar();
+    deleteColorList();
 }
 
 function createShowTable(resultTable, max){
@@ -1716,6 +1696,13 @@ function showReadyQueue(readyQueue){
             }
             start++;
         }
+    }
+}
+
+function deleteColorList(){
+    let colorList = document.querySelector(".color_list");
+    while(colorList !== null && colorList.hasChildNodes()){ 
+        colorList.removeChild(colorList.firstChild);
     }
 }
 
