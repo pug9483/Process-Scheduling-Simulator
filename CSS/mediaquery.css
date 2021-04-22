@@ -18,8 +18,15 @@
     text-align: center;
   }
 
+  .processor_input__table table{
+    width: 100%;
+  }
+
   .processor_input__column {
     margin-top: 20px;
+    justify-content: center;
+    width: 100%;
+
   }
 
   .logo {
@@ -73,17 +80,26 @@
     display: flex;
   }
 
+  .readyQueue__process {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50px;
+  }
+
   .processor_show__table table {
-    width: 480px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    width: 455px;
+    margin : 10px 10px;
   }
 
   .progressBar__time {
     background-color: #f0f0f2;
     /* opacity: 0.6; */
     height: 180px;
-    width: 480px;
+    width: 100%;
     position: relative;
     top: -180px;
   }
