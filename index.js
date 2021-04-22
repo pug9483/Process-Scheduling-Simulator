@@ -154,7 +154,7 @@ function run(){
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    createShowTable(result.resultTable);
+    createShowTable(result.resultTable, result.max);
 }
 
 // 알고리즘 선택 함수
@@ -1479,7 +1479,7 @@ function init(){
     deleteAllOfProgressBar();
 }
 
-function createShowTable(resultTable){
+function createShowTable(resultTable, max){
     console.log("테이블 출력 부분");
     console.log(resultTable);
     let totalWt = 0;
@@ -1513,16 +1513,16 @@ function createShowTable(resultTable){
     }
     let totalLaw = showTable.insertRow(showTable.rows.length);  
         const cell0 = totalLaw.insertCell(0);
-        cell0.innerText = "TOTAL";
+        cell0.innerText = "RESULT";
     
         const cell1 = totalLaw.insertCell(1);
-        cell1.innerText = "-";
+        cell1.innerText = "RUNTIME:"+max;
     
         const cell2 = totalLaw.insertCell(2);
         cell2.innerText = "-";
     
         const cell3 = totalLaw.insertCell(3);
-        cell3.innerText = totalWt;
+        cell3.innerText = "Total Wt: "+totalWt;
     
         const cell4 = totalLaw.insertCell(4);
         cell4.innerText = "-";
@@ -1531,7 +1531,7 @@ function createShowTable(resultTable){
         cell5.innerText = "-";
     
         const cell6 = totalLaw.insertCell(6);
-        cell6.innerText = totalCs;
+        cell6.innerText = "Total Cs: "+totalCs;
     
 }
 
