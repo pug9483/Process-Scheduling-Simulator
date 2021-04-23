@@ -84,7 +84,7 @@ function inputCheck(atInput, btInput, selectprocess){  // 빈 값 체크
         }        
     }
     
-    if(selectprocess.value === "rr"){
+    if(selectprocess.value === "rr" || selectprocess.value === "hrr"){
         const quantumTime = document.querySelector(".quantumTime").value;
         if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
             return false;
@@ -112,7 +112,7 @@ function run(){
     
     //입력 체크
     if(!inputCheck(atInput,btInput,selectprocess)){
-        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR이라면 Time quantum을 넣어 주세요.)");
+        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR(HRR)이라면 Time quantum을 넣어 주세요.)");
         init();
         // run();
         return;
@@ -166,8 +166,8 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
     else if(processValue == "hrrn"){
         result = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
-    else if(processValue == "newalgorithm"){
-        result = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
+    else if(processValue == "hrr"){
+        result = hrr(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
 
     return result;
@@ -1170,7 +1170,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     //======================== 결과, 리턴 처리 종료 ==========================
 }
 
-function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
+function hrr(atInput, btInput, numberOfProcessor, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
     const nopr = numberOfProcessor;  // 프로세서 수
