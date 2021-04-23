@@ -96,7 +96,7 @@
   width: 830px;
   margin: 10px 10px;
 }
-.processor_show__table{
+.processor_show__table {
   border: 2px solid #dedede;
 }
 
@@ -108,7 +108,7 @@
   background-color: #f0f0f2;
   border-radius: 10px;
   display: flex;
-  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  transition: all 0.1s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
 
 .processor_show__table:hover,
@@ -117,13 +117,13 @@
   border: 2px solid black;
   border-radius: 5px;
 }
-.color_list{
+.color_list {
   display: flex;
   justify-content: flex-end;
   margin: 5px;
 }
-.progressColor{
-  padding:5px;
+.progressColor {
+  padding: 5px;
   margin: 5px;
   border-radius: 2px;
 }
@@ -135,7 +135,7 @@
   margin-bottom: 10px;
   font-size: large;
 }
- 
+
 .ready_queue__show {
   width: 750px;
   display: flex;

@@ -1476,6 +1476,7 @@ function init(){
     deleteReadyQueue();
     deleteAllOfShowTable();
     deleteAllOfProgressBar();
+    deleteColorList();
 }
 
 function createShowTable(resultTable, max){
@@ -1613,6 +1614,11 @@ function createProgressBar(resultData, maxTime, numberOfCore, nop){
     }
     for(let j=0; j<nop; j++){
         let colorList = document.querySelector(".color_list");
+
+        // let colorListShow = document.createElement("div");
+        // colorListShow.className = "color_list__show";
+        // colorList.appendChild(colorListShow);
+
         let childColor = document.createElement("div");
         colorList.appendChild(childColor);
         childColor.className = "progressColor";
@@ -1750,6 +1756,13 @@ function deleteProgressBar(){
     var del = document.querySelector(".gantt_table__top-right");
     while(del !== null && del.hasChildNodes()){ 
         del.removeChild(del.firstChild);
+    }
+}
+
+function deleteColorList(){
+    let colorList = document.querySelector(".color_list");
+    while(colorList !== null && colorList.hasChildNodes()){ 
+        colorList.removeChild(colorList.firstChild);
     }
 }
 
