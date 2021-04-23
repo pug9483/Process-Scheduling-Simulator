@@ -27,11 +27,15 @@
 }
 .progressBar__time {
   background-color: #f0f0f2;
-  /* opacity: 0.6; */
   height: 180px;
   width: 750px;
   position: relative;
   top: -180px;
+}
+
+.progressBar__time:hover {
+  background-color: #f0f0f2;
+  opacity: 0.6;
 }
 
 .progressBar {
@@ -40,8 +44,6 @@
 }
 
 .progressBar__process {
-  /* background-color: blue; */
-  /* text-align: center; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -85,9 +87,11 @@
   display: flex;
   margin: 0px 10px;
 }
+
 .gantt_table__bottom div {
   padding-top: 5px;
 }
+
 .gantt_table__bottom div {
   padding-top: 5px;
 }
@@ -96,8 +100,10 @@
   width: 830px;
   margin: 10px 10px;
 }
+
 .processor_show__table {
   border: 2px solid #dedede;
+  border-radius: 5px;
 }
 
 .ready_queue {
@@ -117,11 +123,13 @@
   border: 2px solid black;
   border-radius: 5px;
 }
+
 .color_list {
   display: flex;
   justify-content: flex-end;
   margin: 5px;
 }
+
 .progressColor {
   padding: 5px;
   margin: 5px;
@@ -158,6 +166,8 @@
   font-size: 13px;
   font-weight: 600;
 }
+
+/* 색 지정 */
 #progressBar__processP1,
 #P1 {
   background-color: #f08c8c;
