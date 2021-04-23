@@ -235,4 +235,8 @@
     background-color: #f0f0f2;
     opacity: 1;
   }
+
+  .body{
+    width: 100%;
+  }
 }
