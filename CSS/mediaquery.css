@@ -164,9 +164,10 @@
   }
 
   .gantt_table__bottom {
-    padding-left: 40px;
+    padding-left: 30px;
     display: flex;
     margin: 0px 10px;
+    width: 430px;
   }
 
   #progressBars {
