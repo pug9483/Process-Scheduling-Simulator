@@ -1376,7 +1376,6 @@ function createShowTable(resultTable, max){
     let totalCs = 0;
     //showTable
     for(let i=0; i <resultTable.length; i++){
-        console.log("dddddddddddddd",showTable.rows.length);
         let newRow = showTable.insertRow(showTable.rows.length);  
         const cell0 = newRow.insertCell(0);
         cell0.innerText = "P"+ (resultTable[i][0]+1);
@@ -1567,7 +1566,7 @@ function showProgressBar(maxTime){
     }
 
     setTimeout(function(){
-        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
+        white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
     }, 1000);
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
@@ -1589,7 +1588,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 1000);
+    const id = setInterval(show, 1000/1.5);
     function show(){
         
         //초기화
