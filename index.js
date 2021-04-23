@@ -94,7 +94,7 @@ function inputCheck(atInput, btInput, selectprocess){
 
     if(selectprocess.value === "rr"){
         const quantumTime = document.querySelector(".quantumTime").value;
-        if(quantumTime === "0" || quantumTime === "" || isNaN(quantumTime)) {
+        if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
             return false;
         }  
     }
