@@ -230,4 +230,9 @@
   #run {
     border: 2px solid #dedede;
   }
+
+  .progressBar__time:hover {
+    background-color: #f0f0f2;
+    opacity: 1;
+  }
 }

@@ -132,11 +132,12 @@ function run(){
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
     
+    // //실행 progress 보여주기
+    showProgressBar(result.max);
+
     //2021-04-21 1:22 실제 데이터 삽입
     showReadyQueue(result.readyQLog);
   
-    // //실행 progress 보여주기
-    showProgressBar(result.max);
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
@@ -1579,8 +1580,6 @@ function showProgressBar(maxTime){
       });
 }
 
-
-
 function showReadyQueue(readyQueue){
     const readyqueue = document.querySelector(".ready_queue"); 
     var readyqueueShow = document.createElement("div");
@@ -1613,6 +1612,10 @@ function showReadyQueue(readyQueue){
             start++;
         }
     }
+    var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
+    proTime.addEventListener('click',function () {
+        readyqueueShow.style.display= "none";
+    });
 }
 
 function deleteColorList(){
