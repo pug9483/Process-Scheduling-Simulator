@@ -98,6 +98,7 @@
 }
 .processor_show__table{
   border: 2px solid #dedede;
+  border-radius: 5px;
 }
 
 .ready_queue {
