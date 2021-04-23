@@ -3,6 +3,7 @@ function debug(result){  // 디버그 함수
 }
 
 
+
 //-------------------태그 관리-------------------------
 const inputTable = document.querySelector("#input-table");
 const showTable = document.querySelector("#show-table");
@@ -20,10 +21,6 @@ addProcess.addEventListener("click", addInputRow);  // "프로세스 추가" 클
 deleteProcess.addEventListener("click", deleteLastIndexOfInputRow); // "프로세스 제거" 클릭시
 runSimulator.addEventListener("click", run); // "실행" 클릭시
 //-------------------- 이벤트 처리 ----------------------
-const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
-"#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];  // 컬러 배열
-
-
 
 
 
@@ -69,16 +66,12 @@ function deleteLastIndexOfInputRow(){
         showTable.deleteRow(-1);
     }
 }
-//------------------입력 끝-----------------
 
-
-
-
-//------------------빈 값 체크-----------------
+//빈 값 체크
 function inputCheck(atInput, btInput, selectprocess){
     //프로세스 칸을 추가하지 않고 바로 만들경우 에러 탐지 추가.
     if(atInput.length == 0 && btInput.length == 0) return false;
-
+    
     for(var i = 0; i < atInput.length; i++){
         if(parseInt(atInput[i].value) <= -1 || atInput[i].value === "" || isNaN(atInput[i].value)) {
             return false;
@@ -91,7 +84,7 @@ function inputCheck(atInput, btInput, selectprocess){
             return false;
         }        
     }
-
+    
     if(selectprocess.value === "rr"){
         const quantumTime = document.querySelector(".quantumTime").value;
         if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
@@ -101,7 +94,7 @@ function inputCheck(atInput, btInput, selectprocess){
     
     return true;
 }
-//------------------빈 값 체크 끝-----------------
+//------------------입력 처리 끝-----------------
 
 
 
@@ -1434,6 +1427,8 @@ function createShowTable(resultTable, max){
 }
 
 function createProgressBar(resultData, maxTime, numberOfCore, nop){
+    const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
+    "#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];  // 컬러 배열
     const progress = document.querySelector(".gantt_table__top-right");
     const progressBars = document.createElement("div");
     progressBars.className = "progressBars";
@@ -1542,7 +1537,6 @@ function createBottomIndex(maxTime){
         index += tmp;
     }
 }
-
 
 function showCoreName(numberOfCore){
     const ganttTableLeft = document.querySelector(".gantt_table__top-left");
@@ -1665,6 +1659,4 @@ function deleteAllOfProgressBar(){
         del.removeChild( del.firstChild ); 
     }
 }
-//srtn 우선순위 큐  -> 
 //-------------------- FrontEnd 끝--------------------
-
