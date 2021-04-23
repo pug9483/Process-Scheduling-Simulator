@@ -84,7 +84,7 @@ function inputCheck(atInput, btInput, selectprocess){  // 빈 값 체크
         }        
     }
     
-    if(selectprocess.value === "rr"){
+    if(selectprocess.value === "rr" || selectprocess.value === "hrr"){
         const quantumTime = document.querySelector(".quantumTime").value;
         if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
             return false;
@@ -112,7 +112,7 @@ function run(){
     
     //입력 체크
     if(!inputCheck(atInput,btInput,selectprocess)){
-        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR이라면 Time quantum을 넣어 주세요.)");
+        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR(HRR)이라면 Time quantum을 넣어 주세요.)");
         init();
         // run();
         return;
@@ -132,11 +132,12 @@ function run(){
     showCoreName(numberOfProcessor); //코어 개수
     createBottomIndex(result.max);
     
+    // //실행 progress 보여주기
+    showProgressBar(result.max);
+
     //2021-04-21 1:22 실제 데이터 삽입
     showReadyQueue(result.readyQLog);
   
-    // //실행 progress 보여주기
-    showProgressBar(result.max);
 
     ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
     // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
@@ -165,8 +166,8 @@ function chooseProcessAlgorithm(atInput, btInput, numberOfProcessor, numberOfPro
     else if(processValue == "hrrn"){
         result = hrrn(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
-    else if(processValue == "newalgorithm"){
-        result = newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess);
+    else if(processValue == "hrr"){
+        result = hrr(atInput, btInput, numberOfProcessor, numberOfProcess);
     }
 
     return result;
@@ -1169,7 +1170,7 @@ function hrrn(atInput, btInput, numberOfProcessor, numberOfProcess){
     //======================== 결과, 리턴 처리 종료 ==========================
 }
 
-function newalgorithm(atInput, btInput, numberOfProcessor, numberOfProcess){
+function hrr(atInput, btInput, numberOfProcessor, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
     const nopr = numberOfProcessor;  // 프로세서 수
@@ -1375,7 +1376,6 @@ function createShowTable(resultTable, max){
     let totalCs = 0;
     //showTable
     for(let i=0; i <resultTable.length; i++){
-        console.log("dddddddddddddd",showTable.rows.length);
         let newRow = showTable.insertRow(showTable.rows.length);  
         const cell0 = newRow.insertCell(0);
         cell0.innerText = "P"+ (resultTable[i][0]+1);
@@ -1505,6 +1505,11 @@ function createProgressBar(resultData, maxTime, numberOfCore, nop){
     }
     for(let j=0; j<nop; j++){
         let colorList = document.querySelector(".color_list");
+
+        // let colorListShow = document.createElement("div");
+        // colorListShow.className = "color_list__show";
+        // colorList.appendChild(colorListShow);
+
         let childColor = document.createElement("div");
         colorList.appendChild(childColor);
         childColor.className = "progressColor";
@@ -1566,20 +1571,18 @@ function showProgressBar(maxTime){
     }
 
     setTimeout(function(){
-        white.style.animation = "leftmargin "+(totalTime)+"s linear 1 both";
+        white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
     }, 1000);
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
-    }, totalTime*1000);
+    }, totalTime*1000/1.5);
 
     var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
     proTime.addEventListener('click',function () {
-        proTime.style.opacity = 0;
+        proTime.parentElement.removeChild(proTime);
         baram.style.animationPlayState = "paused";
       });
 }
-
-
 
 function showReadyQueue(readyQueue){
     const readyqueue = document.querySelector(".ready_queue"); 
@@ -1590,7 +1593,7 @@ function showReadyQueue(readyQueue){
     const time = readyQueue.length;
     let start = 0;
 
-    const id = setInterval(show, 1000);
+    const id = setInterval(show, 1000/1.5);
     function show(){
         
         //초기화
@@ -1613,6 +1616,10 @@ function showReadyQueue(readyQueue){
             start++;
         }
     }
+    var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
+    proTime.addEventListener('click',function () {
+        readyqueueShow.style.display= "none";
+    });
 }
 
 function deleteColorList(){
@@ -1653,6 +1660,13 @@ function deleteProgressBar(){
     var del = document.querySelector(".gantt_table__top-right");
     while(del !== null && del.hasChildNodes()){ 
         del.removeChild(del.firstChild);
+    }
+}
+
+function deleteColorList(){
+    let colorList = document.querySelector(".color_list");
+    while(colorList !== null && colorList.hasChildNodes()){ 
+        colorList.removeChild(colorList.firstChild);
     }
 }
 
