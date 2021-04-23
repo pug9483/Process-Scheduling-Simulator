@@ -67,9 +67,8 @@ function deleteLastIndexOfInputRow(){
     }
 }
 
-//빈 값 체크
-function inputCheck(atInput, btInput, selectprocess){
-    //프로세스 칸을 추가하지 않고 바로 만들경우 에러 탐지 추가.
+function inputCheck(atInput, btInput, selectprocess){  // 빈 값 체크
+    // 프로세스 칸을 추가하지 않고 바로 만들경우 에러 탐지 추가.
     if(atInput.length == 0 && btInput.length == 0) return false;
     
     for(var i = 0; i < atInput.length; i++){
@@ -100,7 +99,6 @@ function inputCheck(atInput, btInput, selectprocess){
 
 //-------------------- 실행시 처리 ---------------------
 function run(){
-    
     init(); // 초기화 함수
     baram.style.animationPlayState = "running";  // 바람개비 돌리기
     let result;
@@ -1573,10 +1571,15 @@ function showProgressBar(maxTime){
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
     }, totalTime*1000);
-    
 
-    // console.log("leftmargin "+(2*totalTime)+"s steps("+totalTime+") 1");
+    var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
+    proTime.addEventListener('click',function () {
+        proTime.style.opacity = 0;
+        baram.style.animationPlayState = "paused";
+      });
 }
+
+
 
 function showReadyQueue(readyQueue){
     const readyqueue = document.querySelector(".ready_queue"); 
