@@ -39,19 +39,12 @@
   opacity: 0.6;
 }
 
-.progressBar__time:visited {
-  background-color: #f0f0f2;
-  opacity: 0;
-}
-
 .progressBar {
   height: 30px;
   display: flex;
 }
 
 .progressBar__process {
-  /* background-color: blue; */
-  /* text-align: center; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
