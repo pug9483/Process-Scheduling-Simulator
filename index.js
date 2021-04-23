@@ -1570,7 +1570,7 @@ function showProgressBar(maxTime){
     }, 1000);
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
-    }, totalTime*1000);
+    }, totalTime*1000/1.5);
 
     var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
     proTime.addEventListener('click',function () {
