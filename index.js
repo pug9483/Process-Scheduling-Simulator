@@ -1574,7 +1574,7 @@ function showProgressBar(maxTime){
 
     var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
     proTime.addEventListener('click',function () {
-        proTime.style.opacity = 0;
+        proTime.parentElement.removeChild(proTime);
         baram.style.animationPlayState = "paused";
       });
 }
