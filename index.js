@@ -1277,12 +1277,10 @@ function hrr(atInput, btInput, numberOfProcessor, numberOfProcess){
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         exitByQuantum = processData[runningProcess[j]].st + qt; 
-                        let exitMyQantum = processData[runningProcess[j]].st + 1.5*qt;
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt != 0) && ((presentTime >= exitByQuantum)) && (processorState[i] == 1)){
-                                console.log("dddddd",presentTime,exitByQuantum,exitMyQantum);
-                                if((processData[runningProcess[j]].rt < 1.5*qt)){  // 남은시간이 1.5퀀텀이하면 그냥 나가
+                                if((processData[runningProcess[j]].rt <= 0.5*qt)){  // 남은시간이 1.5퀀텀이하면 그냥 나가
                                     break;
                                 }
                                 processData[runningProcess[j]].cs++;
