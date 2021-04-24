@@ -911,12 +911,6 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
         
         presentTime++; //****************  현재시간 1추가 ******************  
         
-        for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
-            if(runningProcess[i] == -1)  {
-                runningProcess.splice(i, 1);
-                i--;
-            }
-        }
 
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
             if(runningProcess[i] == -1)  {
