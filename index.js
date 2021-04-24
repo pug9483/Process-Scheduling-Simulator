@@ -1280,7 +1280,6 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt != 0) && ((presentTime >= exitByQuantum)) && (coreState[i] == 1)){
-                                console.log("dddddd",presentTime,exitByQuantum,exitMyQantum);
                                 if((processData[runningProcess[j]].rt <= 0.5*qt)){  // 남은시간이 1.5퀀텀이하면 그냥 나가
                                     break;
                                 }
