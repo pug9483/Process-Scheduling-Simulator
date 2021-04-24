@@ -120,7 +120,7 @@ function run(){
     
     //변수값 확인
     console.log("======================입력값 확인=====================");
-    console.log("프로세서 수: ",numberOfCore);
+    console.log("코어 수: ",numberOfCore);
     console.log("프로세스 수: ",numberOfProcess);
     console.log("=========================run=======================");
     
@@ -251,7 +251,6 @@ class Queue {
             this.dataStore[j+1] = key;
         }
     }
-
     srtnSort(){ // 삽입 정렬
         this.n = this.dataStore.length;
         for(let i=1; i<this.n;i++){
@@ -264,8 +263,6 @@ class Queue {
             this.dataStore[j+1] = key;
         }
     }
-
-
     hrrnSort(){  // 삽입 정렬
         this.n = this.dataStore.length;
         for(let i=1; i< this.n; i++){
@@ -286,11 +283,11 @@ class Queue {
 function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
-    const nopr = numberOfCore;  // 프로세서 수
-    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    const coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    const coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
-    let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
+    const nopr = numberOfCore;  // 코어 수
+    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    const coreData = new Array(); // 각 코어 별 실행중인 프로세스
+    const coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    let dequeProcess; // 레디큐에서 러닝프로세스배열로 옮기기위한 변수
 
     //큐
     let readyQueue = new Queue(); // 레디큐 생성
@@ -303,15 +300,15 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
     // 객체에 들어갈 키값 변수
-    let resultData = new Array(new Array());
-    let readyQLog = new Array();
-    let max;
-    let resultTable = new Array();
+    let resultData = new Array(new Array()); // 코어 별 프로세스 이름, 시작 시간, 종료시간을 담고 있음
+    let readyQLog = new Array(); // 시간별 readyQueue 로그를 담음
+    let max; // 코어 별 가장 긴 실행시간
+    let resultTable = new Array(); //{Name, Arrival Time, Busrt Time, Waiting Timr, Turnaound Time, Nomalized Time, Context Switched}
     // ================ 선언부 종료 ========================
     
 
@@ -319,7 +316,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -342,15 +339,15 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
         //==================콘솔확인(디버깅)====================
                
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
-            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
+            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
         
@@ -362,9 +359,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
                 processData[i].wt++;
             }
         }
-        
         presentTime++; //****************  현재시간 1추가 ******************  
-        
         for(let i = 0; i < runningProcess.length; i++) {   // runningProcess안에 종료된 프로세스(-1)이 있다면 없앰(splice)
             if(runningProcess[i] == -1)  {
                 runningProcess.splice(i, 1);
@@ -377,18 +372,18 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
             }
         }
         
-        // 종료조건
+        // 프로세스 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if(processData[runningProcess[j]].rt <= 0){
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -405,11 +400,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
 
     //======================== 결과, 리턴 처리 ==========================
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
     
-    //2021-04-21 17:47 결과표 배열
     for(let i =0;i<nop; i++) {
     let tt = (processData[i].et) - (processData[i].at);
     let wt = tt - processData[i].bt;
@@ -425,7 +416,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -436,7 +427,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -450,11 +441,11 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
 function rr(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
-    const nopr = numberOfCore;  // 프로세서 수
+    const nopr = numberOfCore;  // 코어 수
     const qt =  Number(document.querySelector(".quantumTime").value); 
-    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    const coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    const coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    const coreData = new Array(); // 각 코어 별 실행중인 프로세스(디버깅용)
+    const coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
 
     //큐
@@ -470,7 +461,7 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
@@ -485,7 +476,7 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -515,15 +506,15 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
         //==================콘솔확인(디버깅)====================
 
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
         
@@ -549,31 +540,32 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
             for(let i=0; i<runningProcess.length;i++){ //실행중인 모든 프로세스의 잔여시간을 줄여라.
                 processData[runningProcess[i]].rt--;
             }
-        }
+        } 
         
-        // 종료조건
+        // 프로세스 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         exitByQuantum = processData[runningProcess[j]].st + qt; 
                         if(processData[runningProcess[j]].pr == i) {
-                            
                             if((processData[runningProcess[j]].rt != 0) && (presentTime == exitByQuantum) && (coreState[i] == 1)){
                                 processData[runningProcess[j]].cs++;
-                                // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 코어가 켜져이싸면
+                                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
                                 exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
                                 runningProcess[j] = -1; // 프로세스를 종료한다.
                                 break;
                             }else if(processData[runningProcess[j]].rt <= 0){
                                 // processData[runningProcess[j]].cs++;  // 문맥전환 수 추가, 마지막 프로세스인 경우 밑에서 1차감
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
+                                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -607,7 +599,7 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -618,7 +610,7 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -632,10 +624,10 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
 function spn(atInput, btInput, numberOfCore, numberOfProcess){ 
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
-    const nopr = numberOfCore;  // 프로세서 수
-    let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    let coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    let coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    const nopr = numberOfCore;  // 코어 수
+    let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    let coreData = new Array(); // 각 코어 별 실행중인 프로세스(디버깅용)
+    let coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
 
     //큐
@@ -649,7 +641,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
@@ -664,7 +656,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -689,8 +681,8 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
         //==================콘솔확인(디버깅)====================
         
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             readyQueue.spnSort();
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
@@ -698,7 +690,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
         
@@ -728,16 +720,16 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
         
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -773,7 +765,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -784,7 +776,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -798,10 +790,10 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
 function srtn(atInput, btInput, numberOfCore, numberOfProcess){
     // =============선언부==============
     let nop = numberOfProcess;  // 총 프로세스 수
-    let nopr = numberOfCore;  // 프로세서 수
-    let processData = new Array(); //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    let coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    let coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    let nopr = numberOfCore;  // 코어 수
+    let processData = new Array(); //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    let coreData = new Array(); // 각 코어 별 실행중인 프로세스(디버깅용)
+    let coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
     
     //큐
@@ -816,7 +808,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
@@ -831,7 +823,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0; // 현재시간 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -861,7 +853,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
         console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)====================
         
-        while ((readyQueue.empty() == false) && (coreState.indexOf(-1) == -1)){// 프로세서가 다 차있으면 레디큐 내 잔여 최솟값과 실행 프로세서 내 잔여 최댓값 비교 후 swap 필요
+        while ((readyQueue.empty() == false) && (coreState.indexOf(-1) == -1)){// 코어가 다 차있으면 레디큐 내 잔여 최솟값과 실행 코어 내 잔여 최댓값 비교 후 swap 필요
             let readyQMin = readyQueue.front().rt; // 레디큐 내 잔여 최솟값 (정렬돼있으므로 인덱스 0)
             let runningPsMax = -1; //러닝프로세스중 rt 최댓값 담을 변수
             let maxIndex = -1; //rt 최댓값인 러닝프로세스 인덱스 담을 변수
@@ -872,7 +864,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
             if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
                 processData[runningProcess[maxIndex]].cs++;
                 exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
-                coreData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여)
+                coreData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여)
                 workIndex = processData[runningProcess[maxIndex]].pr;
                 runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
                 dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
@@ -880,7 +872,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
                     processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
                 }
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-                processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+                processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
                 runningProcess.splice(maxIndex,0,dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
             }
             else{// 더이상 레디큐 내 잔여시간이 실행 프로세스 잔여시간 보다 작은게 없다는 뜻
@@ -888,15 +880,15 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
             }
         }
         
-        while((readyQueue.empty() == false) && (coreState.indexOf(-1) >= 0)){ // 빈 프로세서가 있는 경우
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+        while((readyQueue.empty() == false) && (coreState.indexOf(-1) >= 0)){ // 빈 코어가 있는 경우
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if(processData[dequeProcess.id].st ==-1){ // 처음실행하는 프로세스인경우(디큐 프로세스의 시작시간이 없으면)
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가    
         }
         
@@ -933,17 +925,17 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
         
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                          
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 때
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 때
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -980,7 +972,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -992,7 +984,7 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -1006,10 +998,10 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
 function hrrn(atInput, btInput, numberOfCore, numberOfProcess){ 
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
-    const nopr = numberOfCore;  // 프로세서 수
-    let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    let coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    let coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    const nopr = numberOfCore;  // 코어 수
+    let processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    let coreData = new Array(); // 각 코어 별 실행중인 프로세스(디버깅용)
+    let coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 배열
 
     //큐
@@ -1023,7 +1015,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
@@ -1038,7 +1030,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -1067,15 +1059,15 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
         
         
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
         
@@ -1104,16 +1096,16 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
         
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -1149,7 +1141,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -1159,7 +1151,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
     }
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
@@ -1173,11 +1165,11 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
 function hrr(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
-    const nopr = numberOfCore;  // 프로세서 수
+    const nopr = numberOfCore;  // 코어 수
     const qt =  Number(document.querySelector(".quantumTime").value); 
-    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 프로세서 번호, 잔여시간}
-    const coreData = new Array(); // 각 프로세서 별 실행중인 프로세스(디버깅용)
-    const coreState = new Array(); // 프로세서 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
+    const processData = new Array();  //processData  {프로세스번호(1부터), 도착시간, 실행시간, 시작시간, 종료시간, 대기시간, 할당된 코어 번호, 잔여시간}
+    const coreData = new Array(); // 각 코어 별 실행중인 프로세스(디버깅용)
+    const coreState = new Array(); // 코어 별 실행중인지 아닌지 확인하기 위한 변수(함수 안으로 옮겨야함)
     let dequeProcess; // 레디큐 -> 러닝프로세스배열로 옮기기위한 변수
 
     //큐
@@ -1193,7 +1185,7 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
-    let workIndex // 현재 작업중인 프로세서 인덱스
+    let workIndex // 현재 작업중인 코어 인덱스
     
     //최종 결과
     let result = new Object();  // 최종결과 객체 반환
@@ -1208,7 +1200,7 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
     presentTime = 0;  // 현재시간 0 초로 초기화
 
     for(let i =0; i<nopr; i++) {
-        coreState[i] = -1;  // 프로세서 수 만큼 프로세서상태를 꺼진상태(-1)으로 초기화
+        coreState[i] = -1;  // 코어 수 만큼 코어상태를 꺼진상태(-1)으로 초기화
         coreData[i] = new Queue();
     }
 
@@ -1235,15 +1227,15 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
         console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)=================== 
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
-            workIndex = coreState.indexOf(-1); // 꺼져있는 프로세서 중 가장 앞에 있는 프로세서의 인덱스를 반환
-            coreState[workIndex] = 1; // 작업할 프로세서를 작동시킨다
+            workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
+            coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
             if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
             processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간 매 초 업데이트
-            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 프로세서 번호 설정
+            processData[dequeProcess.id].pr = workIndex; // 프로세스에게 할당된 코어 번호 설정
             runningProcess.push(dequeProcess.id); // 실행중인프로세스 목록에 디큐된 프로세스 추가
         }
         
@@ -1273,30 +1265,30 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
 
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
-            for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
+            for(let i =0; i<nopr;i++){  // 모든 코어를 검사      
                 for(let j = 0; j< runningProcess.length; j++){
                     if(runningProcess[j] != -1){
                         exitByQuantum = processData[runningProcess[j]].st + qt; 
                         if(processData[runningProcess[j]].pr == i) {
                             
                             if((processData[runningProcess[j]].rt != 0) && ((presentTime >= exitByQuantum)) && (coreState[i] == 1)){
-                                if((processData[runningProcess[j]].rt <= 0.5*qt)){  // 남은시간이 1.5퀀텀이하면 그냥 나가
+                                if((processData[runningProcess[j]].rt <= 0.5*qt)){  // 남은시간이 1.5퀀텀이하면 나간다.
                                     break;
                                 }
                                 processData[runningProcess[j]].cs++;
-                                // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 프로세서가 켜져이싸면
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 코어가 켜져이싸면
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
                                 exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
                                 runningProcess[j] = -1; // 프로세스를 종료한다.
                                 break;
                             }else if(processData[runningProcess[j]].rt <= 0){
                                 // processData[runningProcess[j]].cs++;  // 문맥전환 수 추가, 마지막 프로세스인 경우 밑에서 1차감
-                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 프로세서가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 프로세서에 어떤 프로세스가 들어갔는지 부여
+                                //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
-                                coreState[i] = -1; // 프로세서를 종료한다.
+                                coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
@@ -1331,7 +1323,7 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
     }
 
     //최종결과 처리
-    for(let i =0; i < nopr;i++){  // 프로세서데이터 처리
+    for(let i =0; i < nopr;i++){  // 코어데이터 처리
         for(let j =0; j<coreData[i].toLength(); j++){
             resultData[i] = (coreData[i].dequeueAll())
         }
@@ -1342,7 +1334,7 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
         prRunTime[i] = lastindex[lastindex.length-1];
     }
 
-    max = Math.max.apply(null, prRunTime);  // 최대시간 프로세서 런터임
+    max = Math.max.apply(null, prRunTime);  // 최대시간 코어 런터임
 
     //결과값 넣어줌
     result.readyQLog = readyQLog;
