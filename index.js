@@ -330,6 +330,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
 
     //======================================== 실행부 ===============================================
     while(1){ // 무한루프
+
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
 
@@ -437,7 +438,6 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
-
 function rr(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
@@ -581,8 +581,6 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
 
     //======================== 결과, 리턴 처리 ==========================
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
 
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -604,7 +602,6 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
             resultData[i] = (coreData[i].dequeueAll())
         }
     }
-
     for(let i = 0;i<resultData.length;i++){  // 최대시간 처리
         let lastindex = resultData[i][resultData[i].length-1];
         prRunTime[i] = lastindex[lastindex.length-1];
@@ -685,7 +682,7 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
             coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             readyQueue.spnSort();
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
-            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
+            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
@@ -727,7 +724,8 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
@@ -864,7 +862,8 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
             if(readyQMin < runningPsMax){ // 레디큐 최솟값이 러닝프로세스 최댓값보다 작으면
                 processData[runningProcess[maxIndex]].cs++;
                 exitQueue.push(processData[runningProcess[maxIndex]]); // rt 러닝 프로세스 임시저장
-                coreData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여)
+                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여)
+                coreData[processData[runningProcess[maxIndex]].pr].enqueue(([("P"+(runningProcess[maxIndex]+1)),processData[runningProcess[maxIndex]].st,presentTime])); 
                 workIndex = processData[runningProcess[maxIndex]].pr;
                 runningProcess.splice(maxIndex,1); // 최대 rt 러닝 프로세스 삭제
                 dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
@@ -927,7 +926,8 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 때
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
@@ -1048,6 +1048,8 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
         console.log("시간: ",presentTime);
         console.log("레디큐: ","P"+readyQueue.toString());
         //==================콘솔확인(디버깅)====================
+
+
         readyQueue.hrrnSort();
         
         
@@ -1056,7 +1058,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
             coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
             dequeProcess = readyQueue.dequeue(); // 레디큐에서 디큐한 프로세스를 dequeProcess에 임시 저장
-            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우(디큐 프로세스의 잔여시간이 없거나 시작시간이 없으면)
+            if((processData[dequeProcess.id].rt==-1)||(processData[dequeProcess.id].st==-1)){ // 처음실행하는 프로세스인경우
                 processData[dequeProcess.id].rt = dequeProcess.bt; // 잔여시간은 총 실행시간
                 processData[dequeProcess.id].st = presentTime; // 시작시간은 현재시간
             }
@@ -1097,7 +1099,8 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
                             
                             if((processData[runningProcess[j]].rt <= 0) && (coreState[i] == 1)){
                                 //(프로세스 종료조건) 잔여시간 = 0 && 해당 코어가 켜져있을 떄
-                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
+                                coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
                                 console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
@@ -1556,6 +1559,7 @@ function showProgressBar(maxTime){
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
     }, totalTime*1000/1.5);
+    
     setTimeout(function(){
         white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
     }, 1000);
