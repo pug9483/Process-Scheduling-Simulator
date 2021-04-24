@@ -242,4 +242,11 @@
     height: 36px;
     padding: 0px;
   }
+
+  #koreatech {
+    padding-top: 5px;
+    width: 40px;
+    height: 50px;
+    object-fit: cover;
+  }
 }
