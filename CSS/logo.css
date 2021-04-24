@@ -17,6 +17,13 @@
   object-fit: cover;
 }
 
+#action{
+  width: 250px;
+  height: 80px;
+  padding-left: 30px;
+  padding-bottom: 20px;
+}
+
 @keyframes rotation {
   from {
     -webkit-transform: rotate(0deg);
