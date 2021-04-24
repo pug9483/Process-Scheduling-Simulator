@@ -1,18 +1,18 @@
 @import url(https://fonts.googleapis.com/css?family=BenchNine:700);
 
 .processor_input {
+  padding:8px;
   border: 2px solid #dedede;
-  padding:8px 4px;
-  width: 850px;
+  width: 840px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin: 20px 0px;
   border-radius: 5px;
   transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
 }
 
 .processor_input:hover{
-padding:8px 4px;
+padding:8px;
 border: 2px solid black;
 border-radius: 5px;
 }
@@ -90,8 +90,19 @@ tr {
   cursor: pointer;
 }
 
+#run:hover {
+  border: 2px solid rgb(238, 74, 14);
+  color:rgb(238, 74, 14);
+  transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  cursor: pointer;
+
+}
+
 .processor_input__column {
-  width: 400px;
   height: 100px;
   display: flex;
   justify-content: center;
@@ -142,7 +153,7 @@ tr {
 }
 
 .selectprocess {
-  margin-right: 10px;
+  margin-right: 130px;
 }
 
 .p input {
