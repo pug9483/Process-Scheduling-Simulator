@@ -1270,7 +1270,7 @@ function hrr(atInput, btInput, numberOfProcessor, numberOfProcess){
                 processData[runningProcess[i]].rt--;
             }
         }
-        
+
         // 종료조건
         if(runningProcess.length){ // 실행중인 프로세스가 있을때 실행
             for(let i =0; i<nopr;i++){  // 모든 프로세서를 검사      
@@ -1555,7 +1555,6 @@ function showProgressBar(maxTime){
     white.className = "progressBar__time";
     white.id ="progressBar__time";  
     progress.appendChild(white);
-    
     let totalTime;
     let tmp;
     
