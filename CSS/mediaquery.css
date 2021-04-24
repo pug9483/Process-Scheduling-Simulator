@@ -69,8 +69,8 @@
   }
 
   #baram {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     float: right;
     animation: rotation 2s infinite linear;
     animation-play-state: paused;
@@ -233,7 +233,20 @@
     opacity: 1;
   }
 
-  .body{
+  .body {
     width: 100%;
+  }
+
+  #action {
+    width: 120px;
+    height: 36px;
+    padding: 0px;
+  }
+
+  #koreatech {
+    padding-top: 5px;
+    width: 40px;
+    height: 50px;
+    object-fit: cover;
   }
 }
