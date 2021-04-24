@@ -1,21 +1,22 @@
 .logo {
   margin-top: 5px;
   margin-bottom: 10px;
-  width: 850px;
+  width: 830px;
   height: 100px;
   margin-bottom: 5px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid white;
   padding: 10px;
 }
 
-img {
-  max-width: 100%;
-  max-height: 100%;
+#koreatech {
+  width: 50px;
+  height: 60px;
   object-fit: cover;
 }
+
 @keyframes rotation {
   from {
     -webkit-transform: rotate(0deg);
@@ -26,9 +27,9 @@ img {
 }
 
 #baram {
-  width: 15%;
-  height: 15%;
-  float: right;
+  max-width: 90px;
+  max-height: 90px;
+  object-fit: cover;
   animation: rotation 2s infinite linear;
   animation-play-state: paused;
   align-self: inherit;
