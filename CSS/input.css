@@ -1,20 +1,20 @@
 @import url(https://fonts.googleapis.com/css?family=BenchNine:700);
 
-.processor_input {
-  padding:8px;
+.core_input {
+  padding: 8px;
   border: 2px solid #dedede;
   width: 840px;
   display: flex;
   justify-content: space-between;
   margin: 20px 0px;
   border-radius: 5px;
-  transition: all 0.1s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  transition: all 0.1s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
 
-.processor_input:hover{
-padding:8px;
-border: 2px solid black;
-border-radius: 5px;
+.core_input:hover {
+  padding: 8px;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 table,
@@ -92,17 +92,16 @@ tr {
 
 #run:hover {
   border: 2px solid rgb(238, 74, 14);
-  color:rgb(238, 74, 14);
+  color: rgb(238, 74, 14);
   transform: scale(1.5);
   -webkit-transform: scale(1.5);
   -moz-transform: scale(1.5);
   -ms-transform: scale(1.5);
   -o-transform: scale(1.5);
   cursor: pointer;
-
 }
 
-.processor_input__column {
+.core_input__column {
   height: 100px;
   display: flex;
   justify-content: center;
@@ -113,7 +112,7 @@ tr {
   display: flex;
 }
 
-.processor_input__column-left {
+.core_input__column-left {
   height: 80px;
   margin-left: 15px;
   margin-right: 15px;
@@ -122,7 +121,7 @@ tr {
   justify-content: space-around;
 }
 
-.processor_input__column-right {
+.core_input__column-right {
   width: 230px;
   height: 80px;
   margin-left: 15px;
@@ -132,11 +131,11 @@ tr {
   justify-content: space-around;
 }
 
-.processor_input__table table {
+.core_input__table table {
   width: 420px;
 }
 
-.processor_input__table {
+.core_input__table {
   background-color: #f0f0f2;
   border-radius: 10px;
   padding: 0px 10px 10px 10px;
@@ -148,7 +147,7 @@ tr {
   justify-content: flex-start;
 } */
 
-.numofprocessors {
+.numofcores {
   margin-left: 10px;
 }
 

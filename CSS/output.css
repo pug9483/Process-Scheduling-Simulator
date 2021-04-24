@@ -96,12 +96,12 @@
   padding-top: 5px;
 }
 
-.processor_show__table table {
+.core_show__table table {
   width: 830px;
   margin: 10px 10px;
 }
 
-.processor_show__table {
+.core_show__table {
   border: 2px solid #dedede;
   border-radius: 5px;
 }
@@ -117,7 +117,7 @@
   transition: all 0.1s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
 
-.processor_show__table:hover,
+.core_show__table:hover,
 .gantt_table:hover,
 .ready_queue:hover {
   border: 2px solid black;
