@@ -96,8 +96,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 23px;
+    height: 23px;
     margin-right: 10px;
     border-radius: 50px;
   }
@@ -231,5 +231,9 @@
   .progressBar__time:hover {
     background-color: #f0f0f2;
     opacity: 1;
+  }
+
+  .body{
+    width: 100%;
   }
 }
