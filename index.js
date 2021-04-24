@@ -1566,13 +1566,13 @@ function showProgressBar(maxTime){
         tmp = parseInt(maxTime / 15) + 1;
         totalTime = maxTime - (maxTime % tmp) + tmp;
     }
-
-    setTimeout(function(){
-        white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
-    }, 1000);
+    
     setTimeout(function(){
         baram.style.animationPlayState = "paused";
     }, totalTime*1000/1.5);
+    setTimeout(function(){
+        white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
+    }, 1000);
 
     var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
     proTime.addEventListener('click',function () {
