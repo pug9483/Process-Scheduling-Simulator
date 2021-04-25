@@ -115,7 +115,7 @@ function run(){
         alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR(HRR)이라면 Time quantum을 넣어 주세요.)");
         init();
         // run();
-        baram.style.animationPlayState = "paused";  // 바람개비 돌리기
+        baram.style.animationPlayState = "paused";  // 바람개비 멈추기
         return;
     } 
     
