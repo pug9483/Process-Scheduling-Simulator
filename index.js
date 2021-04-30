@@ -1,184 +1,101 @@
-function debug(result){  // 디버그 함수
-    console.log("결과값 디버그:  ", result);;
-}
-
-
-
-//-------------------태그 관리-------------------------
-const inputTable = document.querySelector("#input-table");
-const showTable = document.querySelector("#show-table");
-const body = document.querySelector("body");
-const addProcess = document.getElementById("addprocess");
-const deleteProcess = document.getElementById("deleteprocess");
-const runSimulator = document.getElementById("run");
-const baram = document.querySelector(".baram");
-//------------------태그 관리 끝-----------------------
-
-
-
-//-------------------- 이벤트 처리 ---------------------
-addProcess.addEventListener("click", addInputRow);  // "프로세스 추가" 클릭시
-deleteProcess.addEventListener("click", deleteLastIndexOfInputRow); // "프로세스 제거" 클릭시
-runSimulator.addEventListener("click", run); // "실행" 클릭시
-//-------------------- 이벤트 처리 ----------------------
-
-
-
-//------------------입력 처리-------------------
-function addInputRow(){
-    if(inputTable.rows.length < 15){
-        let newRow = inputTable.insertRow(inputTable.rows.length);  
-        let size = inputTable.rows.length;
+// BackEnd
+class inputManage{
+    addRow(){
+        if(inputTable.rows.length < 15){
+            let newRow = inputTable.insertRow(inputTable.rows.length);  
+            let size = inputTable.rows.length;
+            
+            const cell0 = newRow.insertCell(0);
+            cell0.innerText = "P" + size;
+            
+            //arrival time
+            const arrivalTd = newRow.insertCell(1);
+            let arrivalText = document.createElement("input");
+            arrivalTd.appendChild(arrivalText);
+            arrivalText.value = "";
+            arrivalText.type = "text";
+            arrivalText.className = "arrivalTime";
+            /* add <input type = "text" value = "" class = "arrivalTime"> in new row */
+            
+            //burst time
+            const burstTd = newRow.insertCell(2);
+            let burstText = document.createElement("input");
+            burstTd.appendChild(burstText);
+            burstText.value = "";
+            burstText.type = "text";
+            burstText.className = "burstTime";
+            /* add <input type = "text" value = "" class = "burstTime"> in new row */
+        }
+    }
+    
+    deleteRow(){
+        if(inputTable.rows.length >= 1) inputTable.deleteRow(-1);
+    }
+    
+    errorCheck(atInput, btInput, selectprocess){  
+        // No input and Run -> Erorr
+        if(atInput.length == 0 && btInput.length == 0) return false;
         
-        const cell0 = newRow.insertCell(0);
-        cell0.innerText = "P" + size;
+        // Arrival Time must be integer(>=0)
+        for(var i = 0; i < atInput.length; i++){
+            if(parseInt(atInput[i].value) <= -1 || atInput[i].value === "" || isNaN(atInput[i].value)){ 
+                return false;
+            }             
+        }
         
-        //arrival time
-        const arrival = newRow.insertCell(1);
-        let arrivalText = document.createElement("input");
-        arrivalText.setAttribute("value", "");
-        arrival.appendChild(arrivalText);
+        // Burst Time must be integer(>=1)
+        for(var i = 0; i < btInput.length; i++){
+            if(parseInt(btInput[i].value) <= 0 || btInput[i].value === "" || isNaN(btInput[i].value)) {
+                return false;
+            }        
+        }
         
-        arrivalText.type="text";
-        arrivalText.className = "arrivalTime";
+        // Algorithm "rr" and "hrr" must have quantumTime that is integer(>=1)
+        if(selectprocess.value === "rr" || selectprocess.value === "hrr"){
+            const quantumTime = document.querySelector(".quantumTime").value;
+            if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
+                return false;
+            }  
+        }
         
-        //burst time
-        const burst = newRow.insertCell(2);
-        let burstText = document.createElement("input");
-        burstText.setAttribute("value", "");
-        burst.appendChild(burstText);
-        
-        burstText.type="text";
-        burstText.className = "burstTime";
+        return true;
     }
 }
 
-function showProcess(){
-    const width = 80;
-    const height = 80;
-    processNode.style.width = width + "px";
-    processNode.style.height = height + "px";
-}
+class chooseAlgorithm{
+    constructor(atInput, btInput, numberOfCore, numberOfProcess){
+        this.at = atInput;
+        this.bt = btInput;
+        this.noc = numberOfCore;
+        this.nop =  numberOfProcess;
+        this.selectprocess = document.querySelector(".selectprocess").value;
+        this.result;
+    }
 
-function deleteLastIndexOfInputRow(){
-    if(inputTable.rows.length >= 1){
-        inputTable.deleteRow(-1);
-        showTable.deleteRow(-1);
+    scheduling(){
+        if(this.selectprocess == "fcfs"){
+            this.result = fcfs(this.at, this.bt, this.noc, this.nop);
+        }
+        else if(this.selectprocess == "rr"){
+            this.result = rr(this.at, this.bt, this.noc, this.nop);
+        }
+        else if(this.selectprocess == "spn"){
+            this.result= spn(this.at, this.bt, this.noc, this.nop);
+        }
+        else if(this.selectprocess == "srtn"){
+            this.result = srtn(this.at, this.bt, this.noc, this.nop);
+        }
+        else if(this.selectprocess == "hrrn"){
+            this.result = hrrn(this.at, this.bt, this.noc, this.nop);
+        }
+        else if(this.selectprocess == "hrr"){
+            this.result = hrr(this.at, this.bt, this.noc, this.nop);
+        }
+    
+        return this.result;
     }
 }
 
-function inputCheck(atInput, btInput, selectprocess){  // 빈 값 체크
-    // 프로세스 칸을 추가하지 않고 바로 만들경우 에러 탐지 추가.
-    if(atInput.length == 0 && btInput.length == 0) return false;
-    
-    for(var i = 0; i < atInput.length; i++){
-        if(parseInt(atInput[i].value) <= -1 || atInput[i].value === "" || isNaN(atInput[i].value)) {
-            return false;
-        }        
-    }
-    
-    //burstTime이 0초일 때 false 추가
-    for(var i = 0; i < btInput.length; i++){
-        if(parseInt(btInput[i].value) <= 0 || btInput[i].value === "" || isNaN(btInput[i].value)) {
-            return false;
-        }        
-    }
-    
-    if(selectprocess.value === "rr" || selectprocess.value === "hrr"){
-        const quantumTime = document.querySelector(".quantumTime").value;
-        if(parseInt(quantumTime) <= 0 || quantumTime === "" || isNaN(quantumTime)) {
-            return false;
-        }  
-    }
-    
-    return true;
-}
-//------------------입력 처리 끝-----------------
-
-
-
-//-------------------- 실행시 처리 ---------------------
-function run(){
-    init(); // 초기화 함수
-    baram.style.animationPlayState = "running";  // 바람개비 돌리기
-    let result;
-    
-    //입력값 정리
-    const atInput = document.querySelectorAll(".arrivalTime");
-    const btInput = document.querySelectorAll(".burstTime");
-    const numberOfProcess = inputTable.rows.length;
-    const numberOfCore = document.querySelector(".numofcores").value;
-    const selectprocess = document.querySelector(".selectprocess");
-    
-    //입력 체크
-    if(!inputCheck(atInput,btInput,selectprocess)){
-        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR(HRR)이라면 Time quantum을 넣어 주세요.)");
-        init();
-        // run();
-        baram.style.animationPlayState = "paused";  // 바람개비 멈추기
-        return;
-    } 
-    
-    //변수값 확인
-    console.log("======================입력값 확인=====================");
-    console.log("코어 수: ",numberOfCore);
-    console.log("프로세스 수: ",numberOfProcess);
-    console.log("=========================run=======================");
-    
-    result = chooseProcessAlgorithm(atInput, btInput, numberOfCore, numberOfProcess);
-    debug(result); // 디버깅 함수 호출
-    
-    // //progress bar 함수 -> 큰 창과 그 내부 프로세스들의 상태바 만들기 위한 용도
-    createProgressBar(result.resultData, result.max, numberOfCore, numberOfProcess); //배열, time
-    showCoreName(numberOfCore); //코어 개수
-    createBottomIndex(result.max);
-    
-    // //실행 progress 보여주기
-    showProgressBar(result.max);
-
-    //2021-04-21 1:22 실제 데이터 삽입
-    showReadyQueue(result.readyQLog);
-  
-
-    ///2021-04-21 2:04 표 만들기용 프로세스 데이터 필요
-    // 표 만들기 : 이름, Arrival Time, Buster Time, Wating Time, Turnaound Time, Nomarlized TT
-    createShowTable(result.resultTable, result.max);
-}
-
-// 알고리즘 선택 함수
-function chooseProcessAlgorithm(atInput, btInput, numberOfCore, numberOfProcess){
-    const selectprocess = document.querySelector(".selectprocess");
-    const processValue = selectprocess.value;
-    let result;
-
-    console.log("선택된 알고리즘: ",processValue.toUpperCase());
-    if(processValue == "fcfs"){
-        result = fcfs(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-    else if(processValue == "rr"){
-        result = rr(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-    else if(processValue == "spn"){
-        result= spn(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-    else if(processValue == "srtn"){
-        result = srtn(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-    else if(processValue == "hrrn"){
-        result = hrrn(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-    else if(processValue == "hrr"){
-        result = hrr(atInput, btInput, numberOfCore, numberOfProcess);
-    }
-
-    return result;
-}
-//-------------------- 실행시 처리 끝 ---------------------
-
-
-
-//------------------BackEnd-------------------------
-// 큐 클래스 선언
 class Queue {
     constructor(){ // 생성자
         this.dataStore = []; 
@@ -280,7 +197,6 @@ class Queue {
     }
 }
 
-// 알고리즘 6개
 function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
@@ -297,7 +213,6 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     //시간
     let prRunTime = new Array();  // max 런타임 처리
     let presentTime; // 현재시간 0으로 초기화
-    let totoalTime; // 알고리즘 실행시간
     
     //실행 여부
     let runningProcess = new Array(); // 실행중인 프로세스
@@ -334,11 +249,6 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
 
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
-
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ",readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
                
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
@@ -386,7 +296,6 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -439,6 +348,7 @@ function fcfs(atInput, btInput, numberOfCore, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
+
 function rr(atInput, btInput, numberOfCore, numberOfProcess){
     // =======================선언부=======================
     const nop = numberOfProcess;  // 총 프로세스 수
@@ -501,11 +411,6 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
             for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
         }
 
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
-
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
             coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
@@ -556,7 +461,6 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
                                 // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
                                 exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
                                 runningProcess[j] = -1; // 프로세스를 종료한다.
                                 break;
@@ -567,7 +471,6 @@ function rr(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -673,11 +576,6 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
         
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
-        
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
             coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
@@ -729,7 +627,6 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -745,9 +642,6 @@ function spn(atInput, btInput, numberOfCore, numberOfProcess){
 
     //======================== 결과, 리턴 처리 ==========================
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
-    // showContextSwit(); // 버그수정 필요
     //수정
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -847,11 +741,6 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
         
         readyQueue.srtnSort(); // 레디큐 rt 기준 오름차순 정렬
         
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
-        
         while ((readyQueue.empty() == false) && (coreState.indexOf(-1) == -1)){// 코어가 다 차있으면 레디큐 내 잔여 최솟값과 실행 코어 내 잔여 최댓값 비교 후 swap 필요
             let readyQMin = readyQueue.front().rt; // 레디큐 내 잔여 최솟값 (정렬돼있으므로 인덱스 0)
             let runningPsMax = -1; //러닝프로세스중 rt 최댓값 담을 변수
@@ -931,7 +820,6 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -949,8 +837,6 @@ function srtn(atInput, btInput, numberOfCore, numberOfProcess){
     //======================== 결과, 리턴 처리 ==========================
 
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
     
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -1042,18 +928,7 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
         for(let i=0;i<nop; i++) // 프로세스가 도착하면 레디큐에 삽입
             if (presentTime == processData[i].at) readyQueue.enqueue(processData[i]);
 
-
-
-
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)====================
-
-
         readyQueue.hrrnSort();
-        
-        
         
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
@@ -1104,7 +979,6 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); 
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -1121,8 +995,6 @@ function hrrn(atInput, btInput, numberOfCore, numberOfProcess){
     //======================== 결과, 리턴 처리 ==========================
 
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
 
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -1220,10 +1092,6 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
             for(let i =0; i<temp;i++) readyQueue.enqueue(exitQuantumQueue.dequeue()); // 퀀텀에 의해 종료된 큐를 이후에 레디큐에 삽입
         }
 
-        //==================콘솔확인(디버깅)====================
-        console.log("시간: ",presentTime);
-        console.log("레디큐: ","P"+readyQueue.toString());
-        //==================콘솔확인(디버깅)=================== 
         while(readyQueue.empty() == false && coreState.indexOf(-1) >= 0){ 
             workIndex = coreState.indexOf(-1); // 꺼져있는 코어 중 가장 앞에 있는 코어의 인덱스를 반환
             coreState[workIndex] = 1; // 작업할 코어를 작동시킨다
@@ -1277,7 +1145,6 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
                                 // 잔여시간이 0이 아니고, 현재시간이 퀀텀에 의해 종료될 시간이며, 해당 코어가 켜져이싸면
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("****************** P"+(runningProcess[j]+1)+" 종료 By Quantum ******************")
                                 exitQuantumQueue.enqueue(processData[(runningProcess[j])]); // 퀀텀시간이 지나 레디큐로 이동
                                 runningProcess[j] = -1; // 프로세스를 종료한다.
                                 break;
@@ -1287,7 +1154,6 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
                                 coreData[processData[runningProcess[j]].pr].enqueue([("P"+(runningProcess[j]+1)),processData[runningProcess[j]].st,presentTime]); // 작업중인 코어에 어떤 프로세스가 들어갔는지 부여
                                 processData[runningProcess[j]].et = presentTime;  // 종료시간 업데이트
                                 coreState[i] = -1; // 코어를 종료한다.
-                                console.log("********************** P"+(runningProcess[j]+1)+" 종료 **********************")
                                 exitProcessQueue.enqueue(processData[(runningProcess[j])]); // 잔여시간이 다지나서 종료큐로 이동
                                 runningProcess[j] = -1; //프로세스를 종료한다.
                             }
@@ -1303,8 +1169,6 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
 
     //======================== 결과, 리턴 처리 ==========================
     totoalTime = presentTime; //전체실행시간을 저장.
-    console.log("=============결과=============== ");
-    console.log("전체 실행 시간: ",totoalTime);
     
     for(let i =0;i<nop; i++) {
         let tt = (processData[i].et) - (processData[i].at);
@@ -1342,326 +1206,360 @@ function hrr(atInput, btInput, numberOfCore, numberOfProcess){
     return result;
     //======================== 결과, 리턴 처리 종료 ==========================
 }
-//------------------BackEnd-------------------------
 
 
 
-// --------------------- FrontEnd -------------------
-function init(){
-    deleteBottomIndex();
-    deleteProgressBar();
-    deleteCoreName();
-    deleteReadyQueue();
-    deleteAllOfShowTable();
-    deleteAllOfProgressBar();
-    deleteColorList();
-}
-
-function createShowTable(resultTable, max){
-    console.log("테이블 출력 부분");
-    console.log(resultTable);
-    let totalWt = 0;
-    let totalCs = 0;
-    //showTable
-    for(let i=0; i <resultTable.length; i++){
-        let newRow = showTable.insertRow(showTable.rows.length);  
-        const cell0 = newRow.insertCell(0);
-        cell0.innerText = "P"+ (resultTable[i][0]+1);
-        
-        const cell1 = newRow.insertCell(1);
-        cell1.innerText = resultTable[i][1];
-        
-        const cell2 = newRow.insertCell(2);
-        cell2.innerText = resultTable[i][2];
-        
-        const cell3 = newRow.insertCell(3);
-        cell3.innerText = resultTable[i][3];
-        totalWt += resultTable[i][3];
-
-        const cell4 = newRow.insertCell(4);
-        cell4.innerText = resultTable[i][4];
-        
-        const cell5 = newRow.insertCell(5);
-        cell5.innerText = resultTable[i][5];
-        
-        const cell6 = newRow.insertCell(6);
-        cell6.innerText = resultTable[i][6];
-        totalCs += resultTable[i][6];
-    }
-    let totalLaw = showTable.insertRow(showTable.rows.length);  
-        const cell0 = totalLaw.insertCell(0);
-        cell0.innerText = "RESULT";
+// FrontEnd
+class createOutput{
+    createShowTable(resultTable, max){
+        let totalWt = 0;
+        let totalCs = 0;
+        //showTable
+        for(let i=0; i <resultTable.length; i++){
+            let newRow = showTable.insertRow(showTable.rows.length);  
+            const cell0 = newRow.insertCell(0);
+            cell0.innerText = "P"+ (resultTable[i][0]+1);
+            
+            const cell1 = newRow.insertCell(1);
+            cell1.innerText = resultTable[i][1];
+            
+            const cell2 = newRow.insertCell(2);
+            cell2.innerText = resultTable[i][2];
+            
+            const cell3 = newRow.insertCell(3);
+            cell3.innerText = resultTable[i][3];
+            totalWt += resultTable[i][3];
     
-        const cell1 = totalLaw.insertCell(1);
-        cell1.innerText = "RUNTIME:"+max;
-    
-        const cell2 = totalLaw.insertCell(2);
-        cell2.innerText = "-";
-    
-        const cell3 = totalLaw.insertCell(3);
-        cell3.innerText = "Total Wt: "+totalWt;
-    
-        const cell4 = totalLaw.insertCell(4);
-        cell4.innerText = "-";
-    
-        const cell5 = totalLaw.insertCell(5);
-        cell5.innerText = "-";
-    
-        const cell6 = totalLaw.insertCell(6);
-        cell6.innerText = "Total Cs: "+totalCs;
-    
-}
-
-function createProgressBar(resultData, maxTime, numberOfCore, nop){
-    const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
-    "#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0",];  // 컬러 배열
-    const progress = document.querySelector(".gantt_table__top-right");
-    const progressBars = document.createElement("div");
-    progressBars.className = "progressBars";
-    progressBars.id = "progressBars";
-    progress.appendChild(progressBars);
-
-    let totalTime;
-    let tmp;
-
-    if(maxTime % 15 === 0){
-        tmp = parseInt(maxTime / 15);
-        totalTime = maxTime + tmp;
-    }
-    else{
-        tmp = parseInt(maxTime / 15) + 1;
-        totalTime = maxTime - (maxTime % tmp) + tmp;
-    }
-    console.log("totalTime" ,totalTime);
-    //1초의 간격
-    const widthInterval = 100 / totalTime;
-    console.log("widthInterval", widthInterval);
-    
-
-    for(let i=0; i < numberOfCore; i++){
-        //하나의 코어 만들기
-        var childProg = document.createElement("div");
-        childProg.className = "progressBar";
-        childProg.id = "progressBar"+(i+1);
-        progressBars.appendChild(childProg);
-
-        if(resultData[i] === undefined) continue;
-
-        for(let j=0; j<resultData[i].length; j++){
-            const startIndex = j;
-            while(j < resultData[i].length-1 && resultData[i][j][0] === resultData[i][j+1][0]) j++;
-
-            const pro = document.createElement("div");
-            pro.className = "progressBar__process";
-            pro.id = "progressBar__process"+ resultData[i][startIndex][0];
-         
-
-            if(startIndex === 0) pro.style.marginLeft = (resultData[i][startIndex][1] * widthInterval) + "%";
-            else pro.style.marginLeft = ((resultData[i][startIndex][1] - resultData[i][startIndex-1][2])*widthInterval)+ "%";
-            let processWidth = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval;
-            pro.style.width = processWidth + "%";
-           
-            console.log("processWidth",processWidth);
-            if(processWidth > 3) pro.innerHTML = resultData[i][startIndex][0];
-            else pro.innerHTML = "";
-
-
-            if (matchMedia("screen and (min-width: 831px)").matches) {
-                pro.addEventListener("mouseover", function(){
-                    if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
-                        pro.style.width =  "15%";
-                        pro.style.height = 40 + "px";
-                    }
-                    pro.innerHTML = resultData[i][startIndex][0] + "    [     " + resultData[i][startIndex][1] +" -> " + + resultData[i][j][2]+ "   ]   ";
-                });
-                pro.addEventListener("mouseout", function(){
-                    if(pro.style.width === "15%"){
-                        pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
-                        pro.style.height = 30 + "px";
-                    }
-                    if(processWidth > 3){
-                        pro.innerHTML = resultData[i][startIndex][0];
-                    }
-                    else pro.innerHTML = "";
-                });
-              }
-
-
-              
-            childProg.appendChild(pro);
+            const cell4 = newRow.insertCell(4);
+            cell4.innerText = resultTable[i][4];
+            
+            const cell5 = newRow.insertCell(5);
+            cell5.innerText = resultTable[i][5];
+            
+            const cell6 = newRow.insertCell(6);
+            cell6.innerText = resultTable[i][6];
+            totalCs += resultTable[i][6];
         }
-    }
-    for(let j=0; j<nop; j++){
-        let colorList = document.querySelector(".color_list");
-
-        // let colorListShow = document.createElement("div");
-        // colorListShow.className = "color_list__show";
-        // colorList.appendChild(colorListShow);
-
-        let childColor = document.createElement("div");
-        colorList.appendChild(childColor);
-        childColor.className = "progressColor";
-        childColor.id = "Color"+(j+1);
-        childColor.innerHTML = "P"+(j+1);
-        childColor.style.backgroundColor =colorListArray[j];
-    }
-}
-
-function createBottomIndex(maxTime){
-    const ganttTableBottom = document.querySelector(".gantt_table__bottom");
-    let index = 0;
-    let tmp;
-    
-    if(maxTime % 15 === 0){
-        tmp = parseInt(maxTime / 15);
-    }
-    else{
-        tmp = parseInt(maxTime / 15) + 1;
-    }
-    const plusWidth = 100 / (parseInt(maxTime/tmp) + 1);
-
-    while(index <= maxTime){
-        const time = document.createElement("div");
-        time.innerText = index;
-        time.style.width = plusWidth + "%";
-        ganttTableBottom.appendChild(time);
-        index += tmp;
-    }
-}
-
-function showCoreName(numberOfCore){
-    const ganttTableLeft = document.querySelector(".gantt_table__top-left");
-    for(let i=0; i < numberOfCore; i++){
-        var core = document.createElement("div");
-        core.className = "CORE ";
-        core.innerText = "CORE " + (i+1);
-        ganttTableLeft.appendChild(core);
-    }
-}
-
-function showProgressBar(maxTime){
-    const progress = document.querySelector(".gantt_table__top-right");
-    var white = document.createElement("div");
-    white.className = "progressBar__time";
-    white.id ="progressBar__time";  
-    progress.appendChild(white);
-    let totalTime;
-    let tmp;
-    
-    if(maxTime % 15 === 0){
-        tmp = parseInt(maxTime / 15);
-        totalTime = maxTime + tmp;
-    }
-    else{
-        tmp = parseInt(maxTime / 15) + 1;
-        totalTime = maxTime - (maxTime % tmp) + tmp;
-    }
-    
-    setTimeout(function(){
-        baram.style.animationPlayState = "paused";
-    }, totalTime*1000/1.5);
-    
-    setTimeout(function(){
-        white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
-    }, 1000);
-
-    var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
-    proTime.addEventListener('click',function () {
-        proTime.parentElement.removeChild(proTime);
-        baram.style.animationPlayState = "paused";
-      });
-}
-
-function showReadyQueue(readyQueue){
-    const readyqueue = document.querySelector(".ready_queue"); 
-    var readyqueueShow = document.createElement("div");
-    readyqueueShow.className = "ready_queue__show";
-    readyqueue.appendChild(readyqueueShow);
-
-    const time = readyQueue.length;
-    let start = 0;
-
-    const id = setInterval(show, 1000/1.5);
-    function show(){
+        let totalLaw = showTable.insertRow(showTable.rows.length);  
+            const cell0 = totalLaw.insertCell(0);
+            cell0.innerText = "RESULT";
         
-        //초기화
-        while ( readyqueueShow.hasChildNodes() ) { 
-            readyqueueShow.removeChild( readyqueueShow.firstChild ); 
-        }
-
-        if(start >= time){
-            clearInterval(id);
+            const cell1 = totalLaw.insertCell(1);
+            cell1.innerText = "RUNTIME:"+max;
+        
+            const cell2 = totalLaw.insertCell(2);
+            cell2.innerText = "-";
+        
+            const cell3 = totalLaw.insertCell(3);
+            cell3.innerText = "Total Wt: "+totalWt;
+        
+            const cell4 = totalLaw.insertCell(4);
+            cell4.innerText = "-";
+        
+            const cell5 = totalLaw.insertCell(5);
+            cell5.innerText = "-";
+        
+            const cell6 = totalLaw.insertCell(6);
+            cell6.innerText = "Total Cs: "+totalCs;
+        
+    }
+    
+    createProgressBar(resultData, maxTime, numberOfCore, nop){
+        const colorListArray = ["#f08c8c","#bf82bf","#ff7f50","#8c8cbe","#f9ca24","#6fcc98", "#f6e58d","#badc58",
+        "#c7ecee","#95afc0","#22a6b3","#7ed6df","#ff91dc","#6e9fed", "#a0a0ff","#a0a0a0"];  // 컬러 배열
+        const progress = document.querySelector(".gantt_table__top-right");
+        const progressBars = document.createElement("div");
+        progressBars.className = "progressBars";
+        progressBars.id = "progressBars";
+        progress.appendChild(progressBars);
+    
+        let totalTime;
+        let tmp;
+    
+        if(maxTime % 15 === 0){
+            tmp = parseInt(maxTime / 15);
+            totalTime = maxTime + tmp;
         }
         else{
-            //다음 생성
-            for(let i = 0; i<readyQueue[start].length; i++){
-                const node = document.createElement("div");
-                node.className = "readyQueue__process";
-                node.id = "P" + readyQueue[start][i];
-                node.innerHTML = "P" +readyQueue[start][i];
-                readyqueueShow.appendChild(node);
+            tmp = parseInt(maxTime / 15) + 1;
+            totalTime = maxTime - (maxTime % tmp) + tmp;
+        }
+        const widthInterval = 100 / totalTime;
+        
+    
+        for(let i=0; i < numberOfCore; i++){
+            //하나의 코어 만들기
+            var childProg = document.createElement("div");
+            childProg.className = "progressBar";
+            childProg.id = "progressBar"+(i+1);
+            progressBars.appendChild(childProg);
+    
+            if(resultData[i] === undefined) continue;
+    
+            for(let j=0; j<resultData[i].length; j++){
+                const startIndex = j;
+                while(j < resultData[i].length-1 && resultData[i][j][0] === resultData[i][j+1][0]) j++;
+    
+                const pro = document.createElement("div");
+                pro.className = "progressBar__process";
+                pro.id = "progressBar__process"+ resultData[i][startIndex][0];
+             
+    
+                if(startIndex === 0) pro.style.marginLeft = (resultData[i][startIndex][1] * widthInterval) + "%";
+                else pro.style.marginLeft = ((resultData[i][startIndex][1] - resultData[i][startIndex-1][2])*widthInterval)+ "%";
+                let processWidth = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval;
+                pro.style.width = processWidth + "%";
+               
+                if(processWidth > 3) pro.innerHTML = resultData[i][startIndex][0];
+                else pro.innerHTML = "";
+    
+    
+                if (matchMedia("screen and (min-width: 831px)").matches) {
+                    pro.addEventListener("mouseover", function(){
+                        if((resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval < 12){
+                            pro.style.width =  "15%";
+                            pro.style.height = 40 + "px";
+                        }
+                        pro.innerHTML = resultData[i][startIndex][0] + "    [     " + resultData[i][startIndex][1] +" -> " + + resultData[i][j][2]+ "   ]   ";
+                    });
+                    pro.addEventListener("mouseout", function(){
+                        if(pro.style.width === "15%"){
+                            pro.style.width = (resultData[i][j][2] - resultData[i][startIndex][1]) * widthInterval + "%";
+                            pro.style.height = 30 + "px";
+                        }
+                        if(processWidth > 3){
+                            pro.innerHTML = resultData[i][startIndex][0];
+                        }
+                        else pro.innerHTML = "";
+                    });
+                  }  
+                childProg.appendChild(pro);
             }
-            start++;
+        }
+        for(let j=0; j<nop; j++){
+            let colorList = document.querySelector(".color_list");    
+            let childColor = document.createElement("div");
+            colorList.appendChild(childColor);
+            childColor.className = "progressColor";
+            childColor.id = "Color"+(j+1);
+            childColor.innerHTML = "P"+(j+1);
+            childColor.style.backgroundColor =colorListArray[j];
         }
     }
-    var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
-    proTime.addEventListener('click',function () {
-        readyqueueShow.style.display= "none";
-    });
-}
-
-function deleteColorList(){
-    let colorList = document.querySelector(".color_list");
-    while(colorList !== null && colorList.hasChildNodes()){ 
-        colorList.removeChild(colorList.firstChild);
+    
+    createBottomIndex(maxTime){
+        const ganttTableBottom = document.querySelector(".gantt_table__bottom");
+        let index = 0;
+        let tmp;
+        
+        if(maxTime % 15 === 0){
+            tmp = parseInt(maxTime / 15);
+        }
+        else{
+            tmp = parseInt(maxTime / 15) + 1;
+        }
+        const plusWidth = 100 / (parseInt(maxTime/tmp) + 1);
+    
+        while(index <= maxTime){
+            const time = document.createElement("div");
+            time.innerText = index;
+            time.style.width = plusWidth + "%";
+            ganttTableBottom.appendChild(time);
+            index += tmp;
+        }
     }
 }
 
-function deleteReadyQueue(){
-    var del = document.querySelector(".ready_queue"); 
-    if(del !== null && del.hasChildNodes() ) { 
-        del.removeChild( del.lastChild ); 
+class showOutput{
+    showCoreName(numberOfCore){
+        const ganttTableLeft = document.querySelector(".gantt_table__top-left");
+        for(let i=0; i < numberOfCore; i++){
+            var core = document.createElement("div");
+            core.className = "CORE ";
+            core.innerText = "CORE " + (i+1);
+            ganttTableLeft.appendChild(core);
+        }
+    }
+    
+    showProgressBar(maxTime){
+        const progress = document.querySelector(".gantt_table__top-right");
+        var white = document.createElement("div");
+        white.className = "progressBar__time";
+        white.id ="progressBar__time";  
+        progress.appendChild(white);
+        let totalTime;
+        let tmp;
+        
+        if(maxTime % 15 === 0){
+            tmp = parseInt(maxTime / 15);
+            totalTime = maxTime + tmp;
+        }
+        else{
+            tmp = parseInt(maxTime / 15) + 1;
+            totalTime = maxTime - (maxTime % tmp) + tmp;
+        }
+        
+        setTimeout(function(){
+            baram.style.animationPlayState = "paused";
+        }, totalTime*1000/1.5);
+        
+        setTimeout(function(){
+            white.style.animation = "leftmargin "+(totalTime/1.5)+"s linear 1 both";
+        }, 1000);
+    
+        var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
+        proTime.addEventListener('click',function () {
+            proTime.parentElement.removeChild(proTime);
+            baram.style.animationPlayState = "paused";
+          });
+    }
+    
+    showReadyQueue(readyQueue){
+        const readyqueue = document.querySelector(".ready_queue"); 
+        var readyqueueShow = document.createElement("div");
+        readyqueueShow.className = "ready_queue__show";
+        readyqueue.appendChild(readyqueueShow);
+    
+        const time = readyQueue.length;
+        let start = 0;
+    
+        const id = setInterval(show, 1000/1.5);
+        function show(){
+            
+            //초기화
+            while ( readyqueueShow.hasChildNodes() ) { 
+                readyqueueShow.removeChild( readyqueueShow.firstChild ); 
+            }
+    
+            if(start >= time){
+                clearInterval(id);
+            }
+            else{
+                //다음 생성
+                for(let i = 0; i<readyQueue[start].length; i++){
+                    const node = document.createElement("div");
+                    node.className = "readyQueue__process";
+                    node.id = "P" + readyQueue[start][i];
+                    node.innerHTML = "P" +readyQueue[start][i];
+                    readyqueueShow.appendChild(node);
+                }
+                start++;
+            }
+        }
+        var proTime = document.getElementById("progressBar__time");  // 클릭시 전체보기
+        proTime.addEventListener('click',function () {
+            readyqueueShow.style.display= "none";
+        });
     }
 }
 
-function deleteAllOfShowTable(){
-    while(showTable.rows.length>0){
-        showTable.deleteRow(0);
+class deleteOutput{
+    deleteColorList(){
+        let colorList = document.querySelector(".color_list");
+        while(colorList !== null && colorList.hasChildNodes()){ 
+            colorList.removeChild(colorList.firstChild);
+        }
+    }
+    
+    deleteReadyQueue(){
+        var del = document.querySelector(".ready_queue"); 
+        if(del !== null && del.hasChildNodes() ) { 
+            del.removeChild( del.lastChild ); 
+        }
+    }
+    
+    deleteAllOfShowTable(){
+        while(showTable.rows.length>0){
+            showTable.deleteRow(0);
+        }
+    }
+    
+    deleteBottomIndex(){
+        var del = document.querySelector(".gantt_table__bottom"); 
+        while ( del.hasChildNodes() ) { 
+            del.removeChild( del.firstChild ); 
+        }
+    }
+    
+    deleteCoreName(){
+        var del = document.querySelector(".gantt_table__top-left"); 
+        while ( del.hasChildNodes() ) { 
+            del.removeChild( del.firstChild ); 
+        }
+    }
+    
+    deleteProgressBar(){
+        var del = document.querySelector(".gantt_table__top-right");
+        while(del !== null && del.hasChildNodes()){ 
+            del.removeChild(del.firstChild);
+        }
+    }
+    
+    deleteAllOfProgressBar(){
+        var del = document.getElementById("progressBars"); 
+        while ( del !== null && del.hasChildNodes() ) { 
+            del.removeChild( del.firstChild ); 
+        }
     }
 }
 
-function deleteBottomIndex(){
-    var del = document.querySelector(".gantt_table__bottom"); 
-    while ( del.hasChildNodes() ) { 
-        del.removeChild( del.firstChild ); 
+
+
+// run
+function run(){
+    init();
+    baram.style.animationPlayState = "running";
+    
+    // Input value 
+    const atInput = document.querySelectorAll(".arrivalTime");
+    const btInput = document.querySelectorAll(".burstTime");
+    const numberOfProcess = inputTable.rows.length;
+    const numberOfCore = document.querySelector(".numofcores").value;
+    const selectprocess = document.querySelector(".selectprocess");
+    
+    // InputError
+    if(!controlInput.errorCheck(atInput,btInput,selectprocess)){
+        alert("오류! 값을 다시 넣고 실행해주세요.\n(정수로 or RR(HRR)이라면 Time quantum을 넣어 주세요.)");
+        init();
+        baram.style.animationPlayState = "paused";  // 바람개비 멈추기
+        return;
     }
+    const algorithm = new chooseAlgorithm(atInput, btInput, numberOfCore, numberOfProcess);
+    const result = algorithm.scheduling();
+    
+    
+    const co = new createOutput();
+    const so = new showOutput();
+
+    co.createProgressBar(result.resultData, result.max, numberOfCore, numberOfProcess); //배열, time
+    co.createBottomIndex(result.max);
+    co.createShowTable(result.resultTable, result.max)
+
+    so.showCoreName(numberOfCore); //코어 개수
+    so.showProgressBar(result.max);
+    so.showReadyQueue(result.readyQLog);
 }
 
-function deleteCoreName(){
-    var del = document.querySelector(".gantt_table__top-left"); 
-    while ( del.hasChildNodes() ) { 
-        del.removeChild( del.firstChild ); 
-    }
+// initialize
+function init(){
+    const dop = new deleteOutput();
+    dop.deleteBottomIndex();
+    dop.deleteProgressBar();
+    dop.deleteCoreName();
+    dop.deleteReadyQueue();
+    dop.deleteAllOfShowTable();
+    dop.deleteAllOfProgressBar();
+    dop.deleteColorList();
 }
-
-function deleteProgressBar(){
-    var del = document.querySelector(".gantt_table__top-right");
-    while(del !== null && del.hasChildNodes()){ 
-        del.removeChild(del.firstChild);
-    }
-}
-
-function deleteColorList(){
-    let colorList = document.querySelector(".color_list");
-    while(colorList !== null && colorList.hasChildNodes()){ 
-        colorList.removeChild(colorList.firstChild);
-    }
-}
-
-function deleteAllOfProgressBar(){
-    var del = document.getElementById("progressBars"); 
-    while ( del !== null && del.hasChildNodes() ) { 
-        del.removeChild( del.firstChild ); 
-    }
-}
-//-------------------- FrontEnd 끝--------------------
+// tag & event
+const inputTable = document.querySelector("#input-table");
+const showTable = document.querySelector("#show-table");
+const body = document.querySelector("body");
+const addProcess = document.getElementById("addprocess");
+const deleteProcess = document.getElementById("deleteprocess");
+const runSimulator = document.getElementById("run");
+const baram = document.querySelector(".baram");
+const controlInput = new inputManage();
+addProcess.addEventListener("click", controlInput.addRow);  // click "프로세스 추가"
+deleteProcess.addEventListener("click", controlInput.deleteRow); // click "프로세스 제거"
+runSimulator.addEventListener("click", run); // click "실행"
